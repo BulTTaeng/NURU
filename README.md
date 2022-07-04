@@ -3,7 +3,7 @@
 ### History
 
 <details>
-<summary>접기/펼치기</summary>
+<summary>접기/펼치기</summary><br>
 
 `2022.07.04`  
 - Init Project
