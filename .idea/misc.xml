@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_greenline.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge_black.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge_filledLightGreen.xml" value="0.2101851851851852" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge_filledgray.xml" value="0.2101851851851852" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge_filledlightgreen.xml" value="0.2074074074074074" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_roundedge_round.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/background_underline.xml" value="0.2074074074074074" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/change_button_color.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/ic_baseline_thumb_up_24.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/ic_baseline_thumb_up_gray_24.xml" value="0.26564102564102565" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/ic_launcher_background.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/ic_main__background.xml" value="0.26564102564102565" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/ic_main_background.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/drawable/seperate_item_in_recycleview.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_add_admin.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_add_community.xml" value="0.176" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_add_farm.xml" value="0.18115942028985507" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_add_image.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_community.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_community_contents.xml" value="0.3066502463054187" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_edit_community.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_home.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_main2.xml" value="0.24864130434782608" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_map.xml" value="0.176" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_maps.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_maps2.xml" value="0.18115942028985507" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_marker_list.xml" value="0.19972826086956522" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_my_farm.xml" value="0.152" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_my_page.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_new_my_farm.xml" value="0.11911231884057971" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_other.xml" value="0.17572463768115942" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_search_address.xml" value="0.1598731884057971" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_search_address2.xml" value="0.18115942028985507" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_setting.xml" value="0.16458333333333333" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_show_image.xml" value="0.19384057971014493" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/activity_splash.xml" value="0.176" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/add_community_image_view.xml" value="0.15416666666666667" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/backgorund_greenline.xml" value="0.19655797101449277" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/cardView_Farm.xml" value="0.1598731884057971" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/cardview_comments.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/cardview_farm.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/cardview_setting.xml" value="0.4" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/community_view.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragagds.xml" value="0.21603260869565216" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_add_farm.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_alarm.xml" value="0.15" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_community.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_first.xml" value="0.4" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_login2.xml" value="0.21603260869565216" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_main.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_main2.xml" value="0.12335359675785208" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_map.xml" value="0.176" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_my_page.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_new_my_farm.xml" value="0.152" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_products.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_setting.xml" value="0.2" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_signup.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/fragment_splash.xml" value="0.1296875" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/image_view.xml" value="0.19384057971014493" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/imgview_for_community.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/include_progress_overlay.xml" value="0.19972826086956522" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/newsibal.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/progressbarholder.xml" value="0.264" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/splash_screen.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/layout/viewholder_search_result_item.xml" value="0.4" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/menu/menu_button.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/menu/navi_menu.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/mipmap-anydpi-v26/ic_main.xml" value="0.1703125" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/Nuru/app/src/main/res/mipmap-anydpi-v26/ic_main_round.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/Choi/AppData/Local/Android/Sdk/platforms/android-32/data/res/drawable/edit_text.xml" value="0.2074074074074074" />
+        <entry key="..\:/Users/Choi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/activity_list_item.xml" value="0.1598731884057971" />
+        <entry key="..\:/Users/Choi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/auto_complete_list.xml" value="0.15416666666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

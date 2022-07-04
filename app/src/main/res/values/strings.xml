@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Nuru</string>
+    <string name="smartFarmNuru">내 손안에 메타버스 팜</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">이메일을 입력하세요</string>
+    <string name="password">비밀번호를 입력하세요</string>
+    <string name="confirm_password">비밀번호를 다시 한번 입력하세요</string>
+    <string name="create_account">계정 생성하기</string>
+    <string name="DontHaveAccount">아직 계정이 없으신가요?</string>
+    <string name="sign_in">로그인</string>
+    <string name="or">다른 로그인 방법</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="empty_result_text">\"\"</string>
+    <string name="search">search</string>
+    <string name="please_input_search_keyword">주소를 입력해 주세요</string>
+    <string name="firebaseMessaging_server_key">AAAAVwRBhJ4:APA91bFoMJ4cyDSJKeLEmK5P4Y_UGBXu3GLrI2Q5zTzgzsFjTcNf9dhf1PAgByWdWY6i7JKUjieojTHD9-LKuBJr57B-YmP-8aLxAJEY2TTACzvrJU9PCqo_pjqNnKuT6cl__-zERKmP></string>
+
+    <string name="cal_num">특화 계수 계산하기</string>
+    <string name="basic_image">https://firebasestorage.googleapis.com/v0/b/nuru-a3203.appspot.com/o/profile_lightGray.png?alt=media&amp;token=fbd9ab57-dbde-45e2-900d-b7ce20534888</string>
+    <string name="give_id">아이디를 입력하세요</string>
+    <string name="give_password">비밀번호를 입력하세요</string>
+    <string name="id_password_wrong">아이디와 비밀번호를 확인해 주세요</string>
+    <string name="do_logout">로그아웃 하였습니다</string>
+    <string name="logout_exception">로그아웃중 문제가 발생하였습니다. 잠시후 다시 시도해주세요</string>
+    <string name="withdrawal">회원탈퇴</string>
+    <string name="logout">로그아웃</string>
+    <string name="wrong_password">비밀번호가 일치 하지 않습니다</string>
+    <string name="password_longer_6">비밀번호는 6자 이상이여야 합니다!</string>
+    <string name="give_name">이름을 입력해 주세요</string>
+    <string name="select_admin_farm">관리자 혹은 농장주를 선택해 주세요</string>
+    <string name="singup_success">회원가입에 성공하였습니다.</string>
+    <string name="singup_exception">회원가입중 문제가 발생하였습니다. 잠시 후 다시 시도해주세요</string>
+    <string name="email_login">email_login</string>
+    <string name="image_limit_9">사진은 9장까지 선택 가능합니다</string>
+    <string name="press_address_find">주소 찾기 버튼을 눌러 주세요</string>
+    <string name="empty_image">https://firebasestorage.googleapis.com/v0/b/nuru-a3203.appspot.com/o/empty_img.png?alt=media&amp;token=2df229da-8ef7-460d-83ce-88ee5e591e6f</string>
+    <string name="no_sensor">센서가 없어요</string>
+    <string name="new_comments">새로운 댓글이 달렸습니다</string>
+    <string name="alarm_message">알림 메세지</string>
+    <string name="authority_required">권한 승인이 필요합니다</string>
+    <string name="try_later">잠시뒤 다시 시도해 주세요</string>
+    <string name="default_farm">사진 및 관리자를 추가 할 수 없는 농장입니다</string>
+    <string name="yes">네</string>
+    <string name="no">아니오</string>
+    <string name="sure_to_delete_farm">정말 이 농장을 삭제 하실 건가요?</string>
+    <string name="cannot_delete_farm">농장을 하나 이상 추가하기 전에 삭제가 불가능 합니다</string>
+    <string name="cannot_delete_farm_image">농장사진을 하나이상 추가하기 전에 삭제 할 수 없습니다.</string>
+    <string name="sure_to_delete_farm_page">이 농장페이지을 삭제 할까요?</string>
+    <string name="check_internet_connection">인터넷 연결을 확인해 주세요</string>
+    <string name="go_back">돌아가기</string>
+    <string name="close_app">앱 종료</string>
+    <string name="my_farm">내 농장</string>
+    <string name="no_building_name">빌딩명 없음</string>
+</resources>

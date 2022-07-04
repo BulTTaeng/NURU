@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_AddAdmin"
+        android:title="관리자 추가하기" />
+    <item
+        android:id="@+id/btn_addImage"
+        android:title="농장 사진 추가하기" />
+</menu>

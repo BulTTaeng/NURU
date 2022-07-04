@@ -1,0 +1,93 @@
+package com.example.nuru.Fragment
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.nuru.*
+import com.example.nuru.Adapter.SettingAdapter
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_my_page.*
+import kotlinx.android.synthetic.main.fragment_setting.*
+
+class SettingFragment : Fragment() {
+
+    private lateinit var firebaseAuth: FirebaseAuth
+    val db = FirebaseFirestore.getInstance()
+    lateinit var mypageActivity: MyPageActivity
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        firebaseAuth = FirebaseAuth.getInstance()
+        mypageActivity = context as MyPageActivity
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_setting, container, false)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val items = mutableListOf<SettingItem>()
+        items.add(SettingItem( getString(R.string.withdrawal)))
+        items.add(SettingItem( getString(R.string.logout)))
+        val adapter = SettingAdapter(items)
+        setting_recycleView.layoutManager = LinearLayoutManager(mypageActivity)
+        adapter.currentPage = 2
+        // Setting the Adapter with the recyclerview
+
+        adapter.setSearchResultList(items) {
+            if(it.title == getString(R.string.logout)){
+                revokeAccess()
+                val intent = Intent(getActivity(), LoginActivity::class.java)
+                startActivity(intent)
+                ActivityCompat.finishAffinity(mypageActivity)
+            }
+        }
+
+        setting_recycleView.adapter = adapter
+
+        btn_Cancel_Setting.setOnClickListener {
+            findNavController().navigate(R.id.myPageFragment)
+        }
+    }
+
+    private fun revokeAccess() { //회원탈퇴
+        var login_type : String
+        db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
+            login_type = it["type"].toString()
+
+            if(login_type.equals("email_login")){
+                firebaseAuth.signOut()
+            }
+            else if(login_type.equals("google_login")){
+                // Firebase sign out
+                googleSignInClient.revokeAccess().addOnCompleteListener(mypageActivity) {
+                    if(it.isSuccessful){
+                        Toast.makeText(mypageActivity, getString(R.string.do_logout), Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(mypageActivity, getString(R.string.logout_exception), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+
+}

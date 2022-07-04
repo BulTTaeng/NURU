@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/myPageFragment"
+        android:enabled="true"
+        android:icon="@drawable/myfarm_lightgray"
+        android:title="내 농장" />
+
+    <item android:id="@+id/communityFragment"
+        android:enabled="true"
+        android:icon="@drawable/community_lightgray_edited"
+        android:title="커뮤니티" />
+
+    <item android:id="@+id/mapFragment"
+        android:enabled="true"
+        android:icon="@drawable/map_lightgray"
+        android:title="지도" />
+
+    <item android:id="@+id/alarmFragment"
+        android:enabled="true"
+        android:icon="@drawable/alarm_lightgray"
+        android:title="알리미" />
+</menu>
