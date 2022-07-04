@@ -3,7 +3,7 @@
 ### History
 
 <details>
-<summary>접기/펼치기</summary>
+<summary>접기/펼치기</summary><br>
 
 `2022.07.04`  
 - Init Project
@@ -15,6 +15,3 @@
 ### Description
 
 스마트 임산물 관리  
-
-kdj branch test  
-CJH branch test
