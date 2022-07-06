@@ -28,4 +28,8 @@ class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
     fun fetchData(): LiveData<MutableList<Farm>> {
         return mutableData
     }
+
+    fun updateFarm(){
+        repo.updateFarm()
+    }
 }

@@ -25,4 +25,8 @@ class CommunityViewModel : ViewModel() {
     fun fetchData(): LiveData<MutableList<CommunityEntity>> {
         return mutableData
     }
+
+    fun updateView(){
+        repo.updateCommunity()
+    }
 }

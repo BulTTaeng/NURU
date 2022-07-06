@@ -52,13 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         singletonC.setcurrentContext(this)
-
-        //navigation
-        navController = findNavController(R.id.nav_host_fragment)
         auth = Firebase.auth
-
-
-
     }
 
     public override fun onStart() {
@@ -77,34 +71,10 @@ class MainActivity : AppCompatActivity() {
             //navController.navigate(R.id.action_mainFragment_to_loginActivity)
         }
         else{
-            registerPushToken()
             val intent = Intent(this, MyPageActivity::class.java)
             startActivity(intent)
             finish()
             //navController.navigate(R.id.action_mainFragment_to_mapFragment)
-        }
-    }
-
-    //TODO
-    //지금 테스트를 위해서 앱을 킬떄마다 token을 확인 하는데 나중에 로그인 하면 토큰을 가져오게 확인해야 함.
-    //아래 함수는 토큰을 가져와서 firebase db에 넣어주는 함수.
-    private fun registerPushToken() {
-        //v17.0.0 이전까지는
-        ////var pushToken = FirebaseInstanceId.getInstance().token
-        //v17.0.1 이후부터는 onTokenRefresh()-depriciated
-        //var pushToken: String? = null
-        var uid = FirebaseAuth.getInstance().currentUser!!.uid
-        //var map = mutableMapOf<String, Any>()
-        FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
-            if(task.isSuccessful){
-                var pushToken = task.result
-
-                val data = hashMapOf(
-                    "pushtoken" to pushToken,
-                )
-                db.collection("pushtokens").document(uid!!).set(data)
-            }
-            //pushToken = task.token
         }
     }
 

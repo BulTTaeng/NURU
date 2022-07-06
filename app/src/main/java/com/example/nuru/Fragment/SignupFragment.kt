@@ -13,18 +13,21 @@ import androidx.navigation.fragment.findNavController
 import com.example.nuru.LoginActivity
 import com.example.nuru.MyPageActivity
 import com.example.nuru.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.fragment_login2.*
 import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 class SignupFragment : Fragment() {
     //firebase Auth
@@ -98,24 +101,52 @@ class SignupFragment : Fragment() {
                 Toast.makeText(loginActivity, getString(R.string.select_admin_farm), Toast.LENGTH_SHORT).show()
             }
             else{
+
                 progressBar_Signup.visibility = View.VISIBLE
-                auth!!.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(loginActivity){
-                    if(it.isSuccessful){
-                        val user = auth?.currentUser?.uid
-                        writeNewUserWithTaskListeners(user.toString(), name, email , getString(R.string.email_login) , isAdmin , isFarmer)
-                        Toast.makeText(loginActivity, getString(R.string.singup_success), Toast.LENGTH_SHORT).show()
-                        val ass = Intent(context, MyPageActivity::class.java)
-                        startActivity(ass)
-                        //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
-                        activity?.finish()
+                CoroutineScope(Dispatchers.IO).launch {
+                    auth!!.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(loginActivity){
+                        if(it.isSuccessful){
+                            async{registerPushToken()}
+                            val user = auth?.currentUser?.uid
+                            writeNewUserWithTaskListeners(user.toString(), name, email , getString(R.string.email_login) , isAdmin , isFarmer)
+                            Toast.makeText(loginActivity, getString(R.string.singup_success), Toast.LENGTH_SHORT).show()
+                            val ass = Intent(context, MyPageActivity::class.java)
+                            startActivity(ass)
+                            //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
+                            activity?.finish()
+                        }
+                        else{
+                            Toast.makeText(loginActivity, getString(R.string.singup_exception), Toast.LENGTH_SHORT).show()
+                        }
+
+                        progressBar_Signup.visibility = View.GONE
                     }
-                    else{
-                        Toast.makeText(loginActivity, getString(R.string.singup_exception), Toast.LENGTH_SHORT).show()
-                    }
-                    progressBar_Signup.visibility = View.GONE
                 }
+
             }
         }//end of btn setonclick listener
+    }
+
+    suspend fun registerPushToken() {
+        //v17.0.0 이전까지는
+        ////var pushToken = FirebaseInstanceId.getInstance().token
+        //v17.0.1 이후부터는 onTokenRefresh()-depriciated
+        //var pushToken: String? = null
+
+
+        var uid = FirebaseAuth.getInstance().currentUser!!.uid
+        //var map = mutableMapOf<String, Any>()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
+            if(task.isSuccessful){
+                var pushToken = task.result
+
+                val data = hashMapOf(
+                    "pushtoken" to pushToken,
+                )
+                db.collection("pushtokens").document(uid!!).set(data)
+            }
+            //pushToken = task.token
+        }
     }
 
     fun writeNewUserWithTaskListeners(userId: String, name: String, email: String , type : String , isAdmin : Boolean , isFarmer : Boolean) {

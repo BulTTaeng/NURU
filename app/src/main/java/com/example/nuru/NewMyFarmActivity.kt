@@ -18,7 +18,7 @@ class NewMyFarmActivity : AppCompatActivity() , OnMapReadyCallback {
     lateinit var myPageActivity: MyPageActivity
     lateinit var f : Farm
     private lateinit var mMap: GoogleMap
-
+    //TODO :: share viewModel with MypageFragment?? 꼭 필요할까?
     private var mapFragment: SupportMapFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

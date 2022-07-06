@@ -142,6 +142,12 @@ class MyPageFragment : Fragment() , CoroutineScope {
         btn_Setting.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_settingFragment)
         }
+        swipe_in_mypage.setOnRefreshListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val update = async {  viewModel.updateFarm() }
+                update.await()
+            }
+        }
 
 
 
@@ -156,28 +162,16 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
     fun observerData(){
         viewModel.fetchData().observe(
-            myPageActivity, Observer {
+            this, Observer {
                 widget_ProgressBarInMyPage.visibility = View.VISIBLE
-                adapter.setListData(it)
-                //TODO : 여기서 임시로 만들 농장이면 그냥 터치 이벤트 없애야함.
-                adapter.setSearchResultList(it) { it ->
 
-                    val Intent = Intent(myPageActivity, NewMyFarmActivity::class.java)
-                    Intent.putExtra("FARM",it)
-                    startActivity(Intent)
-                    //val bundle = Bundle()
-                   // bundle.putString("FARMID", "Aaa")
-                    //bundle.putParcelable("FARM" , it)
-                    //bundle.putSerializable("Farm" , it)
-
-                    //MyPageController.navigate(R.id.action_myPageFragment_to_newMyFarm
-                    //findNavController().navigate(MyPageFragmentDirections.actionMyPageFragmentToNewMyFarmFragment(it))
-                    //현재 safe args를 사용해서 overriding 하는 navigate를 만들 수 없으므로 일단 bundle로 넘기자!
-
-                    //findNavController().navigate(R.id.newMyFarmFragment , bundle)
+                adapter.submitList(it.map{
+                    it.copy()
                 }
-                adapter.notifyDataSetChanged()
-                widget_ProgressBarInMyPage.visibility = View.GONE
+                ).let {
+                    swipe_in_mypage.isRefreshing = false
+                    widget_ProgressBarInMyPage.visibility = View.GONE
+                }
             }
         )
     }
