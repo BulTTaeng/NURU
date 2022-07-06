@@ -70,4 +70,7 @@
     <string name="close_app">앱 종료</string>
     <string name="my_farm">내 농장</string>
     <string name="no_building_name">빌딩명 없음</string>
+    <string name="problem_try_later">문제가 발생했습니다. 잠시 후 다시 시도해주세요</string>
+    <string name="comments_rewrite">댓글 작성중 오류가 생겼습니다. 재작성 부탁드립니다</string>
+    <string name="delete_comments">정말 댓글을 삭제 할까요?</string>
 </resources>

@@ -30,87 +30,54 @@ class MyFarmRepository(val farmRef : DocumentReference) {
     val Farm: LiveData<MutableList<Farm>>
         get() = _mutableData
 
-
-
-    fun getData(): LiveData<MutableList<Farm>> {
-
-        /*db.collection("community").orderBy("time" , Query.Direction.DESCENDING).get().addOnSuccessListener{
-            var community_info = ArrayList<CommunityEntity>()
-            for(document in it){
-                val img_path = document["image"] as ArrayList<String>
-                val contents = document["contents"].toString()
-                val title = document["title"].toString()
-                val writer = document["writer"].toString()
-                val like = document["likeId"] as ArrayList<String>
-                val comments = document["commentsNum"] as Long
-                val time = document.getTimestamp("time")?.toDate()!!
-
-                var idd= document.id
-
-                community_info.add(
-                    CommunityEntity(img_path[0],contents,title , writer , idd , like , comments , time)
-                )
-
-            }
-            _mutableData.value = community_info
-
-        }*/
-
-        return _mutableData
+    init {
+        updateFarm()
     }
 
-    init {
+    fun updateFarm(){
+        farmRef.get().addOnSuccessListener {
+            var i =1
 
-        farmRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w("TAG", "Listen failed.", e)
-                return@addSnapshotListener
+            var user_farm_info = ArrayList<Farm>()
+
+            val username = it["name"] as String
+            var userEmail = it["email"] as String
+            val user_farm_list = it["farmList"] as ArrayList<String>
+            //Log.d("userName", "DocumentSnapshot data: ${username} ")
+            //txt_UserNameMyPage.text = username + "\n" +userEmail
+            //Log.d("userName", "DocumentSnapshot data: ${document.data}")
+            if (user_farm_list.isEmpty()) {
+                user_farm_list.add("zerozero")
             }
+            val Farm_Info = db.collection("farmList")
 
-            if (snapshot != null) {
-                var i = 1
+            Farm_Info.whereIn("farmId", user_farm_list).get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        Log.d("newwww", document.data["farmName"].toString())
+                        val lati = document.data["latitude"] as Double
+                        val longti = document.data["longitude"] as Double
 
-                var user_farm_info = ArrayList<Farm>()
+                        val location = LatLng(lati, longti)
 
-                val username = snapshot["name"] as String
-                var userEmail = snapshot["email"] as String
-                val user_farm_list = snapshot["farmList"] as ArrayList<String>
-                //Log.d("userName", "DocumentSnapshot data: ${username} ")
-                //txt_UserNameMyPage.text = username + "\n" +userEmail
-                //Log.d("userName", "DocumentSnapshot data: ${document.data}")
-                if (user_farm_list.isEmpty()) {
-                    user_farm_list.add("zerozero")
-                }
-                val Farm_Info = db.collection("farmList")
-
-                Farm_Info.whereIn("farmId", user_farm_list).get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            Log.d("newwww", document.data["farmName"].toString())
-                            val lati = document.data["latitude"] as Double
-                            val longti = document.data["longitude"] as Double
-
-                            val location = LatLng(lati, longti)
-
-                            user_farm_info.add(
-                                Farm(
-                                    document.id,
-                                    document.data["farmName"].toString(),
-                                    document.data["farmPhoto"] as ArrayList<String>,
-                                    location,
-                                    document.data["farmAddress"].toString(),
-                                    document.data["farmOwner"].toString(),
-                                    i,
-                                    document.data["products"].toString()
-                                )
+                        user_farm_info.add(
+                            Farm(
+                                document.id,
+                                document.data["farmName"].toString(),
+                                document.data["farmPhoto"] as ArrayList<String>,
+                                location,
+                                document.data["farmAddress"].toString(),
+                                document.data["farmOwner"].toString(),
+                                i,
+                                document.data["products"].toString()
                             )
+                        )
 
-                            i++
+                        i++
 
-                        }
-                        _mutableData.value = user_farm_info
                     }
-            }
+                    _mutableData.value = user_farm_info
+                }
         }
     }
 }

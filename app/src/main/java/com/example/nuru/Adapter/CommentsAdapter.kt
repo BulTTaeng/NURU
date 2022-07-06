@@ -19,33 +19,30 @@ import com.google.firebase.ktx.Firebase
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.R
-import android.R.attr
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
+import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import com.example.nuru.R
+import com.example.nuru.model.CommunityEntity
+import com.example.nuru.viewmodel.CommentsViewModel
 
-import android.widget.EditText
-import android.R.attr.button
-import android.provider.Settings.Global.getString
+//Your Fragment's views should have a shorter lifecycle than your associated ViewModel,
+// so it should be OK to pass it in as a constructor parameter.
 
+class CommentsAdapter( private val context: Context , private val viewModel : CommentsViewModel) :
+    ListAdapter<Comments, CommentsAdapter.CommentsViewHolder>(COMMENTS_DIFF_CALLBACK)
+{
 
-class CommentsAdapter( private val context: Context) : RecyclerView.Adapter<CommentsAdapter.ResultViewHolder>() {
-    var mList = mutableListOf<Comments>()
-    private var searchResultList: List<Comments> = mList
     val auth = Firebase.auth
     val db = FirebaseFirestore.getInstance()
 
-    fun setListData(data:MutableList<Comments>){
-        searchResultList = data
-    }
-
-    var currentPage = 1
     val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
     val currentDate : String = sdf.format(Date())
 
 
-    inner class ResultViewHolder(
+    inner class CommentsViewHolder(
         private val binding: CardviewCommentsBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(data: Comments) = with(binding) {
@@ -100,7 +97,7 @@ class CommentsAdapter( private val context: Context) : RecyclerView.Adapter<Comm
     }
 
     // create new views
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
         // inflates the card_view_design view
         // that is used to hold list item
         //val view = LayoutInflater.from(parent.context)
@@ -111,32 +108,33 @@ class CommentsAdapter( private val context: Context) : RecyclerView.Adapter<Comm
             false
         )
 
-        return ResultViewHolder(binding)
+        return CommentsViewHolder(binding)
 
 
     }
 
     // return the number of the items in the list
     override fun getItemCount(): Int {
-        return searchResultList.size
+        return currentList.size
     }
 
-    override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
-        holder.bindData(searchResultList[position])
+    override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
+        holder.bindData(currentList[position])
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setSearchResultList(
-        searchResultList: List<Comments>
-    ) {
-        this.searchResultList = this.searchResultList
+    companion object {
+        val COMMENTS_DIFF_CALLBACK = object : DiffUtil.ItemCallback<Comments>() {
+            override fun areItemsTheSame(oldItem: Comments, newItem: Comments): Boolean =
+                oldItem.id == newItem.id
 
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: Comments, newItem: Comments): Boolean =
+                oldItem == newItem
+        }
     }
 
     fun showAlert(commentsId : String , communityId : String) {
         AlertDialog.Builder(context)
-            .setTitle("정말 댓글을 삭제 할까요?")
+            .setTitle(R.string.delete_comments)
             .setPositiveButton("아니요") {
                     dialogInterface: DialogInterface, i: Int ->
             } .setNegativeButton("네") {
@@ -145,7 +143,23 @@ class CommentsAdapter( private val context: Context) : RecyclerView.Adapter<Comm
     }
 
     fun deleteComments(commentsId: String , communityId: String){
+
+
+
         db.collection("comments").document(communityId).collection(communityId).document(commentsId).delete()
+        var size : Long =0
+        db.collection("community").document(communityId).get().addOnCompleteListener {
+            if(it.isSuccessful) {
+                size = it.result["commentsNum"] as Long
+                size--
+                db.collection("community").document(communityId).update("commentsNum", size)
+                viewModel.updateComments()
+            }
+            else{
+                Toast.makeText(context , R.string.problem_try_later , Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 
     fun findDifference(start_date: String?, end_date: String?): String {

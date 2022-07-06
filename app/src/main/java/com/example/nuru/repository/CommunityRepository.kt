@@ -32,49 +32,18 @@ class CommunityRepository {
     val Community: LiveData<MutableList<CommunityEntity>>
         get() = _mutableData
 
-
-
-    fun getData(): LiveData<MutableList<CommunityEntity>> {
-
-        /*db.collection("community").orderBy("time" , Query.Direction.DESCENDING).get().addOnSuccessListener{
-            var community_info = ArrayList<CommunityEntity>()
-            for(document in it){
-                val img_path = document["image"] as ArrayList<String>
-                val contents = document["contents"].toString()
-                val title = document["title"].toString()
-                val writer = document["writer"].toString()
-                val like = document["likeId"] as ArrayList<String>
-                val comments = document["commentsNum"] as Long
-                val time = document.getTimestamp("time")?.toDate()!!
-
-                var idd= document.id
-
-                community_info.add(
-                    CommunityEntity(img_path[0],contents,title , writer , idd , like , comments , time)
-                )
-
-            }
-            _mutableData.value = community_info
-
-        }*/
-
-        return _mutableData
-    }
-
     init {
         db = FirebaseFirestore.getInstance()
-        db.collection("community").orderBy("time" , Query.Direction.DESCENDING).addSnapshotListener{
-            snapshot , e ->
-            if (e != null) {
-                Log.w("TAG", "Listen failed.", e)
-                return@addSnapshotListener
-            }
+        updateCommunity()
+    }
 
-            if(snapshot != null) {
-                val doc = snapshot.documents
+    fun updateCommunity(){
+        db.collection("community")
+            .orderBy("time" , Query.Direction.DESCENDING)
+            .get().addOnSuccessListener {
                 var community_info = ArrayList<CommunityEntity>()
 
-                doc.forEach{
+                it.forEach{
                     val img_path = it["image"] as ArrayList<String>
                     val contents = it["contents"].toString()
                     val title = it["title"].toString()
@@ -96,28 +65,11 @@ class CommunityRepository {
                             CommunityEntity(img_path,contents,title , writer , idd , like , comments , timedate)
                         )
                     }
-                    //var time = it["time"] as Timestamp
 
-
-
-                    /*if(time != null) {
-                        val timedate = Date(time.seconds * 1000)
-                        community_info.add(
-                            CommunityEntity(img_path[0],contents,title , writer , idd , like , comments , timedate)
-                        )
-                    }
-                    else{
-                        val timedate = Date()
-
-                        community_info.add(
-                            CommunityEntity(img_path[0],contents,title , writer , idd , like , comments , timedate)
-                        )
-                    }*/
-
-
+                    _mutableData.value = community_info
                 }
-                _mutableData.value = community_info
+
             }
-        }
     }
+
 }

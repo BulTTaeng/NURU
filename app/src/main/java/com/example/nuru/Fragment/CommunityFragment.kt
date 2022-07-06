@@ -21,8 +21,7 @@ import com.example.nuru.viewmodel.CommunityViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_community.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class CommunityFragment : Fragment() {
@@ -80,35 +79,27 @@ class CommunityFragment : Fragment() {
             findNavController().navigate(R.id.myPageFragment)
         }
 
+        swipe_in_community.setOnRefreshListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val update = async {  viewModel.updateView() }
+                update.await()
+            }
+        }
+
     }
 
     fun observerData(){
-
-
         viewModel.fetchData().observe(
             this, androidx.lifecycle.Observer {
-                adapter.setListData(it)
-                adapter.setSearchResultList(it){
-                    val intent_to_CommunityCotents = Intent(requireContext(), CommunityContentsActivity::class.java)
-                    intent_to_CommunityCotents.putExtra("CONTENTS",it.contents)
-                    intent_to_CommunityCotents.putStringArrayListExtra("IMAGE",it.image)
-                    intent_to_CommunityCotents.putExtra("TITLE",it.title)
-                    intent_to_CommunityCotents.putExtra("WRITER",it.writer)
-                    intent_to_CommunityCotents.putExtra("IDD",it.id)
-                    val args = Bundle()
-                    args.putSerializable("ARRAYLIST", it.like)
-                    intent_to_CommunityCotents.putExtra("BUNDLE", args)
-
-                    intent_to_CommunityCotents.putExtra("COMMENTS", it.comments)
-
-                    startActivity(intent_to_CommunityCotents)
-                    //adapter.currentPage = i
-                    //i++
+                adapter.submitList(it.map{
+                    it.copy()
                 }
-                //adapter.notifyDataSetChanged()
+                ).let{
+                    swipe_in_community.isRefreshing = false
+                    widget_ProgressBarInCommunity1.visibility = View.GONE
+                }
             }
         )
-        widget_ProgressBarInCommunity1.visibility = View.GONE
     }
 
 }

@@ -21,19 +21,41 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent"
-                    app:srcCompat="@drawable/empty_img" />
+                    app:srcCompat="@drawable/empty_im,ag" />
                     -->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/community_recycleViewInCommunityContents"
+                <FrameLayout
+                    android:id="@+id/image_frame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constrainedHeight="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent"
-                    android:adjustViewBounds="true"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/community_recycleViewInCommunityContents"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constrainedHeight="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:adjustViewBounds="true" />
+
+                    <ProgressBar
+                        android:id="@+id/widget_progressbarInCommunityImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleX="0.4"
+                        android:scaleY="0.4"
+                        android:visibility="visible" />
+
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/txt_TitleInContent"
@@ -58,7 +80,7 @@
                     android:textSize="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/community_recycleViewInCommunityContents" />
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame" />
 
                 <ImageButton
                     android:id="@+id/btn_EditContents"
@@ -70,7 +92,7 @@
                     android:background="@null"
                     android:scaleType="fitCenter"
                     app:layout_constraintEnd_toStartOf="@+id/btn_DeleteCommunity"
-                    app:layout_constraintTop_toBottomOf="@+id/community_recycleViewInCommunityContents"
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
                     app:srcCompat="@drawable/pencil" />
 
                 <ImageButton
@@ -133,8 +155,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleX="0.3"
-                        android:scaleY="0.3"
+                        android:scaleX="0.4"
+                        android:scaleY="0.4"
                         android:visibility="visible" />
 
                 </FrameLayout>
@@ -162,7 +184,8 @@
                     android:text="댓글작성"
                     app:layout_constraintBottom_toBottomOf="@+id/edt_AddComments"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/edt_AddComments" />
+                    app:layout_constraintTop_toTopOf="@+id/edt_AddComments"
+                    app:layout_constraintVertical_bias="0.444" />
 
                 <ImageButton
                     android:id="@+id/btn_DeleteCommunity"
@@ -173,7 +196,7 @@
                     android:background="@null"
                     android:scaleType="fitCenter"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/community_recycleViewInCommunityContents"
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
                     app:srcCompat="@drawable/cancelbtn" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

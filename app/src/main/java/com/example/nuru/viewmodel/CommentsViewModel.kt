@@ -1,5 +1,6 @@
 package com.example.nuru.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,10 @@ class CommentsViewModel(val commentsRef : CollectionReference) : ViewModel() {
 
     fun fetchData(): LiveData<MutableList<Comments>> {
         return mutableData
+    }
+
+    fun updateComments(){
+        repo.updateComments()
     }
 
 

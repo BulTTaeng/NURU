@@ -7,18 +7,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.nuru.Adapter.CommentsAdapter
 import com.example.nuru.Adapter.ImgInCommunityAdapter
 import com.example.nuru.model.Comments
+import com.example.nuru.model.CommunityEntity
+import com.example.nuru.model.Farm
 import com.example.nuru.model.PushDTO
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.viewmodel.CommentsViewModel
 import com.example.nuru.viewModelFactory.viewModelFactoryForComments
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -27,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_community_contents.*
 import kotlinx.android.synthetic.main.cardview_comments.*
 import kotlinx.android.synthetic.main.fragment_my_page.*
 import kotlinx.coroutines.*
+import okhttp3.internal.wait
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.coroutines.CoroutineContext
@@ -41,7 +49,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
     lateinit var viewModel : CommentsViewModel
     private lateinit var adapter: CommentsAdapter
     private lateinit var adapterForImage: ImgInCommunityAdapter
-
+    var block = false
 
     private lateinit var job: Job
 
@@ -56,20 +64,24 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         firebaseAuth = FirebaseAuth.getInstance()
         job = Job()
 
-        val Intent = intent
-        var title = Intent.getStringExtra("TITLE").toString()
-        var contents = Intent.getStringExtra("CONTENTS").toString()
-        //var image = Intent.getStringExtra("IMAGE").toString()
-        var image = Intent.getStringArrayListExtra("IMAGE").toString()
-        var writer = Intent.getStringExtra("WRITER").toString()
-        var id = Intent.getStringExtra("IDD")
-        val args = intent.getBundleExtra("BUNDLE")
-        var like = args?.getSerializable("ARRAYLIST") as ArrayList<String>
-        var comments = intent.getSerializableExtra("COMMENTS") as Long
+        val Intent: Intent = getIntent()
+
+        val CommunityInfo = Intent.getParcelableExtra<CommunityEntity>("COMMUNITY")!!
+
+        var title = CommunityInfo.title
+        var contents = CommunityInfo.contents
+        var image = CommunityInfo.image
+        var writer = CommunityInfo.writer
+        var id = CommunityInfo.id
+        var like = CommunityInfo.like
+        var comments = CommunityInfo.comments
+
+
 
         txt_TitleInContent.text = title
         txt_ContentInContent.text = contents
-
+        txt_CommentsNumberInContents.text = comments.toString()
+        widget_progressbarInCommunityImage.visibility = View.GONE
         //val urt = Uri.parse(image)
         //Glide.with(this).load(urt).into(img_ContentImage)
 
@@ -83,8 +95,9 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
 
 
         val docRef = db.collection("community").document(id!!)
+        updateCommunityContents(docRef)
 
-        adapter = CommentsAdapter(getCommunityContentsActivity())
+        adapter = CommentsAdapter(getCommunityContentsActivity() , viewModel)
         // Setting the Adapter with the recyclerview
         comments_recycleView.layoutManager = LinearLayoutManager(getCommunityContentsActivity())
         comments_recycleView.adapter = adapter
@@ -110,40 +123,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
 
         }*/
 
-        docRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w("error", "Listen failed.", e)
-                return@addSnapshotListener
-            }
 
-            if (snapshot != null && snapshot.exists()) {
-                txt_TitleInContent.text = snapshot["title"].toString()
-                txt_ContentInContent.text = snapshot["contents"].toString()
-                var updated_image = snapshot["image"] as ArrayList<String>
-                if(updated_image.isEmpty()){
-                    community_recycleViewInCommunityContents.visibility = View.GONE
-                }
-                else{
-                    if(this.isFinishing()){
-                        //Toast.makeText(this,"잠시뒤 다시 시도해 주세요", Toast.LENGTH_LONG).show()
-                    }
-                    else{
-                        //Glide.with(this).load(urt).into(img_ContentImage)
-                        adapterForImage = ImgInCommunityAdapter(this , updated_image)
-                        community_recycleViewInCommunityContents.adapter = adapterForImage
-                        community_recycleViewInCommunityContents.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-                        adapterForImage.setSearchResultList(updated_image) {
-                            val intent= Intent(this , ShowImageActivity::class.java)
-                            intent.putStringArrayListExtra("DATA", updated_image)
-                            startActivity(intent)
-                        }
-                    }
-                }
-
-            } else {
-                Log.d("current null", "Current data: null")
-            }
-        }
 
         if(like.contains(firebaseAuth.currentUser?.uid)){
             btn_LikeInContents.setColorFilter(Color.BLUE)
@@ -191,44 +171,117 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
                 finish()
             }
         }
+
         //댓글 작성
 
         btn_AddComments.setOnClickListener {
-
             if(edt_AddComments.text.isNotEmpty() && edt_AddComments.text.isNotBlank()){
+                CoroutineScope(Dispatchers.Main).launch {
 
-                val commentsRef = db.collection("comments").document(id).collection(id)
-                val createTime = FieldValue.serverTimestamp()
-                var nameofwriter :String
-                nameofwriter =""
-                db.collection("user").document(firebaseAuth.currentUser?.uid.toString()).get().addOnSuccessListener {
-                    if(it.data!=null) {
-                        nameofwriter = it["name"].toString()
-                        val data = hashMapOf(
-                            "contents" to edt_AddComments.text.toString(),
-                            "id" to "",
-                            "communityId" to id,
-                            "time" to createTime,
-                            "writer" to firebaseAuth.currentUser?.uid,
-                            "name" to nameofwriter
-                        )
-                        commentsRef.add(data).addOnSuccessListener {
-                            val data = hashMapOf(
-                                "id" to it.id
-                            )
-                            commentsRef.document(it.id).update("id" , it.id)
-                            edt_AddComments.text.clear()
+                    val commentsRef = db.collection("comments").document(id).collection(id)
+                    val createTime = FieldValue.serverTimestamp()
+                    var nameofwriter :String
+                    nameofwriter =""
+
+                    widget_progressbarInCommunityContents.visibility = View.VISIBLE
+                    block = true
+                    CoroutineScope(Dispatchers.IO).async {
+                        db.collection("user").document(firebaseAuth.currentUser?.uid.toString()).get().addOnCompleteListener{
+                            if(it.isSuccessful) {
+                                nameofwriter = it.result["name"].toString()
+                                val data = hashMapOf(
+                                    "contents" to edt_AddComments.text.toString(),
+                                    "id" to "",
+                                    "communityId" to id,
+                                    "time" to createTime,
+                                    "writer" to firebaseAuth.currentUser?.uid,
+                                    "name" to nameofwriter
+                                )
+                                commentsRef.add(data).addOnSuccessListener {
+                                    val data = hashMapOf(
+                                        "id" to it.id
+                                    )
+                                    commentsRef.document(it.id).update("id" , it.id)
+                                    edt_AddComments.text.clear()
+                                }
+                                commentsRef.get().addOnSuccessListener {
+                                    //TODO :: 동시접근 이슈 있음. DeleteComment도 마찬가지
+                                    var size : Long = 0
+                                    db.collection("community").document(id).get().addOnSuccessListener {
+                                        size = it["commentsNum"] as Long
+                                        size++
+                                        txt_CommentsNumberInContents.text = size.toString()
+                                        db.collection("community").document(id).update("commentsNum" , size)
+                                    }
+
+                                }
+
+                                var message = getString(R.string.new_comments) + "\n" + edt_AddComments.text
+                                var fcmPush = FcmPush()
+                                fcmPush?.sendMessage(writer, getString(R.string.alarm_message), message)
+                                viewModel.updateComments()
+                            }
+                            else{
+                                Toast.makeText(GetContext() , R.string.comments_rewrite, Toast.LENGTH_LONG).show()
+                            }
                         }
+                    }.await()
 
-                        var message = getString(R.string.new_comments) + "\n" + edt_AddComments.text
-                        var fcmPush = FcmPush()
-                        fcmPush?.sendMessage(writer, getString(R.string.alarm_message), message)
-                    }
+                    widget_progressbarInCommunityContents.visibility = View.GONE
+                    block = false
+
                 }
+
                 //푸시를 받을 유저의 UID가 담긴 destinationUid 값을 넣어준후 fcmPush클래스의 sendMessage 메소드 호출
 
             }
         }
+
+
+    }
+
+    override fun onBackPressed() {
+        if(!block){
+            super.onBackPressed()
+        }
+        else{
+            Toast.makeText(this , R.string.problem_try_later, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun GetContext() : CommunityContentsActivity{
+        return this
+    }
+
+    fun updateCommunityContents(docRef : DocumentReference){
+
+        var updated_image = ArrayList<String>()
+
+            CoroutineScope(Dispatchers.Main).async {
+                widget_progressbarInCommunityImage.visibility = View.VISIBLE
+                docRef.get().addOnSuccessListener {
+                    txt_TitleInContent.text = it["title"].toString()
+                    txt_ContentInContent.text = it["contents"].toString()
+                    updated_image = it["image"] as ArrayList<String>
+
+                    if(updated_image.isEmpty()){
+                    }
+                    else{
+                        if(GetContext().isFinishing()){
+                            //Toast.makeText(this,"잠시뒤 다시 시도해 주세요", Toast.LENGTH_LONG).show()
+                        }
+                        else{
+                            //Glide.with(this).load(urt).into(img_ContentImage)
+                            adapterForImage = ImgInCommunityAdapter(GetContext())
+                            community_recycleViewInCommunityContents.adapter = adapterForImage
+                            community_recycleViewInCommunityContents.layoutManager = LinearLayoutManager(GetContext(), LinearLayoutManager.HORIZONTAL, false)
+                            adapterForImage.submitList(updated_image)
+                        }
+                    }
+                    widget_progressbarInCommunityImage.visibility = View.GONE
+                }
+            }
+
 
 
     }
@@ -311,11 +364,11 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         viewModel.fetchData().observe(
             this, androidx.lifecycle.Observer {
                 widget_progressbarInCommunityContents.visibility = View.VISIBLE
-                adapter.setListData(it)
-                adapter.notifyDataSetChanged()
-                txt_CommentsNumberInContents.text = adapter.getItemCount().toString()
 
-                db.collection("community").document(id).update("commentsNum" ,adapter.getItemCount() as Int )
+                adapter.submitList(it.map{
+                    it.copy()
+                }
+                )
                 widget_progressbarInCommunityContents.visibility = View.GONE
             }
         )

@@ -97,9 +97,11 @@ class LoginFragment : Fragment() {
 
             if(id == ""){
                 Toast.makeText(loginActivity, getString(R.string.give_id), Toast.LENGTH_SHORT).show()
+                progressBar_Login.visibility = View.GONE
             }
             else if(pass == ""){
                 Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
+                progressBar_Login.visibility = View.GONE
             }
             else{
                 firebaseAuth!!.signInWithEmailAndPassword(id , pass).addOnCompleteListener(loginActivity){
@@ -164,11 +166,14 @@ class LoginFragment : Fragment() {
             }
     }// firebaseAuthWithGoogle END
 
+    //TODO :: 구글 로그인 할때도 isAdmin , isFarmer 체크해야 하나
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
         activity?.finish()
     }
+
+
 
     companion object {
         private const val TAG = "GoogleActivity"
