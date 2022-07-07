@@ -20,10 +20,10 @@ class CommentsViewModel(val commentsRef : CollectionReference) : ViewModel() {
     }*/
 
     private val repo = CommentsRepository(commentsRef)
-    val mutableData = repo.Comments
+    private val commentsData = repo.Comments
 
     fun fetchData(): LiveData<MutableList<Comments>> {
-        return mutableData
+        return commentsData
     }
 
     fun updateComments(){

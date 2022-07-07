@@ -59,7 +59,7 @@ class CommunityFragment : Fragment() {
         // Setting the Adapter with the recyclerview
         community_recycleView1.layoutManager = LinearLayoutManager(requireContext())
         community_recycleView1.adapter = adapter
-        observerData()
+        observeData()
 
         btn_AddCommunity1.setOnClickListener {
             val intent = Intent(requireContext(), AddCommunityActivity::class.java)
@@ -83,9 +83,9 @@ class CommunityFragment : Fragment() {
 
     }
 
-    fun observerData(){
+    fun observeData(){
         viewModel.fetchData().observe(
-            this, androidx.lifecycle.Observer {
+            viewLifecycleOwner, androidx.lifecycle.Observer {
                 adapter.submitList(it.map{
                     it.copy()
                 }

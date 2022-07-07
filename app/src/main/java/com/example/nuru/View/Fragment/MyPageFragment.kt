@@ -21,7 +21,7 @@ import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.Model.Data.Farm.Farm
 import com.example.nuru.View.Activity.AddFarmActivity
 import com.example.nuru.View.Activity.MyPageActivity
-import com.example.nuru.ViewModel.ViewModelFactory.viewModelFactoryForMyFarm
+import com.example.nuru.ViewModel.ViewModelFactory.ViewModelFactoryForMyFarm
 import com.example.nuru.ViewModel.Farm.MyFarmViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -119,7 +119,7 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
         val UserId = firebaseAuth.currentUser?.uid
         val docRef = db.collection("user").document(UserId.toString())
-        viewModel = ViewModelProvider(this, viewModelFactoryForMyFarm(docRef))
+        viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
             .get(MyFarmViewModel::class.java)
 
 
@@ -145,21 +145,16 @@ class MyPageFragment : Fragment() , CoroutineScope {
                 update.await()
             }
         }
-
-
-
         adapter = FarmAdapter(myPageActivity)
         // Setting the Adapter with the recyclerview
         mypage_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
         mypage_recycleView.adapter = adapter
-        observerData()
-
-
+        observeData()
     }
 
-    fun observerData(){
+    fun observeData(){
         viewModel.fetchData().observe(
-            this, Observer {
+            viewLifecycleOwner, Observer {
                 widget_ProgressBarInMyPage.visibility = View.VISIBLE
 
                 adapter.submitList(it.map{

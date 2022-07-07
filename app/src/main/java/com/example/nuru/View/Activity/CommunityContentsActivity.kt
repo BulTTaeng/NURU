@@ -18,7 +18,7 @@ import com.example.nuru.Model.Data.TMap.PushDTO
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
 import com.example.nuru.ViewModel.Community.CommentsViewModel
-import com.example.nuru.ViewModel.ViewModelFactory.viewModelFactoryForComments
+import com.example.nuru.ViewModel.ViewModelFactory.ViewModelFactoryForComments
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
@@ -80,7 +80,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         btn_DeleteCommunity.isVisible = writer.equals(firebaseAuth.currentUser?.uid)
 
         val commentsRef = db.collection("comments").document(id!!).collection(id)
-        viewModel = ViewModelProvider(this, viewModelFactoryForComments(commentsRef))
+        viewModel = ViewModelProvider(this, ViewModelFactoryForComments(commentsRef))
             .get(CommentsViewModel::class.java)
         //viewModel = ViewModelProvider(this).get(commentsViewModel(commentsRef)::class.java)
 
@@ -92,7 +92,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         // Setting the Adapter with the recyclerview
         comments_recycleView.layoutManager = LinearLayoutManager(getCommunityContentsActivity())
         comments_recycleView.adapter = adapter
-        observerData(id)
+        observeData(id)
 
        /* commentsRef.addSnapshotListener{ value, e ->
             comments_info = ArrayList<Comments>()
@@ -188,6 +188,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
                                     "writer" to firebaseAuth.currentUser?.uid,
                                     "name" to nameofwriter
                                 )
+
                                 commentsRef.add(data).addOnSuccessListener {
                                     val data = hashMapOf(
                                         "id" to it.id
@@ -351,7 +352,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         }
     }*/
 
-    fun observerData(id : String){
+    fun observeData(id : String){
         viewModel.fetchData().observe(
             this, androidx.lifecycle.Observer {
                 widget_progressbarInCommunityContents.visibility = View.VISIBLE

@@ -19,10 +19,10 @@ class CommunityViewModel : ViewModel() {
     }*/
 
     private val repo = CommunityRepository()
-    val mutableData = repo.Community
+    private val communityData = repo.Community
 
     fun fetchData(): LiveData<MutableList<CommunityEntity>> {
-        return mutableData
+        return communityData
     }
 
     fun updateView(){
