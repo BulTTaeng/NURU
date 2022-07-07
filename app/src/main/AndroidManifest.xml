@@ -23,46 +23,40 @@
         android:theme="@style/Theme.Nuru"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".NewMyFarmActivity"
+            android:name=".View.Activity.NewMyFarmActivity"
             android:exported="false" />
         <activity
-            android:name=".ShowImageActivity"
+            android:name=".View.Activity.ShowImageActivity"
             android:exported="false" />
         <activity
-            android:name=".EditCommunityActivity"
+            android:name=".View.Activity.EditCommunityActivity"
             android:exported="false" />
         <activity
-            android:name=".CommunityContentsActivity"
+            android:name=".View.Activity.CommunityContentsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddCommunityActivity"
+            android:name=".View.Activity.AddCommunityActivity"
             android:exported="false" />
         <activity
-            android:name=".CommunityActivity"
+            android:name=".View.Activity.AddAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".AddAdminActivity"
+            android:name=".View.Activity.AddFarmActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFarmActivity"
+            android:name=".View.Activity.AddImageActivity"
             android:exported="false" />
         <activity
-            android:name=".AddImageActivity"
+            android:name=".View.Activity.MyFarmActivity"
             android:exported="false" />
         <activity
-            android:name=".MyFarmActivity"
+            android:name=".View.Activity.MyPageActivity"
             android:exported="false" />
         <activity
-            android:name=".MyPageActivity"
+            android:name=".View.Activity.SearchAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchAddressActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SearchAddressActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".MarkerListActivity"
+            android:name=".View.Activity.SearchAddressActivity2"
             android:exported="false" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -83,14 +77,14 @@
             android:resource="@color/light_green" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".View.Activity.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".MapsActivity2"
+            android:name=".View.Activity.MapsActivity2"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".View.Activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -99,10 +93,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".View.Activity.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".View.Activity.MainActivity"
             android:exported="true" />
     </application>
 

@@ -26,6 +26,7 @@
 - 구글 로그인 문제(admin , farmer) 해결
 - 회원탈퇴 기능 추가
 - 구글 로그아웃 에러 해결
+- Init Refactoring
 
 
 
