@@ -27,7 +27,7 @@
 - 회원탈퇴 기능 추가
 - 구글 로그아웃 에러 해결
 - Init Refactoring
-
+- Code Convention 적용
 
 
 </details><br>  
