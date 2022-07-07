@@ -73,4 +73,12 @@
     <string name="problem_try_later">문제가 발생했습니다. 잠시 후 다시 시도해주세요</string>
     <string name="comments_rewrite">댓글 작성중 오류가 생겼습니다. 재작성 부탁드립니다</string>
     <string name="delete_comments">정말 댓글을 삭제 할까요?</string>
+    <string name="select_job">직업군 고르기</string>
+    <string name="signup">가입하기</string>
+    <string name="farmer">농장주</string>
+    <string name="admin">관리자</string>
+    <string name="back_impossible">회원가입중에는 이동할 수 없습니다.</string>
+    <string name="success_withdrawal">회원 탈퇴에 성공했습니다</string>
+    <string name="fail_withdrawal">회원 탈퇴에 실패했습니다</string>
+
 </resources>

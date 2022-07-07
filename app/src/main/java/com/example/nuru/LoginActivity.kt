@@ -60,4 +60,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         backPressedTime = System.currentTimeMillis()
     }*/
 
+    override fun onBackPressed() {
+    }
+
 }

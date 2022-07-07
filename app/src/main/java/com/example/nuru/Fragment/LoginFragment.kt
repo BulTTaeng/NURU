@@ -31,6 +31,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.net.Uri
 import com.example.nuru.MyPageActivity
+import com.example.nuru.model.SignUpInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
@@ -132,11 +133,11 @@ class LoginFragment : Fragment() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
+                var account = task.getResult(ApiException::class.java)
                 username = account.displayName.toString()
                 email = account.email.toString()
                 firebaseAuthWithGoogle(account!!)
-                activity?.finish()
+                //activity?.finish()
 
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
@@ -144,6 +145,10 @@ class LoginFragment : Fragment() {
             }
         }
     } // onActivityResult End
+
+    private fun checkAdminOrFarmer(){
+
+    }
 
     // firebaseAuthWithGoogle
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
@@ -154,10 +159,12 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(loginActivity) { task ->
                 if (task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
-                    writeNewUserWithTaskListeners(firebaseAuth.currentUser?.uid.toString() , username ,
-                        email, "google_login")
-                    LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
-                    activity?.finish()
+
+                    LoginController.navigate(LoginFragmentDirections
+                        .actionLoginFragment2ToCheckTypeForGoogleFragment(SignUpInfo(firebaseAuth.currentUser?.uid.toString() , username ,
+                            email, "google_login")))
+                    //LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
+                    //activity?.finish()
                     //toMainActivity(firebaseAuth?.currentUser)
                 } else {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
@@ -170,7 +177,7 @@ class LoginFragment : Fragment() {
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-        activity?.finish()
+        //activity?.finish()
     }
 
 

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_loginFragment2_to_myPageActivity"
             app:destination="@id/myPageActivity" />
+        <action
+            android:id="@+id/action_loginFragment2_to_checkTypeForGoogleFragment"
+            app:destination="@id/checkTypeForGoogleFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -39,4 +42,15 @@
         android:name="com.example.nuru.MyPageActivity"
         android:label="activity_my_page"
         tools:layout="@layout/activity_my_page" />
+    <fragment
+        android:id="@+id/checkTypeForGoogleFragment"
+        android:name="com.example.nuru.Fragment.CheckTypeForGoogleFragment"
+        android:label="fragment_check_type_for_google"
+        tools:layout="@layout/fragment_check_type_for_google">
+        <argument
+            android:name="signUpInfo"
+            app:argType="com.example.nuru.model.SignUpInfo"
+            app:nullable="true" />
+
+    </fragment>
 </navigation>
