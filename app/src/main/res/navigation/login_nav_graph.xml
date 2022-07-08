@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment2"
-        android:name="com.example.nuru.View.Fragment.Login.LoginFragment"
+        android:name="com.example.nuru.view.fragment.login.LoginFragment"
         android:label="fragment_login2"
         tools:layout="@layout/fragment_login2" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.nuru.View.Fragment.Login.SignupFragment"
+        android:name="com.example.nuru.view.fragment.login.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
@@ -34,22 +34,22 @@
     </fragment>
     <activity
         android:id="@+id/mapsActivity"
-        android:name="com.example.nuru.View.Activity.Map.MapsActivity"
+        android:name="com.example.nuru.view.activity.map.MapsActivity"
         android:label="activity_maps"
         tools:layout="@layout/activity_maps" />
     <activity
         android:id="@+id/myPageActivity"
-        android:name="com.example.nuru.View.Activity.MyPage.MyPageActivity"
+        android:name="com.example.nuru.view.activity.mypage.MyPageActivity"
         android:label="activity_my_page"
         tools:layout="@layout/activity_my_page" />
     <fragment
         android:id="@+id/checkTypeForGoogleFragment"
-        android:name="com.example.nuru.View.Fragment.Login.CheckTypeForGoogleFragment"
+        android:name="com.example.nuru.view.fragment.login.CheckTypeForGoogleFragment"
         android:label="fragment_check_type_for_google"
         tools:layout="@layout/fragment_check_type_for_google">
         <argument
             android:name="signUpInfo"
-            app:argType="com.example.nuru.Model.Data.Login.SignUpInfo"
+            app:argType="com.example.nuru.model.data.login.SignUpInfo"
             app:nullable="true" />
 
     </fragment>

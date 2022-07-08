@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.Fragment.Login.CheckTypeForGoogleFragment">
+    tools:context=".view.fragment.login.CheckTypeForGoogleFragment">
 
     <TextView
         android:id="@+id/txt_selectJob"
