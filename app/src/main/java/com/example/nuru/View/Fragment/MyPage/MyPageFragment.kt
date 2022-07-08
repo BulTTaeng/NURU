@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.MyPage
 
 import android.content.Context
 import android.content.Intent
@@ -19,8 +19,8 @@ import com.example.nuru.*
 import com.example.nuru.View.Adapter.FarmAdapter
 import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.Model.Data.Farm.Farm
-import com.example.nuru.View.Activity.AddFarmActivity
-import com.example.nuru.View.Activity.MyPageActivity
+import com.example.nuru.View.Activity.MyPage.AddFarmActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.example.nuru.ViewModel.ViewModelFactory.ViewModelFactoryForMyFarm
 import com.example.nuru.ViewModel.Farm.MyFarmViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

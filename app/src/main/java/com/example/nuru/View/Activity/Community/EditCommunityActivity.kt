@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.Community
 
 import android.content.Context
 import android.content.Intent

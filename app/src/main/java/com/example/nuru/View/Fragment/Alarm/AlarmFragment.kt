@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Alarm
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

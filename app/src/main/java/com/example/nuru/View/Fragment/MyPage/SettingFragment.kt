@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.MyPage
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nuru.*
 import com.example.nuru.Model.Data.Setting.SettingItem
-import com.example.nuru.View.Activity.LoginActivity
-import com.example.nuru.View.Activity.MyPageActivity
+import com.example.nuru.View.Activity.Login.LoginActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.example.nuru.View.Adapter.SettingAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

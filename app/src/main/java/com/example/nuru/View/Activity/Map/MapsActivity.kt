@@ -1,15 +1,18 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.Map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.nuru.Model.Data.Farm.Farm
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,10 +20,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_maps2.*
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_maps.*
 import com.example.nuru.Model.Data.TMap.SearchResultEntity
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
@@ -29,18 +39,27 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 
-class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
-    lateinit var mapsActivity: MapsActivity2
+    private lateinit var firebaseAuth: FirebaseAuth
+    //google client
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    lateinit var mapsActivity: MapsActivity
+
     var singletonC = GetCurrentContext.getInstance()
 
     //database connection
     private lateinit var database: DatabaseReference
 
+    lateinit var user_farm_info : ArrayList<Farm>
 
     val db = FirebaseFirestore.getInstance()
 
     private lateinit var mMap: GoogleMap
+    // 현재 위치를 검색하기 위함
+    private lateinit var fusedLocationClient: FusedLocationProviderClient // 위칫값 사용
+    private lateinit var locationCallback: LocationCallback // 위칫값 요청에 대한 갱신 정보를 받아옴
 
     companion object {
         const val SEARCH_RESULT_EXTRA_KEY: String = "SEARCH_RESULT_EXTRA_KEY"
@@ -59,10 +78,10 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps2)
+        setContentView(R.layout.activity_maps)
         singletonC.setcurrentContext(this)
 
-        widget_ProgressBar2.visibility = View.GONE
+        widget_ProgressBar.visibility = View.GONE
 
         // 사용할 권한 array로 저장
         val permissions = arrayOf(
@@ -71,36 +90,43 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
         requirePermissions(permissions, 999) //권환 요쳥, 999는 임의의 숫자
 
-        btn_ConfirmLocation.setOnClickListener {
-            //val intent = Intent(this, MapsActivity::class.java)
-            //startActivity(intent)
+        firebaseAuth = FirebaseAuth.getInstance()
 
-            var searchResult1: SearchResultEntity? = intent.getParcelableExtra<SearchResultEntity>(
-                SEARCH_RESULT_EXTRA_KEY
-            )
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
 
-            val intent = Intent(this, AddFarmActivity::class.java)
-            if(searchResult1 == null){
-                Toast.makeText(this, getString(R.string.try_later) , Toast.LENGTH_LONG).show()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        database = Firebase.database.reference
+
+        job = Job()
+
+        user_farm_info =ArrayList<Farm>()
+
+        btn_CurrentLocation.setOnClickListener{
+            mMap?.let{
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                updateLocation()
             }
-            else{
-                intent.putExtra("ADDRESS", searchResult1.fullAddress)
-                val b = Bundle()
-                b.putDouble("latitude", searchResult1.locationLatLng.latitude.toDouble())
-                b.putDouble("longtitude" , searchResult1.locationLatLng.longitude.toDouble())
-                intent.putExtras(b)
-                val searchaddressactivity2 = SearchAddressActivity2()
-                searchaddressactivity2.endSearchAddressActivity2()
-                startActivity(intent)
-                finish()
-            }
+        }
+
+        btn_Search.setOnClickListener {
+            val intent_address = Intent(this, SearchAddressActivity::class.java)
+            intent_address.putExtra("ADDRESS", et_SearchAddress.text.toString())
+            startActivity(intent_address)
         }
 
     }
 
+    fun returnMaps(): MapsActivity {
+        return this
+    }
+
     fun startProcess() {
         // SupportMapFragment를 가져와서 지도가 준비되면 알림을 받습니다.
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map2) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
@@ -125,9 +151,10 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-            permissionGranted(requestCode)
-        } else {
             permissionDenied(requestCode)
+            //여기 반대로 되야 작동함 , 이유를 모르겠음...
+        } else {
+            permissionGranted(requestCode)
         }
     }
 
@@ -171,6 +198,41 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
             currentSelectMarker = mMap.addMarker(markerOptions)!!
             currentSelectMarker?.showInfoWindow()
         }
+        else{
+            val posLatLng = LatLng(
+                35.1740336,
+                126.9016885
+            )
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posLatLng , CAMERA_ZOOM_LEVEL))
+        }
+        //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //updateLocation()
+    }
+
+    // 위치 정보를 받아오는 역할
+    @SuppressLint("MissingPermission")
+    //requestLocationUpdates는 권한 처리가 필요한데 현재 코드에서는 확인 할 수 없음. 따라서 해당 코드를 체크하지 않아도 됨.
+    fun updateLocation() {
+        widget_ProgressBar.visibility = View.VISIBLE
+        val locationRequest = LocationRequest.create()
+
+        /*locationRequest.run {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 1000
+        }*/
+        //이거 활성화 시키면 1초마다 제제리로 돌아감
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult?.let {
+                    for(location in it.locations) {
+                        setLastLocation(location)
+                    }
+                }
+            }
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
     }
 
 
@@ -188,8 +250,18 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
         mMap.clear()
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-        widget_ProgressBar2.visibility = View.GONE
+        widget_ProgressBar.visibility = View.GONE
     }
+
+    /*private fun addMarkers(googleMap: GoogleMap) {
+        places.forEach { place ->
+            val marker = googleMap.addMarker(
+                MarkerOptions()
+                    .title(place.name)
+                    .position(place.latLng)
+            )
+        }
+    }*/
 
 
 }

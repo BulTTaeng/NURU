@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Map
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.nuru.View.Activity.MapsActivity
+import com.example.nuru.View.Activity.Map.MapsActivity
 import com.example.nuru.R
-import com.example.nuru.View.Activity.SearchAddressActivity
+import com.example.nuru.View.Activity.Map.SearchAddressActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory

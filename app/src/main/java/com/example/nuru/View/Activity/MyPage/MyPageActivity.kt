@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.MyPage
 
 import KeepStateNavigator
 import android.Manifest

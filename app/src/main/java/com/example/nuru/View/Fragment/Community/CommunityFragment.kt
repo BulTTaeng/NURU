@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Community
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nuru.View.Adapter.CommunityAdapter
-import com.example.nuru.View.Activity.AddCommunityActivity
+import com.example.nuru.View.Activity.Community.AddCommunityActivity
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
 import com.example.nuru.ViewModel.Community.CommunityViewModel

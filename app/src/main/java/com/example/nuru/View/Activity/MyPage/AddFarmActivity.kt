@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.MyPage
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
+import com.example.nuru.View.Activity.Map.SearchAddressActivity2
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

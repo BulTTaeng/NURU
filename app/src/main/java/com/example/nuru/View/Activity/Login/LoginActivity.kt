@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.Login
 
 import android.os.Bundle
 import android.view.View

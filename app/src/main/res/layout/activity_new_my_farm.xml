@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_marginTop="4dp"
-                tools:context=".View.Activity.NewMyFarmActivity"
+                tools:context=".View.Activity.MyPage.NewMyFarmActivity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout_inMyPage">
             </fragment>

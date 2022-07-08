@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Login
 
 import android.content.Context
 import android.content.Intent
@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.example.nuru.View.Activity.LoginActivity
+import com.example.nuru.View.Activity.Login.LoginActivity
 import com.example.nuru.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -23,7 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_login2.*
 
-import com.example.nuru.View.Activity.MyPageActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.example.nuru.Model.Data.Login.SignUpInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.collections.ArrayList
@@ -152,11 +152,14 @@ class LoginFragment : Fragment() {
                 if (task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
 
-                    LoginController.navigate(LoginFragmentDirections
-                        .actionLoginFragment2ToCheckTypeForGoogleFragment(
-                            SignUpInfo(firebaseAuth.currentUser?.uid.toString() , username ,
-                            email, "google_login")
-                        ))
+                    LoginController.navigate(
+                        com.example.nuru.View.Fragment.Login.LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
+                            SignUpInfo(
+                                firebaseAuth.currentUser?.uid.toString(), username,
+                                email, "google_login"
+                            )
+                        )
+                    )
                     //LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
                     //activity?.finish()
                     //toMainActivity(firebaseAuth?.currentUser)

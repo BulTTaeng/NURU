@@ -1,10 +1,11 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.MyPage
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.nuru.Model.Data.Farm.Farm
 import com.example.nuru.R
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
