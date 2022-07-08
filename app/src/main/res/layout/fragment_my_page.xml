@@ -1,130 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.mypage.MyPageFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.nuru.view.fragment.mypage.MyPageFragment" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.mypage.MyPageFragment">
 
-        <TextView
-            android:id="@+id/txt_UserNameMyPage"
-            android:layout_width="133dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp"
-            android:maxLines="2"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_MyPageImage" />
-
-        <View
-            android:id="@+id/view_RoundEdge"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/background_roundedge_round"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
-
-        <ImageView
-            android:id="@+id/img_MyPageImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
-            app:srcCompat="@drawable/profile_lightgray" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_in_mypage"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginTop="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_UserNameMyPage" >
+            android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mypage_recycleView"
+            <TextView
+                android:id="@+id/txt_UserNameMyPage"
+                android:layout_width="133dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_MyPageImage" />
+
+            <View
+                android:id="@+id/view_RoundEdge"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_roundedge_round"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
+
+            <ImageView
+                android:id="@+id/img_MyPageImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
+                app:srcCompat="@drawable/profile_lightgray" />
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_in_mypage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                android:layout_height="350dp"
+                android:layout_marginTop="50dp"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_UserNameMyPage">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mypage_recycleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
+            <ProgressBar
+                android:id="@+id/widget_ProgressBarInMyPage"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/swipe_in_mypage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/swipe_in_mypage" />
 
-        <ProgressBar
-            android:id="@+id/widget_ProgressBarInMyPage"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/swipe_in_mypage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/swipe_in_mypage" />
+            <ImageButton
+                android:id="@+id/btn_add_farm"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/background_roundedge"
+                android:scaleType="fitCenter"
+                android:onClick="@{fragment::btnAddFarm}"
+                app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
+                app:srcCompat="@drawable/plusbtn" />
 
-        <ImageButton
-            android:id="@+id/btn_AddFarm"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:scaleType="fitCenter"
-            android:background="@drawable/background_roundedge"
-            app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
-            app:srcCompat="@drawable/plusbtn"/>
+            <TextView
+                android:id="@+id/txt_MyFarmTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="내 농장"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_MyFarmTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="내 농장"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageButton
+                android:id="@+id/btn_setting"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/background_roundedge"
+                android:scaleType="fitCenter"
+                android:src="@drawable/settings"
+                android:onClick="@{fragment::btnSetting}"
+                app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
 
-        <ImageButton
-            android:id="@+id/btn_Setting"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/background_roundedge"
-            android:scaleType="fitCenter"
-            android:src="@drawable/settings"
-            app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
-
-        <Button
-            android:id="@+id/btn_Calnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/cal_num"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/swipe_in_mypage" />
+            <Button
+                android:id="@+id/btn_cal_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/cal_num"
+                android:onClick="@{fragment::btnCalNum}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/swipe_in_mypage" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</ScrollView>
+    </ScrollView>
+</layout>
