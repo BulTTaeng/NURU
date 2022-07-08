@@ -84,6 +84,8 @@ class SettingFragment : Fragment() {
 
 
 
+
+
     private fun signOut() { // 로그아웃
 
         progressBar_setting.visibility = View.VISIBLE

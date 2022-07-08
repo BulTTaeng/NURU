@@ -3,6 +3,7 @@ package com.example.nuru.view.adapter
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,17 +38,18 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
 
     val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
     val currentDate : String = sdf.format(Date())
+    private lateinit var binding: CardviewCommentsBinding
 
 
     inner class CommentsViewHolder(
         private val binding: CardviewCommentsBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(data: Comments) = with(binding) {
-            txtCommentsContents.setText(data.commentsContents)
+            binding.comments= data
+
             txtCommentsContents.isEnabled = false
             btnEditCommentsDone.visibility = View.GONE
             btnEditCommentsDone.isEnabled = false
-            txtWriter.text = data.name
             val writetime : String = sdf.format(data.time)
             txtTimeDiffInComments.text = findDifference(writetime , currentDate)
 
@@ -68,26 +70,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
 
             }
 
-            btnDeleteComments.setOnClickListener {
-                showAlert(data.id , data.communityId)
-            }
-
-            btnEditComments.setOnClickListener {
-                txtCommentsContents.isEnabled = true
-                txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-                btnEditCommentsDone.visibility = View.VISIBLE
-                btnEditCommentsDone.isEnabled = true
-            }
-
-            btnEditCommentsDone.setOnClickListener {
-                val editedText = txtCommentsContents.text.toString()
-                db.collection("comments").document(data.communityId.toString()).collection(data.communityId).document(data.id.toString()).update("contents",editedText)
-                btnEditCommentsDone.visibility = View.GONE
-                btnEditCommentsDone.isEnabled = false
-                txtCommentsContents.setPaintFlags(txtCommentsContents.getPaintFlags() and Paint.UNDERLINE_TEXT_FLAG.inv())
-            }
-
 
 
         }
@@ -99,12 +81,12 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
         // that is used to hold list item
         //val view = LayoutInflater.from(parent.context)
         //   .inflate(R.layout.cardview_farm, parent, false)
-        val binding = CardviewCommentsBinding.inflate(
+        binding = CardviewCommentsBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-
+        binding.adapter = this
         return CommentsViewHolder(binding)
 
 
@@ -128,6 +110,35 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
                 oldItem == newItem
         }
     }
+
+    fun btnEditComments(view : View){
+        binding.txtCommentsContents.isEnabled = true
+        binding.txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
+        binding.btnEditCommentsDone.visibility = View.VISIBLE
+        binding.btnEditCommentsDone.isEnabled = true
+    }
+
+    fun btnDeleteComments(view : View){
+        showAlert(binding.comments!!.id , binding.comments!!.communityId)
+    }
+
+    fun btnEditCommentsDone(view : View){
+        val editedText = binding.txtCommentsContents.text.toString()
+        db.collection("comments").document(binding.comments?.communityId.toString())
+            .collection(binding.comments!!.communityId)
+            .document(binding.comments!!.id.toString())
+            .update("contents",editedText).addOnCompleteListener{
+                if(it.isSuccessful){
+                    binding.btnEditCommentsDone.visibility = View.GONE
+                    binding.btnEditCommentsDone.isEnabled = false
+                    binding.txtCommentsContents.setPaintFlags(binding.txtCommentsContents.getPaintFlags() and Paint.UNDERLINE_TEXT_FLAG.inv())
+                }
+                else{
+                    Toast.makeText(context ,context.getString(R.string.problem_try_later) , Toast.LENGTH_LONG).show()
+                }
+            }
+       }
 
     fun showAlert(commentsId : String , communityId : String) {
         AlertDialog.Builder(context)

@@ -5,9 +5,12 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nuru.R
+import com.example.nuru.databinding.ActivityAddCommunityBinding
 import com.example.nuru.view.adapter.AddCommunityAdapter
 import com.example.nuru.utility.GetCurrentContext
 import com.google.firebase.auth.FirebaseAuth
@@ -32,28 +35,17 @@ class AddCommunityActivity : AppCompatActivity() {
 
     var selectedImageUrilist = ArrayList<Uri>()
     lateinit var adapter : AddCommunityAdapter
+    private lateinit var binding: ActivityAddCommunityBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_community)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_add_community)
+        binding.activity = this@AddCommunityActivity
         singletonC.setcurrentContext(this)
         firebaseAuth = FirebaseAuth.getInstance()
 
         UserId = firebaseAuth.currentUser!!.uid
-
-        btn_AddImageInCommunity.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(intent, 9981)
-        }
-
-        btn_Upload.setOnClickListener {
-            uploadImageTOFirebase(selectedImageUrilist)
-
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -88,6 +80,18 @@ class AddCommunityActivity : AppCompatActivity() {
             //selectedImageUri = data.data
             //img_ImageInCommunity.setImageURI(selectedImageUri)
         }
+    }
+
+    fun btnUpload(view : View){
+        uploadImageTOFirebase(selectedImageUrilist)
+    }
+
+    fun btnAddImageInCommunity(view :View){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, 9981)
     }
 
     fun uploadImageTOFirebase(uriList: ArrayList<Uri>) {

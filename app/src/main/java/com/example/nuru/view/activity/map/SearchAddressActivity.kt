@@ -8,9 +8,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nuru.view.adapter.SearchRecyclerAdapter
@@ -50,15 +52,13 @@ class SearchAddressActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchAddressBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_search_address)
+        binding.activity = this@SearchAddressActivity
+
         singletonC.setcurrentContext(this)
-        val view = binding.root
-        setContentView(view)
 
         val Intent = intent
         address = Intent.getStringExtra("ADDRESS").toString()
-
-
 
         job = Job()
 
@@ -72,17 +72,17 @@ class SearchAddressActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    fun btnSearchAddress(view : View){
+        searchKeyword(et_SearchBarInputView.text.toString())
+        // 키보드 숨기기
+        hideKeyboard()
+    }
+
     private fun initAdapter() {
         adapter = SearchRecyclerAdapter()
     }
 
     private fun bindViews() = with(binding) {
-        btn_SearchAddress.setOnClickListener {
-            searchKeyword(et_SearchBarInputView.text.toString())
-
-            // 키보드 숨기기
-            hideKeyboard()
-        }
 
         et_SearchBarInputView.setOnKeyListener { v, keyCode, event ->
             when (keyCode) {
