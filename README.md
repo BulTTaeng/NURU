@@ -30,6 +30,12 @@
 - Code Convention 적용
 
 
+`2022.07.08`  
+- Activity data biding 다 끝냄
+- Comments adapter 데이터 바인딩
+- CommunityContent ViewModel , ViewModel Factory, Repository 추가
+
+
 </details><br>  
 
 --- 
