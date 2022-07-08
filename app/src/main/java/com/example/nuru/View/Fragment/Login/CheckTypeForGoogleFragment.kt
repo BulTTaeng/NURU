@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Login
 
 import android.content.Context
 import android.content.Intent
@@ -11,8 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.navArgs
-import com.example.nuru.View.Activity.LoginActivity
-import com.example.nuru.View.Activity.MyPageActivity
+import com.example.nuru.View.Activity.Login.LoginActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.example.nuru.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,7 +23,7 @@ class CheckTypeForGoogleFragment : Fragment() {
     lateinit var loginActivity: LoginActivity
     val firebaseAuth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
-    lateinit var args: CheckTypeForGoogleFragmentArgs
+    lateinit var args: com.example.nuru.View.Fragment.Login.CheckTypeForGoogleFragmentArgs
     private lateinit var callback: OnBackPressedCallback
 
     override fun onAttach(context: Context) {
@@ -54,7 +54,7 @@ class CheckTypeForGoogleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         progressBar_googleSignUp.visibility = View.GONE
 
-        val arg by navArgs<CheckTypeForGoogleFragmentArgs>()
+        val arg by navArgs<com.example.nuru.View.Fragment.Login.CheckTypeForGoogleFragmentArgs>()
         args = arg
 
         btn_signUp.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.Community
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

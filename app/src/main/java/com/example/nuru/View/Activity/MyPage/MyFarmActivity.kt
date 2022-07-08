@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.MyPage
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -18,13 +18,12 @@ import com.bumptech.glide.Glide
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityMyFarmBinding
 import com.example.nuru.Utility.GetCurrentContext
+import com.example.nuru.View.Activity.Community.AddImageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_my_farm.*
-import kotlinx.android.synthetic.main.activity_other.*
-import kotlinx.android.synthetic.main.fragment_login2.*
 
 
 class MyFarmActivity : AppCompatActivity() ,  PopupMenu.OnMenuItemClickListener {

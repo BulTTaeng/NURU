@@ -17,6 +17,7 @@ import com.example.nuru.Model.Data.Community.CommunityEntity
 import com.example.nuru.Model.Data.TMap.PushDTO
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
+import com.example.nuru.View.Activity.Community.EditCommunityActivity
 import com.example.nuru.ViewModel.Community.CommentsViewModel
 import com.example.nuru.ViewModel.ViewModelFactory.ViewModelFactoryForComments
 import com.google.firebase.auth.FirebaseAuth

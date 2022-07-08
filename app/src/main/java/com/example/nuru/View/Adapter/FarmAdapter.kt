@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nuru.databinding.CardviewFarmBinding
 import com.example.nuru.Model.Data.Farm.Farm
-import com.example.nuru.View.Activity.NewMyFarmActivity
+import com.example.nuru.View.Activity.MyPage.NewMyFarmActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

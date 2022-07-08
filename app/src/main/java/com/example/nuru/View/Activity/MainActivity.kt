@@ -15,6 +15,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import com.example.nuru.R
 import com.example.nuru.Utility.GetCurrentContext
+import com.example.nuru.View.Activity.Login.LoginActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 
 
 class MainActivity : AppCompatActivity() {

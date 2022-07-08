@@ -1,4 +1,4 @@
-package com.example.nuru.View.Fragment
+package com.example.nuru.View.Fragment.Login
 
 import android.content.Context
 import android.content.Intent
@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.example.nuru.View.Activity.LoginActivity
-import com.example.nuru.View.Activity.MyPageActivity
+import com.example.nuru.View.Activity.Login.LoginActivity
+import com.example.nuru.View.Activity.MyPage.MyPageActivity
 import com.example.nuru.R
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth

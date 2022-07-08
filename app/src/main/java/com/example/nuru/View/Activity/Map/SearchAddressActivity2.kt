@@ -1,4 +1,4 @@
-package com.example.nuru.View.Activity
+package com.example.nuru.View.Activity.Map
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nuru.View.Adapter.SearchRecyclerAdapter
-import com.example.nuru.View.Activity.MapsActivity.Companion.SEARCH_RESULT_EXTRA_KEY
+import com.example.nuru.View.Activity.Map.MapsActivity.Companion.SEARCH_RESULT_EXTRA_KEY
 import com.example.nuru.databinding.ActivitySearchAddress2Binding
 import com.example.nuru.Model.Data.TMap.LocationLatLngEntity
 import com.example.nuru.Model.Data.TMap.SearchResultEntity
@@ -24,8 +24,6 @@ import com.example.nuru.Model.Data.TMap.Search.Poi
 import com.example.nuru.Model.Data.TMap.Search.Pois
 import com.example.nuru.Model.Data.TMap.Search.SearchPoiInfo
 import com.example.nuru.Utility.GetCurrentContext
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_search_address.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext

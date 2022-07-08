@@ -8,7 +8,7 @@
 
     <keep_state_fragment
         android:id="@+id/myPageFragment"
-        android:name="com.example.nuru.View.Fragment.MyPageFragment"
+        android:name="com.example.nuru.View.Fragment.MyPage.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" >
         <action
@@ -17,7 +17,7 @@
     </keep_state_fragment >
     <keep_state_fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.nuru.View.Fragment.SettingFragment"
+        android:name="com.example.nuru.View.Fragment.MyPage.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" >
         <action
@@ -26,17 +26,17 @@
     </keep_state_fragment >
     <keep_state_fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.nuru.View.Fragment.MapFragment"
+        android:name="com.example.nuru.View.Fragment.Map.MapFragment"
         android:label="MapFragment">
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/communityFragment"
-        android:name="com.example.nuru.View.Fragment.CommunityFragment"
+        android:name="com.example.nuru.View.Fragment.Community.CommunityFragment"
         android:label="CommunityFragment" >
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/alarmFragment"
-        android:name="com.example.nuru.View.Fragment.AlarmFragment"
+        android:name="com.example.nuru.View.Fragment.Alarm.AlarmFragment"
         android:label="fragment_alarm"
         tools:layout="@layout/fragment_alarm" />
 </navigation>
