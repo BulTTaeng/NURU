@@ -33,6 +33,12 @@
 - 데이터 바인딩 작업중
 - 회원 탈퇴 이슈 발생 (Github Issue #7)
 
+`2022.07.08`  
+- Activity data biding 다 끝냄
+- Comments adapter 데이터 바인딩
+- CommunityContent ViewModel , ViewModel Factory, Repository 추가
+
+
 </details><br>  
 
 --- 

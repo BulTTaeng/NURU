@@ -105,19 +105,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
         user_farm_info =ArrayList<Farm>()
 
-        btn_CurrentLocation.setOnClickListener{
-            mMap?.let{
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                updateLocation()
-            }
-        }
+    }
 
-        btn_Search.setOnClickListener {
-            val intent_address = Intent(this, SearchAddressActivity::class.java)
-            intent_address.putExtra("ADDRESS", et_SearchAddress.text.toString())
-            startActivity(intent_address)
+    fun btnCurrentLocation(view : View){
+        mMap?.let{
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            updateLocation()
         }
+    }
 
+    fun btnSearch(view : View){
+        val intent_address = Intent(this, SearchAddressActivity::class.java)
+        intent_address.putExtra("ADDRESS", et_SearchAddress.text.toString())
+        startActivity(intent_address)
     }
 
     fun returnMaps(): MapsActivity {

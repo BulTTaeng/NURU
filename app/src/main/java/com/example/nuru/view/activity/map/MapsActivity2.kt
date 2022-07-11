@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_maps2.*
 import com.example.nuru.model.data.tmap.SearchResultEntity
 import com.example.nuru.R
+import com.example.nuru.databinding.ActivityMaps2Binding
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.view.activity.mypage.AddFarmActivity
 import com.google.android.gms.maps.model.Marker
@@ -57,10 +59,12 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
    // lateinit var binding: MapsActivity
 
     private var currentSelectMarker: Marker? = null
+    private lateinit var binding: ActivityMaps2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps2)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_maps2)
+        binding.activity = this@MapsActivity2
         singletonC.setcurrentContext(this)
 
         widget_ProgressBar2.visibility = View.GONE
@@ -71,32 +75,28 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
             Manifest.permission.ACCESS_FINE_LOCATION)
 
         requirePermissions(permissions, 999) //권환 요쳥, 999는 임의의 숫자
+    }
 
-        btn_ConfirmLocation.setOnClickListener {
-            //val intent = Intent(this, MapsActivity::class.java)
-            //startActivity(intent)
+    fun btnConfirmLocation(view : View){
+        var searchResult1: SearchResultEntity? = intent.getParcelableExtra<SearchResultEntity>(
+            SEARCH_RESULT_EXTRA_KEY
+        )
 
-            var searchResult1: SearchResultEntity? = intent.getParcelableExtra<SearchResultEntity>(
-                SEARCH_RESULT_EXTRA_KEY
-            )
-
-            val intent = Intent(this, AddFarmActivity::class.java)
-            if(searchResult1 == null){
-                Toast.makeText(this, getString(R.string.try_later) , Toast.LENGTH_LONG).show()
-            }
-            else{
-                intent.putExtra("ADDRESS", searchResult1.fullAddress)
-                val b = Bundle()
-                b.putDouble("latitude", searchResult1.locationLatLng.latitude.toDouble())
-                b.putDouble("longtitude" , searchResult1.locationLatLng.longitude.toDouble())
-                intent.putExtras(b)
-                val searchaddressactivity2 = SearchAddressActivity2()
-                searchaddressactivity2.endSearchAddressActivity2()
-                startActivity(intent)
-                finish()
-            }
+        val intent = Intent(this, AddFarmActivity::class.java)
+        if(searchResult1 == null){
+            Toast.makeText(this, getString(R.string.try_later) , Toast.LENGTH_LONG).show()
         }
-
+        else{
+            intent.putExtra("ADDRESS", searchResult1.fullAddress)
+            val b = Bundle()
+            b.putDouble("latitude", searchResult1.locationLatLng.latitude.toDouble())
+            b.putDouble("longtitude" , searchResult1.locationLatLng.longitude.toDouble())
+            intent.putExtras(b)
+            val searchaddressactivity2 = SearchAddressActivity2()
+            searchaddressactivity2.endSearchAddressActivity2()
+            startActivity(intent)
+            finish()
+        }
     }
 
     fun startProcess() {

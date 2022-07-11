@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import com.example.nuru.R
+import com.example.nuru.databinding.ActivityAddImageBinding
 import com.example.nuru.utility.GetCurrentContext
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -25,11 +28,13 @@ class AddImageActivity : AppCompatActivity() {
     var singletonC = GetCurrentContext.getInstance()
 
     var selectedImageUri : Uri? = null
-
+    private lateinit var binding: ActivityAddImageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_image)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_add_image)
+        binding.activity = this@AddImageActivity
+
         singletonC.setcurrentContext(this)
 
         val Intent = intent
@@ -41,22 +46,6 @@ class AddImageActivity : AppCompatActivity() {
             1
         )
 
-        btn_FindImage.setOnClickListener {
-            val intent = Intent(android.content.Intent.ACTION_PICK)
-            intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                "image/*"
-            )
-            startActivityForResult(intent, 9981)
-        }
-
-        btn_UploadImage.setOnClickListener {
-            uploadImageTOFirebase(selectedImageUri)
-            //var photoPickerIntent = Intent
-            //photoPickerIntent.type = "image/*"
-            //startActivityForResult(photoPickerIntent, pickImageFromAlbum)
-        }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,6 +54,19 @@ class AddImageActivity : AppCompatActivity() {
             selectedImageUri = data.data
             img_UploadImage.setImageURI(selectedImageUri)
         }
+    }
+
+    fun btnFindImage(view : View){
+        val intent = Intent(android.content.Intent.ACTION_PICK)
+        intent.setDataAndType(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            "image/*"
+        )
+        startActivityForResult(intent, 9981)
+    }
+
+    fun btnUploadImage(view : View){
+        uploadImageTOFirebase(selectedImageUri)
     }
 
     fun uploadImageTOFirebase(uri: Uri?) {

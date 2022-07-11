@@ -7,13 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_edit_community.*
 import android.widget.EditText
+import androidx.databinding.DataBindingUtil
 import com.example.nuru.R
+import com.example.nuru.databinding.ActivityEditCommunityBinding
+import com.example.nuru.model.data.community.CommunityEntity
+import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.utility.GetCurrentContext
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
@@ -29,43 +34,32 @@ class EditCommunityActivity : AppCompatActivity() {
     lateinit var imm : InputMethodManager
 
     var selectedImageUri : Uri? = null
+    private lateinit var binding: ActivityEditCommunityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_community)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_edit_community)
+        binding.activity = this@EditCommunityActivity
         singletonC.setcurrentContext(this)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
         imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        val Intent = intent
-        var title = Intent.getStringExtra("TITLE").toString()
-        var contents = Intent.getStringExtra("CONTENTS").toString()
-        var image = Intent.getStringExtra("IMAGE").toString()
-        var id = Intent.getStringExtra("IDD")
+        val intent: Intent = getIntent()
+
+        binding.communityContents = intent.getParcelableExtra<CommunityEntity>("COMMUNITYENTITY")
+
+
 
         //edt_TitleInEdit.setText(title)
         //edt_ContentsInEdit.setText(contents)
 
-        edt_TitleInEdit.text = Editable.Factory.getInstance().newEditable(title)
-        edt_ContentsInEdit.text = Editable.Factory.getInstance().newEditable(contents)
+        //edt_TitleInEdit.text = Editable.Factory.getInstance().newEditable(title)
+        //edt_ContentsInEdit.text = Editable.Factory.getInstance().newEditable(contents)
 
-        val urt = Uri.parse(image)
+        val urt = Uri.parse(binding.communityContents!!.image.toString())
         Glide.with(this).load(urt).into(img_EditImage)
-
-        btn_ChangeImage.setOnClickListener {
-            val intent = Intent(android.content.Intent.ACTION_PICK)
-            intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                "image/*"
-            )
-            startActivityForResult(intent, 9981)
-        }
-
-        btn_Edit.setOnClickListener {
-            uploadImageTOFirebaseAndAdd(selectedImageUri , id!!, edt_TitleInEdit.text.toString(), edt_ContentsInEdit.text.toString())
-        }
 
     }
 
@@ -75,6 +69,19 @@ class EditCommunityActivity : AppCompatActivity() {
             selectedImageUri = data.data
             img_EditImage.setImageURI(selectedImageUri)
         }
+    }
+
+    fun btnEdit(view : View){
+        uploadImageTOFirebaseAndAdd(selectedImageUri , binding.communityContents!!.id,
+            edt_TitleInEdit.text.toString(), edt_ContentsInEdit.text.toString())
+    }
+    fun btnChangeImage(view : View){
+        val intent = Intent(android.content.Intent.ACTION_PICK)
+        intent.setDataAndType(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            "image/*"
+        )
+        startActivityForResult(intent, 9981)
     }
 
 
