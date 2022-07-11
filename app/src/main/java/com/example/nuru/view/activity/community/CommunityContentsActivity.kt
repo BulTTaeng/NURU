@@ -19,11 +19,14 @@ import com.example.nuru.model.data.tmap.PushDTO
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityCommunityContentsBinding
 import com.example.nuru.utility.GetCurrentContext
+import com.example.nuru.view.activity.community.FcmPush.Companion.RETURN_FROM_EDIT
 import com.example.nuru.view.activity.mypage.NewMyFarmActivity
+import com.example.nuru.view.fragment.community.CommunityFragment
 import com.example.nuru.viewmodel.community.CommentsViewModel
 import com.example.nuru.viewmodel.community.CommunityContentsViewModel
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForComments
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForCommunityContents
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
@@ -32,6 +35,7 @@ import com.google.gson.Gson
 import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.activity_community_contents.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import kotlin.collections.ArrayList
 import kotlin.coroutines.CoroutineContext
 
@@ -120,9 +124,11 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        communityContentsViewModel.updateCommunityContents()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == RETURN_FROM_EDIT){
+            communityContentsViewModel.updateCommunityContents()
+        }
     }
 
     fun btnEditContents(view :View){
@@ -130,14 +136,27 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         if(info?.writer.equals(firebaseAuth.currentUser?.uid)){
             val intent_to_EditCommunity = Intent(this, EditCommunityActivity::class.java)
             intent_to_EditCommunity.putExtra("COMMUNITYENTITY",info)
-            startActivity(intent_to_EditCommunity)
+            startActivityForResult(intent_to_EditCommunity, RETURN_FROM_EDIT)
         }
     }
 
     fun btnDeleteCommunity(view : View){
         if(communityContentsViewModel.fetchData().value?.writer.equals(firebaseAuth.currentUser?.uid)){
-            db.collection("community").document(communityContentsViewModel.fetchData().value?.id.toString()).delete()
-            finish()
+            var done = true
+            widget_progressbarInCommunityImage.visibility = View.VISIBLE
+            CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.IO).launch {
+                    done = deleteCommunityAndComments()
+                }.join()
+                if(done) {
+                    finish()
+                }
+                else{
+                    Toast.makeText(GetContext() , getString(R.string.try_later) , Toast.LENGTH_LONG).show()
+                    widget_progressbarInCommunityImage.visibility = View.GONE
+                }
+            }
+
         }
     }
 
@@ -189,6 +208,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
                                     "id" to it.id
                                 )
                                 commentsRef.document(it.id).update("id" , it.id)
+                                db.collection("comments").document(info!!.id).update("list", FieldValue.arrayUnion(it.id))
                                 edt_AddComments.text.clear()
                             }
                             commentsRef.get().addOnSuccessListener {
@@ -224,6 +244,33 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
 
         }
     }
+
+    suspend fun deleteCommunityAndComments() : Boolean{
+        return try {
+            db.collection("community").document(communityContentsViewModel.fetchData().value?.id.toString()).delete().await()
+            db.collection("comments").document(communityContentsViewModel.fetchData().value?.id.toString()).get().addOnCompleteListener{
+                if(it.isSuccessful){
+                    val list = it.result["list"] as List<String>
+                    for(docId in list){
+                        db.collection("comments").document(communityContentsViewModel.fetchData().value?.id.toString())
+                            .collection(communityContentsViewModel.fetchData().value?.id.toString()).document(docId).delete()
+                    }
+
+                    db.collection("comments").document(communityContentsViewModel.fetchData().value?.id.toString()).delete()
+
+                }
+                else{
+                    Log.d("FFFF" , "FFFFF")
+                }
+            }
+
+            true
+        }catch (e : FirebaseException){
+            Log.e("firesbase " , e.toString())
+            false
+        }
+    }
+
 
     override fun onBackPressed() {
         if(!block){
@@ -326,5 +373,9 @@ class FcmPush() {
                     })
                 }
             }
+    }
+
+    companion object{
+        const val RETURN_FROM_EDIT = 909
     }
 }

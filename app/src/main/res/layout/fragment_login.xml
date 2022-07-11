@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.nuru.view.fragment.login.LoginFragment" />
+    </data>
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragment.login.LoginFragment">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,104 +28,106 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/etEmail"
+                app:layout_constraintBottom_toTopOf="@+id/edt_email"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/etEmail"
+                android:id="@+id/edt_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
-                app:layout_constraintBottom_toTopOf="@id/etPassword"
+                app:layout_constraintBottom_toTopOf="@id/edt_password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <EditText
-                android:id="@+id/etPassword"
+                android:id="@+id/edt_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="10dp"
-                app:layout_constraintBottom_toTopOf="@id/btnSignIn2"
-                app:layout_constraintEnd_toEndOf="@id/etEmail"
-                app:layout_constraintStart_toStartOf="@id/etEmail"
-                app:layout_constraintTop_toBottomOf="@id/etEmail" />
+                app:layout_constraintBottom_toTopOf="@id/btn_signIn"
+                app:layout_constraintEnd_toEndOf="@id/edt_email"
+                app:layout_constraintStart_toStartOf="@id/edt_email"
+                app:layout_constraintTop_toBottomOf="@id/edt_email" />
 
             <Button
-                android:id="@+id/btnSignIn2"
+                android:id="@+id/btn_signIn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/sign_in"
+                android:onClick="@{fragment::btnSignIn}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/etPassword"
+                app:layout_constraintEnd_toEndOf="@id/edt_password"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/etPassword"
-                app:layout_constraintTop_toBottomOf="@id/etPassword" />
+                app:layout_constraintStart_toStartOf="@id/edt_password"
+                app:layout_constraintTop_toBottomOf="@id/edt_password" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/txt_noAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/DontHaveAccount"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/btnSignIn2"
+                app:layout_constraintBottom_toTopOf="@+id/btn_signIn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_createAccount" />
 
 
             <Button
-                android:id="@+id/btnCreateAccount"
+                android:id="@+id/btn_createAccount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:text="@string/create_account"
-                app:layout_constraintBottom_toTopOf="@id/textOr"
-                app:layout_constraintEnd_toEndOf="@id/btnSignIn2"
+                android:onClick="@{fragment::btnCreateAccount}"
+                app:layout_constraintBottom_toTopOf="@id/txt_or"
+                app:layout_constraintEnd_toEndOf="@id/btn_signIn"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@id/btnSignIn2"
-                app:layout_constraintTop_toBottomOf="@id/textView3"
+                app:layout_constraintStart_toStartOf="@id/btn_signIn"
+                app:layout_constraintTop_toBottomOf="@id/txt_noAccount"
                 app:layout_constraintVertical_bias="0.044" />
 
             <TextView
-                android:id="@+id/textOr"
+                android:id="@+id/txt_or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/or"
-                app:layout_constraintBottom_toTopOf="@+id/btnGoogleSignIn"
+                app:layout_constraintBottom_toTopOf="@+id/btn_googleSignIn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_createAccount" />
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/btnGoogleSignIn"
+                android:id="@+id/btn_googleSignIn"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginBottom="30dp"
                 android:gravity="center"
                 app:buttonSize="wide"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/btnCreateAccount"
+                app:layout_constraintEnd_toEndOf="@id/btn_createAccount"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@id/btnCreateAccount"
-                app:layout_constraintTop_toBottomOf="@id/textOr" />
+                app:layout_constraintStart_toStartOf="@id/btn_createAccount"
+                app:layout_constraintTop_toBottomOf="@id/txt_or" />
 
             <ProgressBar
-                android:id="@+id/progressBar_Login"
+                android:id="@+id/progressBar_login"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,3 +140,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+</layout>

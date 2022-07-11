@@ -2,16 +2,19 @@ package com.example.nuru.view.fragment.community
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nuru.view.adapter.CommunityAdapter
 import com.example.nuru.view.activity.community.AddCommunityActivity
 import com.example.nuru.R
+import com.example.nuru.databinding.FragmentCommunityBinding
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.viewmodel.community.CommunityViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +32,7 @@ class CommunityFragment : Fragment() {
     lateinit var UserId : String
 
     private lateinit var job: Job
+    private lateinit var binding: FragmentCommunityBinding
 
     private val viewModel by lazy { ViewModelProvider(this).get(CommunityViewModel::class.java) }
 
@@ -41,7 +45,9 @@ class CommunityFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_community, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_community, container, false)
+        binding.fragment = this@CommunityFragment
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,34 +60,45 @@ class CommunityFragment : Fragment() {
         UserId = firebaseAuth.currentUser!!.uid
 
 
-
         adapter = CommunityAdapter(requireContext())
         // Setting the Adapter with the recyclerview
-        community_recycleView1.layoutManager = LinearLayoutManager(requireContext())
-        community_recycleView1.adapter = adapter
+        community_recycleView.layoutManager = LinearLayoutManager(requireContext())
+        community_recycleView.adapter = adapter
         observeData()
 
-        btn_AddCommunity1.setOnClickListener {
-            val intent = Intent(requireContext(), AddCommunityActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_MyPageInCommunity1.setOnClickListener {
-            /*val intent_mypage = Intent(requireContext(), MyPageActivity::class.java)
-            startActivity(intent_mypage)
-            finish()*/
-
-            findNavController().navigate(R.id.myPageFragment)
-        }
-
         swipe_in_community.setOnRefreshListener {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val update = async {  viewModel.updateView() }
+                update.await()
+            }
+
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("TTTTTTT",resultCode.toString())
+        if(requestCode == RETURN_FROM_ADD_COMMUNITY){
             CoroutineScope(Dispatchers.IO).launch {
                 val update = async {  viewModel.updateView() }
                 update.await()
             }
         }
-
+        else if(resultCode == DELETE_COMMUNITY){
+            CoroutineScope(Dispatchers.IO).launch {
+                val update = async {  viewModel.updateView() }
+                update.await()
+            }
+        }
     }
+
+    fun btnAddCommunity(view:View){
+        val intent = Intent(requireContext(), AddCommunityActivity::class.java)
+        startActivityForResult(intent , RETURN_FROM_ADD_COMMUNITY)
+    }
+
 
     fun observeData(){
         viewModel.fetchData().observe(
@@ -91,10 +108,16 @@ class CommunityFragment : Fragment() {
                 }
                 ).let{
                     swipe_in_community.isRefreshing = false
-                    widget_ProgressBarInCommunity1.visibility = View.GONE
+                    widget_ProgressBarInCommunity.visibility = View.GONE
+                    community_recycleView.smoothScrollToPosition(0)
                 }
             }
         )
+    }
+
+    companion object{
+        const val RETURN_FROM_ADD_COMMUNITY = 144
+        const val DELETE_COMMUNITY = 902
     }
 
 }

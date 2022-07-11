@@ -140,15 +140,22 @@ class MyPageFragment : Fragment() , CoroutineScope {
                 update.await()
             }
         }
-        adapter = FarmAdapter(myPageActivity)
+        adapter = FarmAdapter(myPageActivity , viewModel)
         // Setting the Adapter with the recyclerview
         mypage_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
         mypage_recycleView.adapter = adapter
         observeData()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == RETURN_FROM_ADD) {
+            viewModel.updateFarm()
+            Log.d("aaaaaaaa" , "Aaaaaaaaaaaaa")
+        }
+    }
+
     fun observeData(){
-        Log.d("[MyPageFragment]", "ovserve data 안에 들어옴!")
         viewModel.fetchData().observe(
             viewLifecycleOwner, Observer {
                 widget_ProgressBarInMyPage.visibility = View.VISIBLE
@@ -164,29 +171,6 @@ class MyPageFragment : Fragment() , CoroutineScope {
         )
     }
 
-
-    private fun revokeAccess() { //회원탈퇴
-        var login_type : String
-        db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
-            login_type = it["type"].toString()
-
-            if(login_type.equals("email_login")){
-                firebaseAuth.signOut()
-            }
-            else if(login_type.equals("google_login")){
-                // Firebase sign out
-                googleSignInClient.revokeAccess().addOnCompleteListener(mypageActivity) {
-                    if(it.isSuccessful){
-                        Toast.makeText(mypageActivity, getString(R.string.do_logout), Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        Toast.makeText(mypageActivity, getString(R.string.logout_exception), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
     fun btnCalNum(view : View) {
         Log.d("[Tag] : btn_cal_num", "특화계수 버튼 클릭!")
     }
@@ -199,7 +183,11 @@ class MyPageFragment : Fragment() , CoroutineScope {
     fun btnAddFarm(view : View) {
         Log.d("[Tag] : btn_add_farm", "농장 추가 버튼 클릭")
         val intent = Intent(activity , AddFarmActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent , RETURN_FROM_ADD)
+    }
+
+    companion object {
+        const val RETURN_FROM_ADD = 11
     }
 
     /*private fun findFarmInfo(UserId : String){

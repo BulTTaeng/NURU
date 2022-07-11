@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -13,10 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.nuru.R
 import com.example.nuru.databinding.CommunityViewBinding
 import com.example.nuru.model.data.community.CommunityEntity
 import com.example.nuru.view.activity.community.CommunityContentsActivity
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import java.lang.NullPointerException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -74,9 +82,26 @@ class CommunityAdapter(private val context: Context) :
             }
 
             itemView.setOnClickListener{
-                val intent_to_CommunityCotents = Intent(context, CommunityContentsActivity::class.java)
-                intent_to_CommunityCotents.putExtra("COMMUNITY",data)
-                context.startActivity(intent_to_CommunityCotents)
+                try{
+                    val db = FirebaseFirestore.getInstance()
+                    db.collection("community").document(data.id).get().addOnCompleteListener {
+                        if(it.isSuccessful){
+                            if(it.result["title"] == null){
+                                Toast.makeText(context , "해당 커뮤니티가 삭제되었어요 , 새로고침 해주세요" , Toast.LENGTH_LONG).show()
+                            }
+                            else{
+                                val intent_to_CommunityCotents = Intent(context, CommunityContentsActivity::class.java)
+                                intent_to_CommunityCotents.putExtra("COMMUNITY",data)
+                                context.startActivity(intent_to_CommunityCotents)
+                            }
+                        }
+                        else{
+                            Toast.makeText(context, R.string.try_later, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }catch (e : FirebaseException){
+                    Toast.makeText(context, R.string.try_later, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

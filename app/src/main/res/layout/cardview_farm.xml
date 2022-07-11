@@ -23,8 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/txt_FarmLocation"
         app:layout_constraintEnd_toStartOf="@+id/btn_DeleteFarmm"
         app:layout_constraintStart_toEndOf="@+id/img_NumEmoji"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txt_FarmLocation"

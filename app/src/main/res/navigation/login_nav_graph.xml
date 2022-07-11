@@ -9,7 +9,7 @@
         android:id="@+id/loginFragment2"
         android:name="com.example.nuru.view.fragment.login.LoginFragment"
         android:label="fragment_login2"
-        tools:layout="@layout/fragment_login2" >
+        tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment2_to_signupFragment"
             app:destination="@id/signupFragment" />
