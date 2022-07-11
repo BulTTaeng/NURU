@@ -6,22 +6,26 @@ import com.example.nuru.model.data.community.CommunityEntity
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CommunityRepository {
 
-    var db : FirebaseFirestore
+    var db : FirebaseFirestore = FirebaseFirestore.getInstance()
     val _mutableData = MutableLiveData<MutableList<CommunityEntity>>()
     val Community: LiveData<MutableList<CommunityEntity>>
         get() = _mutableData
 
     init {
-        db = FirebaseFirestore.getInstance()
-        updateCommunity()
+        CoroutineScope(Dispatchers.IO).launch {
+            updateCommunity()
+        }
     }
 
-    fun updateCommunity(){
+    suspend fun updateCommunity(){
         db.collection("community")
             .orderBy("time" , Query.Direction.DESCENDING)
             .get().addOnSuccessListener {

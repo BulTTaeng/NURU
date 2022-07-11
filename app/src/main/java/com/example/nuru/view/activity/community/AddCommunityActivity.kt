@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -113,7 +114,18 @@ class AddCommunityActivity : AppCompatActivity() {
             )
 
             docRef.add(data).addOnSuccessListener {
-                finish()
+                val tt =  ArrayList<String>()
+                val temp = hashMapOf(
+                    "list" to tt
+                )
+                db.collection("comments").document(it.id).set(temp).addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        finish()
+                    }
+                    else{
+                        Log.d("문제 발생" , "aaaaaaaaaaaaaaaaaaa")
+                    }
+                }
             }
         } else {
             var storage: FirebaseStorage? =

@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.navArgs
 import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.R
+import com.example.nuru.databinding.FragmentCheckTypeForGoogleBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_check_type_for_google.*
@@ -25,6 +27,7 @@ class CheckTypeForGoogleFragment : Fragment() {
     val db = FirebaseFirestore.getInstance()
     lateinit var args: com.example.nuru.view.fragment.login.CheckTypeForGoogleFragmentArgs
     private lateinit var callback: OnBackPressedCallback
+    private lateinit var binding: FragmentCheckTypeForGoogleBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,7 +50,9 @@ class CheckTypeForGoogleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_check_type_for_google, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_check_type_for_google, container, false)
+        binding.fragment = this@CheckTypeForGoogleFragment
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,28 +61,6 @@ class CheckTypeForGoogleFragment : Fragment() {
 
         val arg by navArgs<com.example.nuru.view.fragment.login.CheckTypeForGoogleFragmentArgs>()
         args = arg
-
-        btn_signUp.setOnClickListener {
-            progressBar_googleSignUp.visibility = View.VISIBLE
-            if(!toggle_admin.isChecked && !toggle_farmer.isChecked){
-                Toast.makeText(loginActivity , R.string.select_admin_farm , Toast.LENGTH_LONG).show()
-            }
-            else{
-                writeNewUserWithTaskListeners(args.signUpInfo!!.userId ,
-                    args.signUpInfo!!.name , args.signUpInfo!!.email ,
-                    args.signUpInfo!!.type , toggle_farmer.isChecked ,
-                    toggle_admin.isChecked)
-                Log.d("aaaaaaaaaaaaa" , args.signUpInfo!!.userId)
-            }
-        }
-
-        toggle_farmer.setOnClickListener{
-            Log.d("toggle_farmer" , toggle_farmer.isChecked.toString())
-        }
-
-        toggle_admin.setOnClickListener{
-            Log.d("toggle_admin" , toggle_admin.isChecked.toString())
-        }
 
     }
 
@@ -95,6 +78,29 @@ class CheckTypeForGoogleFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+
+    fun toggleFarmer(view: View){
+        Log.d("toggle_farmer" , toggle_farmer.isChecked.toString())
+    }
+
+    fun toggleAdmin(view: View){
+        Log.d("toggle_admin" , toggle_admin.isChecked.toString())
+    }
+
+    fun btnSignUpGoogle(view: View){
+        progressBar_googleSignUp.visibility = View.VISIBLE
+        if(!toggle_admin.isChecked && !toggle_farmer.isChecked){
+            Toast.makeText(loginActivity , R.string.select_admin_farm , Toast.LENGTH_LONG).show()
+            progressBar_googleSignUp.visibility = View.GONE
+        }
+        else{
+            writeNewUserWithTaskListeners(args.signUpInfo!!.userId ,
+                args.signUpInfo!!.name , args.signUpInfo!!.email ,
+                args.signUpInfo!!.type , toggle_farmer.isChecked ,
+                toggle_admin.isChecked)
+            Log.d("aaaaaaaaaaaaa" , args.signUpInfo!!.userId)
+        }
     }
 
     private fun writeNewUserWithTaskListeners(userId: String, name: String, email: String, type : String, isFarmer : Boolean, isAdmin : Boolean) {
