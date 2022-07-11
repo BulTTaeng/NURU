@@ -29,6 +29,9 @@
 - Init Refactoring
 - Code Convention 적용
 
+`2022.07.08`  
+- 데이터 바인딩 작업중
+- 회원 탈퇴 이슈 발생 (Github Issue #7)
 
 `2022.07.08`  
 - Activity data biding 다 끝냄
