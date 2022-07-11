@@ -93,6 +93,8 @@ class SettingFragment : Fragment() {
         findNavController().navigate(R.id.myPageFragment)
     }
 
+
+
     private fun signOut() { // 로그아웃
         progressBar_setting.visibility = View.VISIBLE
         db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {

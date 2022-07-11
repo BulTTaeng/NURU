@@ -22,6 +22,7 @@ import java.io.InputStream
 import java.math.BigDecimal
 import com.example.nuru.R
 
+//여기는 바인딩 필요 없는거같은데
 
 class MyPageActivity : AppCompatActivity() {
 
@@ -73,12 +74,7 @@ class MyPageActivity : AppCompatActivity() {
 
         navController.setGraph(R.navigation.mypage_nav_graph)
 
-        //btn_BottomNavigation_inMyPage.setupWithNavController(MyPageController)
         binding.bottomNavi.setupWithNavController(navController = navController)
-
-        // Setup the ActionBar with navController and 3 top level destinations
-
-        //readExcelFileFromAssets()
     }
 
 
@@ -99,11 +95,6 @@ class MyPageActivity : AppCompatActivity() {
         val xlWs = xlWb.getSheetAt(0)
         val xx = xlWs.getRow(5).getCell(341).toString()
         val x = BigDecimal(xx).toPlainString()
-    }
-
-
-    fun returnMyPage(): MyPageActivity {
-        return this
     }
 
     fun exitApp(){

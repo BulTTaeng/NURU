@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="activity"
             type="com.example.nuru.view.activity.mypage.AddAdminActivity" />
@@ -53,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="100dp"
             android:text="관리자 추가하기"
+            android:onClick="@{activity::btnAddAdmin}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

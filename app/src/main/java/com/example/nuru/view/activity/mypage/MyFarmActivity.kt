@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -27,8 +28,6 @@ import kotlinx.android.synthetic.main.activity_my_farm.*
 
 
 class MyFarmActivity : AppCompatActivity() ,  PopupMenu.OnMenuItemClickListener {
-    lateinit var binding: ActivityMyFarmBinding
-
     lateinit var farm_id : String
     var singletonC = GetCurrentContext.getInstance()
 
@@ -46,10 +45,19 @@ class MyFarmActivity : AppCompatActivity() ,  PopupMenu.OnMenuItemClickListener 
     lateinit var farminfo2 : DocumentReference
 
     lateinit var farm_Photo : ArrayList<String>
+    private lateinit var binding: ActivityMyFarmBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_farm)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_my_farm)
+        binding.activity = this@MyFarmActivity
+
+        binding.farmInfo?.humidity = 0.0
+        binding.farmInfo?.information = getString(R.string.no_sensor)
+        binding.farmInfo?.weather= getString(R.string.no_sensor)
+        binding.farmInfo?.temperature = 0.0
+
+
         singletonC.setcurrentContext(this)
 
         val Intent = intent
@@ -93,20 +101,15 @@ class MyFarmActivity : AppCompatActivity() ,  PopupMenu.OnMenuItemClickListener 
 
         var viewPager = findViewById(R.id.viewPager) as ViewPager2
 
-        // 뷰페이저 사용을 위한 Adapter 생성 후 뷰페이저에 Adapter를 연결
+    }
 
-
-
-        btn_Add.setOnClickListener {
-            if(farm_id.equals("zerozero")){
-                Toast.makeText(this , getString(R.string.default_farm) , Toast.LENGTH_LONG).show();
-            }
-            else{
-                showPopup(btn_Add)
-            }
-
+    fun btnAdd(view : View){
+        if(farm_id.equals("zerozero")){
+            Toast.makeText(this , getString(R.string.default_farm) , Toast.LENGTH_LONG).show();
         }
-
+        else{
+            showPopup(btn_Add)
+        }
     }
 
     private fun showPopup(v: View) {
@@ -144,15 +147,10 @@ class MyFarmActivity : AppCompatActivity() ,  PopupMenu.OnMenuItemClickListener 
         farminfo2.get().addOnSuccessListener {
             if(it != null){
 
-                weather = it["weather"].toString()
-                humidity = it["humidity"] as Double
-                information = it["information"].toString()
-                temperature = it["temperature"] as Double
-
-                txt_Information.text = information
-                txt_Weather.text = weather
-                txt_humidity.text = "{$humidity} %"
-                txt_temperature.text = "{$temperature} C"
+                binding.farmInfo?.weather = it["weather"].toString()
+                binding.farmInfo?.humidity = it["humidity"] as Double
+                binding.farmInfo?.information = it["information"].toString()
+                binding.farmInfo?.temperature = it["temperature"] as Double
 
                 viewPager.adapter = CustomPagerAdapter_Myfarm()
             }

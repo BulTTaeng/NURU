@@ -15,7 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.nuru.databinding.CommunityViewBinding
 import com.example.nuru.model.data.community.CommunityEntity
-import com.example.nuru.view.activity.CommunityContentsActivity
+import com.example.nuru.view.activity.community.CommunityContentsActivity
 import com.google.firebase.auth.FirebaseAuth
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -60,7 +60,8 @@ class CommunityAdapter(private val context: Context) :
 
             //txtDate.text = currentDate.toString()
 
-            Glide.with(context).load("https://firebasestorage.googleapis.com/v0/b/nuru-a3203.appspot.com/o/profile_lightGray.png?alt=media&token=fbd9ab57-dbde-45e2-900d-b7ce20534888")
+            val into = Glide.with(context)
+                .load("https://firebasestorage.googleapis.com/v0/b/nuru-a3203.appspot.com/o/profile_lightGray.png?alt=media&token=fbd9ab57-dbde-45e2-900d-b7ce20534888")
                 .transform(CenterCrop(), RoundedCorners(60)).into(imgProfile)
 
             firebaseAuth = FirebaseAuth.getInstance()
