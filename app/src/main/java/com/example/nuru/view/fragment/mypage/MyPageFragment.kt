@@ -118,12 +118,18 @@ class MyPageFragment : Fragment() , CoroutineScope {
             }
 
         }*/
+        // Setting the Adapter with the recyclerview
+        adapter = FarmAdapter(myPageActivity)
+        binding.mypageRecycleView.layoutManager = LinearLayoutManager(myPageActivity)
+        binding.mypageRecycleView.adapter = adapter
+
+        //mypage_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
+        //mypage_recycleView.adapter = adapter
 
         val UserId = firebaseAuth.currentUser?.uid
         val docRef = db.collection("user").document(UserId.toString())
         viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
             .get(MyFarmViewModel::class.java)
-
 
         docRef.get().addOnSuccessListener {
             username = it["name"].toString() + "\n" + it["email"].toString()
@@ -140,10 +146,6 @@ class MyPageFragment : Fragment() , CoroutineScope {
                 update.await()
             }
         }
-        adapter = FarmAdapter(myPageActivity)
-        // Setting the Adapter with the recyclerview
-        mypage_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
-        mypage_recycleView.adapter = adapter
         observeData()
     }
 
