@@ -120,6 +120,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                         setLastLocation(location)
                     }
                 }
+
             }
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())

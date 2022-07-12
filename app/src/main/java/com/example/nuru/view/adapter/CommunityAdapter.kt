@@ -39,6 +39,7 @@ class CommunityAdapter(private val context: Context) :
     private lateinit var adapter: ImgInCommunityAdapter
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var binding: CommunityViewBinding
 
     inner class CommunityViewHolder(
         private val binding: CommunityViewBinding,
@@ -46,8 +47,7 @@ class CommunityAdapter(private val context: Context) :
         fun bindData(data: CommunityEntity) = with(binding) {
 
             //여기 if image empty로 나눠버리면 업데이트하는도중 잘못인식해서 이미지 사라짐...
-
-            txtTitle.text = data.title
+            binding.community = data
 
             adapter = ImgInCommunityAdapter(context)
             communityRecycleViewForImage.adapter = adapter
@@ -58,8 +58,6 @@ class CommunityAdapter(private val context: Context) :
             //Glide.with(context).load(urt).into(imgThumbnail)
             btnComments.setEnabled(false)
 
-            txtLikeNumber.text = data.like.size.toString()
-            txtCommentsNumber.text = data.comments.toString()
             val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
             val currentDate : String = sdf.format(Date())
             val writetime : String = sdf.format(data.time)
@@ -112,7 +110,7 @@ class CommunityAdapter(private val context: Context) :
         // that is used to hold list item
         //val view = LayoutInflater.from(parent.context)
         //   .inflate(R.layout.cardview_farm, parent, false)
-        val binding = CommunityViewBinding.inflate(
+        binding = CommunityViewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

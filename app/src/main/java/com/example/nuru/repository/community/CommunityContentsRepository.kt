@@ -30,7 +30,7 @@ class CommunityContentsRepository(val communityContentsRef : DocumentReference) 
     fun updateCommunityContents(){
         var newContents : CommunityEntity
 
-        CoroutineScope(Dispatchers.Main).async {
+        CoroutineScope(Dispatchers.IO).async {
             //widget_progressbarInCommunityImage.visibility = View.VISIBLE
             communityContentsRef.get().addOnSuccessListener {
                 newContents = CommunityEntity(

@@ -1,5 +1,6 @@
 package com.example.nuru.repository.community
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.nuru.model.data.community.CommunityEntity
