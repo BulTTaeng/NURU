@@ -46,6 +46,11 @@
 - Community 삭제시 댓글collection도 같이 삭제
 - 삭제된 커뮤니티 글 접근 block
 
+`2022.07.12`  
+- 회원탈퇴 service+broadCast로 구동, 탈퇴 후 firebase 삭제
+
+
+
 
 </details><br>  
 

@@ -26,6 +26,7 @@
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/activity_show_image.xml" value="0.1296875" />
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/cardview_comments.xml" value="0.4035656401944895" />
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/cardview_farm.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/fragment_alarm.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/fragment_check_type_for_google.xml" value="0.21965579710144928" />
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/fragment_community.xml" value="0.136" />
         <entry key="..\:/Users/Choi/AndroidStudioProjects/NURU/app/src/main/res/layout/fragment_login.xml" value="0.1296875" />
@@ -119,6 +120,7 @@
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
