@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.example.nuru.view.activity.map.MapsActivity
 import com.example.nuru.R
+import com.example.nuru.databinding.FragmentMapBinding
 import com.example.nuru.view.activity.map.SearchAddressActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.location.*
@@ -29,6 +31,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var locationCallback: LocationCallback // 위칫값 요청에 대한 갱신 정보를 받아옴
     private lateinit var fusedLocationClient: FusedLocationProviderClient // 위칫값 사용
+    private lateinit var binding: FragmentMapBinding
 
     companion object {
         const val SEARCH_RESULT_EXTRA_KEY: String = "SEARCH_RESULT_EXTRA_KEY"
@@ -55,24 +58,47 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             mapFragment!!.getMapAsync(this)
         }
         getChildFragmentManager().beginTransaction().replace(R.id.map1, mapFragment!!).commit()
-
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_map, container, false)
+        binding.fragment = this@MapFragment
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
-        btn_CurrentLocation1.setOnClickListener{
-            mMap?.let{
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                updateLocation()
-            }
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        val posLatLng = LatLng(
+            35.1740336,
+            126.9016885
+        )
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posLatLng ,
+            MapsActivity.CAMERA_ZOOM_LEVEL
+        ))
+        widget_ProgressBar1.visibility = View.GONE
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if(mapFragment != null){
+            childFragmentManager.beginTransaction().remove(mapFragment!!).commitAllowingStateLoss()
         }
+    }
 
-        btn_Search1.setOnClickListener {
-            val intent_address = Intent(requireContext(), SearchAddressActivity::class.java)
-            intent_address.putExtra("ADDRESS", et_SearchAddress1.text.toString())
-            startActivity(intent_address)
+    fun btnSearch(view : View){
+        val intent_address = Intent(requireContext(), SearchAddressActivity::class.java)
+        intent_address.putExtra("ADDRESS", et_SearchAddress1.text.toString())
+        startActivity(intent_address)
+    }
+
+    fun btnCurrentLocation1(view: View){
+        mMap?.let{
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            updateLocation()
         }
     }
 
@@ -113,28 +139,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         widget_ProgressBar1.visibility = View.GONE
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        val posLatLng = LatLng(
-            35.1740336,
-            126.9016885
-        )
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posLatLng ,
-            MapsActivity.CAMERA_ZOOM_LEVEL
-        ))
-        widget_ProgressBar1.visibility = View.GONE
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if(mapFragment != null){
-            childFragmentManager.beginTransaction().remove(mapFragment!!).commitAllowingStateLoss()
-        }
     }
 
 }

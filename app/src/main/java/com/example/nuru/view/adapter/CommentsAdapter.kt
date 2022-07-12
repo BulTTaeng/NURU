@@ -70,8 +70,35 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
 
             }
 
+            btnEditComments.setOnClickListener {
+                txtCommentsContents.isEnabled = true
+                txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
+                btnEditCommentsDone.visibility = View.VISIBLE
+                btnEditCommentsDone.isEnabled = true
+            }
 
+            btnDeleteComments.setOnClickListener {
+                showAlert(data.id , data.communityId)
+            }
+
+            btnEditCommentsDone.setOnClickListener {
+                val editedText = txtCommentsContents.text.toString()
+                db.collection("comments").document(data.communityId.toString())
+                    .collection(data.communityId)
+                    .document(data.id.toString())
+                    .update("contents",editedText).addOnCompleteListener{
+                        if(it.isSuccessful){
+                            btnEditCommentsDone.visibility = View.GONE
+                            btnEditCommentsDone.isEnabled = false
+                            txtCommentsContents.setPaintFlags(txtCommentsContents.getPaintFlags() and Paint.UNDERLINE_TEXT_FLAG.inv())
+                            txtCommentsContents.isEnabled = false
+                        }
+                        else{
+                            Toast.makeText(context ,context.getString(R.string.problem_try_later) , Toast.LENGTH_LONG).show()
+                        }
+                    }
+            }
         }
     }
 
@@ -86,7 +113,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
             parent,
             false
         )
-        binding.adapter = this
         return CommentsViewHolder(binding)
 
 
@@ -111,34 +137,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
         }
     }
 
-    fun btnEditComments(view : View){
-        binding.txtCommentsContents.isEnabled = true
-        binding.txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-        binding.btnEditCommentsDone.visibility = View.VISIBLE
-        binding.btnEditCommentsDone.isEnabled = true
-    }
-
-    fun btnDeleteComments(view : View){
-        showAlert(binding.comments!!.id , binding.comments!!.communityId)
-    }
-
-    fun btnEditCommentsDone(view : View){
-        val editedText = binding.txtCommentsContents.text.toString()
-        db.collection("comments").document(binding.comments?.communityId.toString())
-            .collection(binding.comments!!.communityId)
-            .document(binding.comments!!.id.toString())
-            .update("contents",editedText).addOnCompleteListener{
-                if(it.isSuccessful){
-                    binding.btnEditCommentsDone.visibility = View.GONE
-                    binding.btnEditCommentsDone.isEnabled = false
-                    binding.txtCommentsContents.setPaintFlags(binding.txtCommentsContents.getPaintFlags() and Paint.UNDERLINE_TEXT_FLAG.inv())
-                }
-                else{
-                    Toast.makeText(context ,context.getString(R.string.problem_try_later) , Toast.LENGTH_LONG).show()
-                }
-            }
-       }
 
     fun showAlert(commentsId : String , communityId : String) {
         AlertDialog.Builder(context)

@@ -25,7 +25,8 @@ class CommunityViewModel : ViewModel() {
         return communityData
     }
 
-    fun updateView(){
+    suspend fun updateView(){
+
         repo.updateCommunity()
     }
 }

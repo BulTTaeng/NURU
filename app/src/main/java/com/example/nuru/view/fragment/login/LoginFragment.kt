@@ -9,10 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.R
+import com.example.nuru.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,11 +24,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.fragment_login2.*
-
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.model.data.login.SignUpInfo
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlin.collections.ArrayList
 
 
@@ -44,6 +46,7 @@ class LoginFragment : Fragment() {
 
     lateinit var username : String
     lateinit var email: String
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,14 +61,16 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_login2, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_login, container, false)
+        binding.fragment = this@LoginFragment
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         LoginController = login_navigation.findNavController()
-        progressBar_Login.visibility = View.GONE
+        progressBar_login.visibility = View.GONE
 
         //firebase auth 객체
         firebaseAuth = FirebaseAuth.getInstance()
@@ -77,44 +82,10 @@ class LoginFragment : Fragment() {
 
         googleSignInClient = GoogleSignIn.getClient(loginActivity, gso)
 
-        //google 로그인
-        btnGoogleSignIn.setOnClickListener {
+        btn_googleSignIn.setOnClickListener{
             signIn()
         }
 
-        //이메일 로그인
-        btnSignIn2.setOnClickListener {
-            progressBar_Login.visibility = View.VISIBLE
-            var id :String = etEmail.text.toString()
-            var pass : String = etPassword.text.toString()
-
-            if(id == ""){
-                Toast.makeText(loginActivity, getString(R.string.give_id), Toast.LENGTH_SHORT).show()
-                progressBar_Login.visibility = View.GONE
-            }
-            else if(pass == ""){
-                Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
-                progressBar_Login.visibility = View.GONE
-            }
-            else{
-                firebaseAuth!!.signInWithEmailAndPassword(id , pass).addOnCompleteListener(loginActivity){
-                    if(it.isSuccessful){
-                        val ass = Intent(context, MyPageActivity::class.java)
-                        startActivity(ass)
-                        //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
-                        activity?.finish()
-                    }
-                    else{
-                        Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
-                        progressBar_Login.visibility = View.GONE
-                    }
-                }
-            }
-        }
-
-        btnCreateAccount.setOnClickListener {
-            LoginController.navigate(R.id.action_loginFragment2_to_signupFragment)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -138,28 +109,64 @@ class LoginFragment : Fragment() {
         }
     } // onActivityResult End
 
-    private fun checkAdminOrFarmer(){
+    fun btnSignIn( view:View){
+        progressBar_login.visibility = View.VISIBLE
+        var id :String = edt_email.text.toString()
+        var pass : String = edt_password.text.toString()
 
+        if(id == ""){
+            Toast.makeText(loginActivity, getString(R.string.give_id), Toast.LENGTH_SHORT).show()
+            progressBar_login.visibility = View.GONE
+        }
+        else if(pass == ""){
+            Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
+            progressBar_login.visibility = View.GONE
+        }
+        else{
+            firebaseAuth!!.signInWithEmailAndPassword(id , pass).addOnCompleteListener(loginActivity){
+                if(it.isSuccessful){
+                    val ass = Intent(context, MyPageActivity::class.java)
+                    startActivity(ass)
+                    //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
+                    activity?.finish()
+                }
+                else{
+                    Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
+                    progressBar_login.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    fun btnCreateAccount(view: View){
+        LoginController.navigate(R.id.action_loginFragment2_to_signupFragment)
     }
 
     // firebaseAuthWithGoogle
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-
+    //TODO:: 여기서 한번 firebase에 쓰고 갈까?
         //Google SignInAccount 객체에서 ID 토큰을 가져와서 Firebase Auth로 교환하고 Firebase에 인증
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(loginActivity) { task ->
                 if (task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
 
-                    LoginController.navigate(
-                        com.example.nuru.view.fragment.login.LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
-                            SignUpInfo(
-                                firebaseAuth.currentUser?.uid.toString(), username,
-                                email, "google_login"
+                    db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
+                        val intent = Intent(loginActivity , MyPageActivity()::class.java)
+                        startActivity(intent)
+                    }.addOnFailureListener{
+                        LoginController.navigate(
+                            com.example.nuru.view.fragment.login.LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
+                                SignUpInfo(
+                                    firebaseAuth.currentUser?.uid.toString(), username,
+                                    email, "google_login"
+                                )
                             )
                         )
-                    )
+                    }
+
                     //LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
                     //activity?.finish()
                     //toMainActivity(firebaseAuth?.currentUser)
@@ -170,7 +177,6 @@ class LoginFragment : Fragment() {
             }
     }// firebaseAuthWithGoogle END
 
-    //TODO :: 구글 로그인 할때도 isAdmin , isFarmer 체크해야 하나
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)

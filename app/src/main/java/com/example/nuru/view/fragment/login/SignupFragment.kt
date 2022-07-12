@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.R
+import com.example.nuru.databinding.FragmentSignupBinding
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -32,16 +34,18 @@ class SignupFragment : Fragment() {
     //firebase Auth
     private lateinit var auth: FirebaseAuth
 
-    //google client
-    private lateinit var googleSignInClient: GoogleSignInClient
-
     lateinit var LoginController : NavController
 
     lateinit var loginActivity: LoginActivity
 
     private lateinit var database: DatabaseReference
 
+    private lateinit var binding: FragmentSignupBinding
+
     val db = FirebaseFirestore.getInstance()
+
+    var isAdmin : Boolean = false
+    var isFarmer : Boolean =false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,75 +59,73 @@ class SignupFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.fragment_signup, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_signup, container, false)
+        binding.fragment = this@SignupFragment
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressBar_Signup.visibility = View.GONE
+        progressBar_signup.visibility = View.GONE
 
         LoginController = login_navigation.findNavController()
 
         database = Firebase.database.reference
         auth = Firebase.auth
+    }
 
-        var isAdmin : Boolean = false
-        var isFarmer : Boolean =false
+    fun chkAdmin(view:View){
+        isAdmin = !isAdmin
+    }
 
-        chk_Admin.setOnCheckedChangeListener{compoundButton, b ->
-            isAdmin = b
+    fun chkFarmer(view:View){
+        isFarmer = !isFarmer
+    }
+
+    fun btnSignup(view:View){
+        var email = edt_signupEmail.text.toString()
+        var pass = edt_signupPassword.text.toString()
+        var pass2 = edt_signupPassword2.text.toString()
+        var name = edt_signupName.text.toString()
+        if(email.isEmpty() || email.equals("")){
+            Toast.makeText(loginActivity, getString(R.string.email), Toast.LENGTH_SHORT).show()
         }
-
-        chk_Farmer.setOnCheckedChangeListener{compoundButton, b ->
-            isFarmer = b
+        else if(!pass.equals(pass2)){
+            Toast.makeText(loginActivity, getString(R.string.wrong_password), Toast.LENGTH_SHORT).show()
         }
+        else if(pass.length < 6){
+            Toast.makeText(loginActivity, getString(R.string.password_longer_6), Toast.LENGTH_SHORT).show()
+        }
+        else if(name.isEmpty() || name.equals("")){
+            Toast.makeText(loginActivity, getString(R.string.give_name), Toast.LENGTH_SHORT).show()
+        }
+        else if(!isAdmin && !isFarmer){
+            Toast.makeText(loginActivity, getString(R.string.select_admin_farm), Toast.LENGTH_SHORT).show()
+        }
+        else{
 
-
-        btnSignup.setOnClickListener {
-            var email = etSignupEmail.text.toString()
-            var pass = etSignupPassword.text.toString()
-            var pass2 = etSignupPassword2.text.toString()
-            var name = etSignupName.text.toString()
-            if(email.isEmpty() || email.equals("")){
-                Toast.makeText(loginActivity, getString(R.string.email), Toast.LENGTH_SHORT).show()
-            }
-            else if(!pass.equals(pass2)){
-                Toast.makeText(loginActivity, getString(R.string.wrong_password), Toast.LENGTH_SHORT).show()
-            }
-            else if(pass.length < 6){
-                Toast.makeText(loginActivity, getString(R.string.password_longer_6), Toast.LENGTH_SHORT).show()
-            }
-            else if(name.isEmpty() || name.equals("")){
-                Toast.makeText(loginActivity, getString(R.string.give_name), Toast.LENGTH_SHORT).show()
-            }
-            else if(!isAdmin && !isFarmer){
-                Toast.makeText(loginActivity, getString(R.string.select_admin_farm), Toast.LENGTH_SHORT).show()
-            }
-            else{
-
-                progressBar_Signup.visibility = View.VISIBLE
-                CoroutineScope(Dispatchers.IO).launch {
-                    auth!!.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(loginActivity){
-                        if(it.isSuccessful){
-                            async{registerPushToken()}
-                            val user = auth?.currentUser?.uid
-                            writeNewUserWithTaskListeners(user.toString(), name, email , getString(R.string.email_login) , isAdmin , isFarmer)
-                            Toast.makeText(loginActivity, getString(R.string.singup_success), Toast.LENGTH_SHORT).show()
-                            val ass = Intent(context, MyPageActivity::class.java)
-                            startActivity(ass)
-                            //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
-                            activity?.finish()
-                        }
-                        else{
-                            Toast.makeText(loginActivity, getString(R.string.singup_exception), Toast.LENGTH_SHORT).show()
-                        }
-
-                        progressBar_Signup.visibility = View.GONE
+            progressBar_signup.visibility = View.VISIBLE
+            CoroutineScope(Dispatchers.IO).launch {
+                auth!!.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(loginActivity){
+                    if(it.isSuccessful){
+                        async{registerPushToken()}
+                        val user = auth?.currentUser?.uid
+                        writeNewUserWithTaskListeners(user.toString(), name, email , getString(R.string.email_login) , isAdmin , isFarmer)
+                        Toast.makeText(loginActivity, getString(R.string.singup_success), Toast.LENGTH_SHORT).show()
+                        val ass = Intent(context, MyPageActivity::class.java)
+                        startActivity(ass)
+                        //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
+                        activity?.finish()
                     }
-                }
+                    else{
+                        Toast.makeText(loginActivity, getString(R.string.singup_exception), Toast.LENGTH_SHORT).show()
+                    }
 
+                    progressBar_signup.visibility = View.GONE
+                }
             }
-        }//end of btn setonclick listener
+
+        }
     }
 
     suspend fun registerPushToken() {

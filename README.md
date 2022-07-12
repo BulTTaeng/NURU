@@ -38,6 +38,19 @@
 - Comments adapter 데이터 바인딩
 - CommunityContent ViewModel , ViewModel Factory, Repository 추가
 
+`2022.07.11`  
+- communityContents 내부 내용 수정 , 농장 추가 및 삭제 -> onActivityResult로 내용 업데이트
+- RecyclerView안에서 터치 이벤트 binding 해제
+- Fragment databinding 끝
+- onActivityResult로 글쓰면 update
+- Community 삭제시 댓글collection도 같이 삭제
+- 삭제된 커뮤니티 글 접근 block
+
+`2022.07.12`  
+- 회원탈퇴 service+broadCast로 구동, 탈퇴 후 firebase 삭제
+
+
+
 
 </details><br>  
 

@@ -25,6 +25,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_setting.*
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.app.ActivityManager
+import android.app.Service
+import android.content.Context
+import androidx.core.content.ContextCompat
+import org.apache.poi.ss.formula.functions.T
+import android.content.ComponentName
+
+import android.os.IBinder
+
+import android.content.ServiceConnection
+import android.content.BroadcastReceiver
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.content.IntentFilter
+import com.example.nuru.repository.service.WithdrawalService
+
 
 class SettingFragment : Fragment() {
 
@@ -35,6 +52,35 @@ class SettingFragment : Fragment() {
     var login_type : String = ""
     lateinit var uid : String
     private lateinit var binding : FragmentSettingBinding
+    lateinit var myPageActivity : MyPageActivity
+
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val msg = intent.getStringExtra("KEYVALUE")
+
+            if(msg == "good"){
+                Toast.makeText(mypageActivity, "good from service $msg", Toast.LENGTH_SHORT).show()
+                endService()
+                progressBar_setting.visibility = View.GONE
+                val intent = Intent(getActivity(), LoginActivity::class.java)
+                startActivity(intent)
+                ActivityCompat.finishAffinity(mypageActivity)
+            }
+            else if(msg =="error"){
+                Toast.makeText(activity, "error from service $msg", Toast.LENGTH_SHORT).show()
+                endService()
+                progressBar_setting.visibility = View.GONE
+            }
+            else{
+                Log.e("What is this " , "Something wrong with broadcasting receiving")
+            }
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myPageActivity = context as MyPageActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,10 +128,46 @@ class SettingFragment : Fragment() {
             }
             else if(it.title == getString(R.string.withdrawal)){
                 Log.d("[SettingFragment]","회원탈퇴를 누르셨습니다.")
-                revokeAccess()
+                //revokeAccess()
+                progressBar_setting.visibility = View.VISIBLE
+                startService()
+
             }
         }
         adapter.notifyDataSetChanged()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myPageActivity?.let { unRegister(it) }
+    }
+
+    fun register(ctx: Context) {
+        LocalBroadcastManager.getInstance(ctx).registerReceiver(
+            receiver, IntentFilter("DONE")
+        )
+    }
+
+    fun unRegister(ctx: Context) {
+        LocalBroadcastManager.getInstance(ctx).unregisterReceiver(
+            receiver
+        )
+    }
+
+    fun startService()
+    {
+        val intent = Intent(myPageActivity, WithdrawalService::class.java)
+        myPageActivity.startService(intent)
+        myPageActivity.let{
+            register(it)
+        }
+    }
+
+    fun endService()
+    {
+        val intent = Intent(myPageActivity, WithdrawalService::class.java)
+        myPageActivity.stopService(intent)
     }
 
     fun btnCancelSetting(view : View) {
@@ -128,35 +210,4 @@ class SettingFragment : Fragment() {
         }
     }
 
-    // TODO : 회원 탈퇴 로직 수정 (Github Issue #7)
-    // Trigger가 없다면, 회원 삭제 버튼을 눌렀을 때, firebase DB에 정보들을 삭제하고 탈퇴해야함.
-    fun revokeAccess() {
-        progressBar_setting.visibility = View.VISIBLE
-        val fAuth: FirebaseUser = firebaseAuth.getCurrentUser()!!
-        db.collection("user").document(uid).delete().addOnCompleteListener{
-            if(it.isSuccessful){
-                Log.d("[revokeAccess]","uid collection 회원정보 delete 성공")
-                fAuth!!.delete().addOnCompleteListener{
-                    if(it.isSuccessful){
-                        Log.d("[revokeAccess]","firebaseAuth 회원정보 delete 성공")
-                        Toast.makeText(mypageActivity, R.string.success_withdrawal , Toast.LENGTH_SHORT).show()
-
-                        progressBar_setting.visibility = View.GONE
-                        FirebaseAuth.getInstance().signOut()
-                        val intent = Intent(getActivity(), LoginActivity::class.java)
-                        startActivity(intent)
-                        ActivityCompat.finishAffinity(mypageActivity)
-                    }
-                    else{
-                        Toast.makeText(mypageActivity, R.string.fail_withdrawal , Toast.LENGTH_SHORT).show()
-                        progressBar_setting.visibility = View.GONE
-                    }
-                }
-            }
-            else{
-                Toast.makeText(mypageActivity, R.string.fail_withdrawal , Toast.LENGTH_SHORT).show()
-                progressBar_setting.visibility = View.GONE
-            }
-        }
-    }
 }

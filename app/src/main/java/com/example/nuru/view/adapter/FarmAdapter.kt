@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nuru.databinding.CardviewFarmBinding
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.mypage.NewMyFarmActivity
+import com.example.nuru.viewmodel.farm.MyFarmViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -212,6 +213,7 @@ class FarmAdapter(private val context: Context) : ListAdapter<Farm, FarmAdapter.
             }
             else{
                 db.collection("user").document(UserId).update("farmList" , FieldValue.arrayRemove(farmId))
+                myFarMViewModel.updateFarm()
             }
         }
     }

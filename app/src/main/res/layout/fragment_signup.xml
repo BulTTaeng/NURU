@@ -1,137 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.fragment.login.SignupFragment">
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.nuru.view.fragment.login.SignupFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.login.SignupFragment">
+
+        <ScrollView
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/etSignupEmail"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                android:ems="10"
-                android:hint="이메일을 입력하세요"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_SignUp" />
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etSignupPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                android:ems="10"
-                android:hint="비밀번호를 입력하세요"
-                android:inputType="textPassword"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSignupEmail" />
+                <EditText
+                    android:id="@+id/edt_signupEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="이메일을 입력하세요"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_signUp" />
 
-            <EditText
-                android:id="@+id/etSignupPassword2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                android:ems="10"
-                android:hint="비밀번호를 다시한번 입력하세요"
-                android:inputType="textPassword"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSignupPassword" />
+                <EditText
+                    android:id="@+id/edt_signupPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="비밀번호를 입력하세요"
+                    android:inputType="textPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_signupEmail" />
 
-            <EditText
-                android:id="@+id/etSignupName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                android:ems="10"
-                android:hint="이름을 입력하세요"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSignupPassword2" />
+                <EditText
+                    android:id="@+id/edt_signupPassword2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="비밀번호를 다시한번 입력하세요"
+                    android:inputType="textPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_signupPassword" />
 
-            <Button
-                android:id="@+id/btnSignup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:layout_marginBottom="20dp"
-                android:width="130dp"
-                android:height="50dp"
-                android:background="#000000"
-                android:text="가입하기"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chk_Admin" />
+                <EditText
+                    android:id="@+id/edt_signupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="이름을 입력하세요"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_signupPassword2" />
 
-            <CheckBox
-                android:id="@+id/chk_Admin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="70dp"
-                android:text="관리자"
-                android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSignupName" />
+                <Button
+                    android:id="@+id/btn_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:width="130dp"
+                    android:height="50dp"
+                    android:background="#000000"
+                    android:text="가입하기"
+                    android:onClick="@{fragment::btnSignup}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chk_admin" />
 
-            <CheckBox
-                android:id="@+id/chk_Farmer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:layout_marginEnd="80dp"
-                android:text="농장주"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSignupName" />
+                <CheckBox
+                    android:id="@+id/chk_admin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="70dp"
+                    android:text="관리자"
+                    android:textSize="16dp"
+                    android:onClick="@{fragment::chkAdmin}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_signupName" />
 
-            <TextView
-                android:id="@+id/txt_SignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="회원 가입"
-                android:textSize="24dp"
-                app:layout_constraintBottom_toTopOf="@+id/etSignupEmail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <CheckBox
+                    android:id="@+id/chk_farmer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:layout_marginEnd="80dp"
+                    android:text="농장주"
+                    android:textSize="16dp"
+                    android:onClick="@{fragment:: chkFarmer}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_signupName" />
 
-            <ProgressBar
-                android:id="@+id/progressBar_Signup"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/txt_signUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="회원 가입"
+                    android:textSize="24dp"
+                    app:layout_constraintBottom_toTopOf="@+id/edt_signupEmail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar_signup"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
