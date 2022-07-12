@@ -48,6 +48,7 @@
 
 `2022.07.12`  
 - 회원탈퇴 service+broadCast로 구동, 탈퇴 후 firebase 삭제
+- Adapter databinding
 
 
 

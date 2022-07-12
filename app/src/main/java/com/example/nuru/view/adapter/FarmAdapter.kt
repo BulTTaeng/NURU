@@ -24,27 +24,17 @@ class FarmAdapter(private val context: Context , private val myFarMViewModel : M
     ListAdapter<Farm, FarmAdapter.FarmViewHolder>(FARM_DIFF_CALLBACK) {
 
     val db = FirebaseFirestore.getInstance()
-    lateinit var UserId : String
-    private lateinit var firebaseAuth: FirebaseAuth
+    val firebaseAuth = FirebaseAuth.getInstance()
+    var UserId = firebaseAuth.currentUser!!.uid
+    lateinit var binding : CardviewFarmBinding
 
 
     inner class FarmViewHolder(
         private val binding: CardviewFarmBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(data: Farm) = with(binding) {
+            binding.farm = data
 
-            var products : String
-            products = ""
-            for(pname in data.products){
-                products += pname
-                products += " "
-            }
-            firebaseAuth = FirebaseAuth.getInstance()
-            UserId = firebaseAuth.currentUser!!.uid
-
-
-            txtFarmProducts.text = data.products.toString()
-            txtFarmLocation.text = data.farm_address
             btnDeleteFarmm.setOnClickListener {
                 showAlert(data.farm_id)
             }
@@ -65,7 +55,7 @@ class FarmAdapter(private val context: Context , private val myFarMViewModel : M
         // that is used to hold list item
         //val view = LayoutInflater.from(parent.context)
         //   .inflate(R.layout.cardview_farm, parent, false)
-        val binding = CardviewFarmBinding.inflate(
+        binding = CardviewFarmBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

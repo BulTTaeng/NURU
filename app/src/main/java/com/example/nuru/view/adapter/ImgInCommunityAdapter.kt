@@ -33,9 +33,7 @@ class ImgInCommunityAdapter(private val context: Context) :
 
             itemView.setOnClickListener{
                 val intent= Intent(context , ShowImageActivity::class.java)
-                val userCollection: Collection<String> = HashSet<String>(currentList)
-
-                val list: ArrayList<String> = ArrayList<String>(userCollection)
+                val list: ArrayList<String> = ArrayList<String>(currentList)
                 intent.putStringArrayListExtra("DATA", list)
                 context.startActivity(intent)
             }
