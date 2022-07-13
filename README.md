@@ -52,8 +52,9 @@
 
 `2022.07.13`  
 - SignupFragment Refactoring 완료
+- LoginFragment Refactoring 완료(Google Login 부분 제외)
 - View, ViewModel, Repository 분리
-- Courtine 적용
+- Coroutine 적용
 
 
 </details><br>  
