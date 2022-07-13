@@ -9,7 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 
-class UserRepository {
+class SignUpRepository {
     val db = FirebaseFirestore.getInstance()
     var auth = Firebase.auth
 
