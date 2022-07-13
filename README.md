@@ -50,7 +50,10 @@
 - 회원탈퇴 service+broadCast로 구동, 탈퇴 후 firebase 삭제
 - Adapter databinding
 
-
+`2022.07.13`  
+- SignupFragment Refactoring 완료
+- View, ViewModel, Repository 분리
+- Courtine 적용
 
 
 </details><br>  
