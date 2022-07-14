@@ -50,6 +50,10 @@
 - 회원탈퇴 service+broadCast로 구동, 탈퇴 후 firebase 삭제
 - Adapter databinding
 
+`2022.07.13`  
+- Community 안에 있는 액티비티를 db접근 로직 분리
+
+
 
 
 
