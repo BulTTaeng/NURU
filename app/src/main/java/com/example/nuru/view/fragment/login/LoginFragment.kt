@@ -24,6 +24,7 @@ import com.example.nuru.viewmodel.login.UserViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -81,12 +82,12 @@ class LoginFragment : Fragment() {
                 Log.d("3233121222222[이거]", "여긴됨123213?")
                 var condition : Boolean
                 Log.d("[코루틴안]", "시작")
-                /*CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     async {
                         condition = userViewModel.firebaseAuthWithGoogle(account!!, loginActivity)
                     }.await()
                     Log.d("[코루틴안]", "끝")
-                }*/
+                }
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("[LoginActivity]", "Google sign in failed", e)

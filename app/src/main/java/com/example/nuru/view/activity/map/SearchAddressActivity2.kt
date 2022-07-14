@@ -5,6 +5,8 @@ import android.os.Bundle
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
@@ -159,11 +161,11 @@ class SearchAddressActivity2 : AppCompatActivity(), CoroutineScope {
 
             // map 액티비티 시작
 
-            val Intent = Intent(this, MapsActivity2::class.java)
-            Intent.apply{
-                putExtra(SEARCH_RESULT_EXTRA_KEY, it)
-            }
-            startActivity(Intent)
+            val Intent = Intent()
+
+            Intent.putExtra(SEARCH_RESULT_EXTRA_KEY, it)
+
+            setResult(Activity.RESULT_OK , Intent)
             finish()
 
             /*startActivity(Intent(this, MapsActivity::class.java).apply {

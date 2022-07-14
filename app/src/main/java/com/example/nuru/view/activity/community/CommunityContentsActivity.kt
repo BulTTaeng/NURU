@@ -131,7 +131,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
     fun btnEditContents(view :View){
         val info = communityContentsViewModel.fetchData().value
         if(info?.writer.equals(firebaseAuth.currentUser?.uid)){
-            val intent_to_EditCommunity = Intent(this, EditCommunityActivity::class.java)
+            val intent_to_EditCommunity = Intent(this, AddCommunityActivity::class.java)
             intent_to_EditCommunity.putExtra("COMMUNITYENTITY",info)
             startActivityForResult(intent_to_EditCommunity, RETURN_FROM_EDIT)
         }

@@ -5,16 +5,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityAddFarmBinding
+import com.example.nuru.model.data.farm.FarmDAO
+import com.example.nuru.model.data.tmap.SearchResultEntity
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.view.activity.map.SearchAddressActivity2
+import com.example.nuru.viewmodel.community.CommunityViewModel
+import com.example.nuru.viewmodel.farm.MyFarmViewModel
+import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import kotlinx.android.synthetic.main.activity_add_farm.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -26,27 +34,38 @@ class AddFarmActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     var singletonC = GetCurrentContext.getInstance()
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivityAddFarmBinding
+
+    //lateinit var viewModel : MyFarmViewModel
+
+    val docRef = db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
+
+    val viewModel : MyFarmViewModel by viewModels{ViewModelFactoryForMyFarm(docRef)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_add_farm)
+        //setContentView(R.layout.activity_add_farm)`
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_farm)
         binding.activity = this@AddFarmActivity
         singletonC.setcurrentContext(this)
-        firebaseAuth = FirebaseAuth.getInstance()
         binding.progressBarAddFarm.visibility = View.GONE
 
-        val Intent = intent
+        binding.address = getString(R.string.press_address_find)
 
-        val b = intent.extras
-        if (b == null) {
-            binding.address = getString(R.string.press_address_find)
-        } else {
-            latitude = b.getDouble("latitude")
-            longtitude = b.getDouble("longtitude")
-            binding.address = Intent.getStringExtra("ADDRESS").toString()
+//        viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
+//            .get(MyFarmViewModel::class.java)
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == RETURN_FROM_SEARCH){
+            val address = data?.getParcelableExtra<SearchResultEntity>("SEARCH_RESULT_EXTRA_KEY")
+            latitude = address?.locationLatLng!!.latitude.toDouble()
+            longtitude =address?.locationLatLng!!.longitude.toDouble()
+            binding.address = address?.fullAddress
         }
 
     }
@@ -54,78 +73,54 @@ class AddFarmActivity : AppCompatActivity() {
     fun btnFindAddress(view: View) {
         val Intent =
             Intent(this, com.example.nuru.view.activity.map.SearchAddressActivity2::class.java)
-        startActivity(Intent)
-        finish()
+        startActivityForResult(Intent , RETURN_FROM_SEARCH)
+        //finish()
         //MyPageController.navigate(R.id.action_addFarmFragment_to_myPageFragment)
     }
 
     fun btnAddFarmInfo(view: View) {
         binding.progressBarAddFarm.visibility = View.VISIBLE
-        var ok: Boolean = true
+        btn_AddFarmInfo.isEnabled = false
+        var ok: Boolean = false
+
+        val farmname = edt_farmName.text
+        val products = edt_products.text
+        val UserId = firebaseAuth.currentUser?.uid
+        var temp = ArrayList<String>()
+        temp.add(getString(R.string.empty_image))
+        var t = ArrayList<String>()
+        t.add(UserId.toString())
+
+        val farmDao = FarmDAO(
+            binding.address.toString(),
+            "farmId",
+            UserId.toString(),
+            farmname.toString(),
+            latitude.toDouble(),
+            longtitude,
+            products.toString(),
+            temp,
+            t
+        )
+
         CoroutineScope(Dispatchers.Main).launch {
-            CoroutineScope(Dispatchers.IO).async {
-                ok = addFarmInfoFirebase()
+            CoroutineScope(Dispatchers.IO).launch {
+                ok = viewModel.addFarm(farmDao)
             }.join()
+
+            Log.d("okkkkkkkkkkk",ok.toString())
             if (ok) {
                 finish()
             } else {
                 Log.d("error", "FirebaseWriting Failed")
                 binding.progressBarAddFarm.visibility = View.GONE
+                btn_AddFarmInfo.isEnabled = true
             }
         }
     }
 
-    suspend fun addFarmInfoFirebase(): Boolean {
-        val farmname = edt_farmName.text
-        val products = edt_products.text
-        val UserId = firebaseAuth.currentUser?.uid
-        val pro = products.split(",") as List<String>
-        var temp = ArrayList<String>()
-        temp.add(getString(R.string.empty_image))
-        var t = ArrayList<String>()
-        t.add(UserId.toString())
-        val data = hashMapOf(
-            "farmAddress" to binding.address.toString(),
-            "farmId" to "farmId".toString(),
-            "farmOwner" to UserId.toString(),
-            "farmName" to farmname.toString(),
-            "latitude" to latitude.toDouble(),
-            "longitude" to longtitude.toDouble(),
-            "products" to products.toString(),
-            "farmId" to "aaa",
-            "farmPhoto" to temp,
-            "farmAdmin" to t
-        )
 
-        val tempdata = hashMapOf(
-            "humidity" to 0.0,
-            "information" to getString(R.string.no_sensor),
-            "temperature" to 0.0,
-            "weather" to getString(R.string.no_sensor)
-        )
-        var docId: String = ""
-
-        return try {
-            val docRef = db.collection("farmList")
-
-            docRef.add(data)
-                .addOnSuccessListener { it ->
-                    docId = it.id
-                }
-                .addOnFailureListener { e ->
-                    Log.w("ErrorInAddingFarm", "Error adding document", e)
-                }.await()
-
-            docRef.document(docId).update("farmId", docId).await()
-            db.collection("user").document(UserId.toString())
-                .update("farmList", FieldValue.arrayUnion(docId)).await()
-            db.collection("farmInformation").document(docId).set(tempdata).await()
-            true
-        } catch (e: FirebaseException) {
-            Log.d("error", e.toString())
-            false
-        }
-
-
+    companion object{
+        const val RETURN_FROM_SEARCH = 765
     }
 }

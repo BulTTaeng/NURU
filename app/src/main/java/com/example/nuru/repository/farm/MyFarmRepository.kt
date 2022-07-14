@@ -3,10 +3,16 @@ package com.example.nuru.repository.farm
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.nuru.R
 import com.example.nuru.model.data.farm.Farm
+import com.example.nuru.model.data.farm.FarmDAO
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 import kotlin.collections.ArrayList
 
 class MyFarmRepository(val farmRef : DocumentReference) {
@@ -66,4 +72,64 @@ class MyFarmRepository(val farmRef : DocumentReference) {
                 }
         }
     }
+
+    suspend fun addFarm(farmDao : FarmDAO) : Boolean{
+        Log.d("hhhhhhhhhhhhh", "hhhhhhhhhhh")
+        val data = hashMapOf(
+            "farmAddress" to farmDao.farmAddress,
+            "farmId" to farmDao.farmId,
+            "farmOwner" to farmDao.farmOwner,
+            "farmName" to farmDao.farmName,
+            "latitude" to farmDao.latitude,
+            "longitude" to farmDao.longitude,
+            "products" to farmDao.products,
+            "farmPhoto" to farmDao.farmPhoto,
+            "farmAdmin" to farmDao.farmAdmin
+        )
+
+        val tempdata = hashMapOf(
+            "humidity" to 0.0,
+            "information" to "센서가 없어요",
+            "temperature" to 0.0,
+            "weather" to "센서가 없어요"
+        )
+        var docId: String = ""
+
+        return try {
+            val docRef = db.collection("farmList")
+
+            docRef.add(data)
+                .addOnSuccessListener { it ->
+                    docId = it.id
+                }
+                .addOnFailureListener { e ->
+                    Log.w("ErrorInAddingFarm", "Error adding document", e)
+                }.await()
+
+            docRef.document(docId).update("farmId", docId).await()
+            db.collection("user").document(farmDao.farmOwner)
+                .update("farmList", FieldValue.arrayUnion(docId)).await()
+            db.collection("farmInformation").document(docId).set(tempdata).await()
+            true
+        } catch (e: FirebaseException) {
+            Log.d("error", e.toString())
+            false
+        }
+    }
+
+    ///////////////addAdmin///////////////
+    suspend fun addAdmin(addId : String , farmId : String) : Boolean{
+        return try {
+            db.collection("farmList").document(farmId).update("farmAdmin" , FieldValue.arrayUnion(addId)).addOnSuccessListener {
+                true
+            }.addOnFailureListener{
+                false
+            }.await()
+            true
+        }catch (e : Exception){
+            Log.d("Error" , e.toString())
+            false
+        }
+    }
+
 }
