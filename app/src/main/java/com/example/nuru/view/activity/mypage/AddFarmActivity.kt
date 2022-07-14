@@ -7,25 +7,17 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityAddFarmBinding
-import com.example.nuru.model.data.farm.FarmDAO
+import com.example.nuru.model.data.farm.FarmEntity
 import com.example.nuru.model.data.tmap.SearchResultEntity
 import com.example.nuru.utility.GetCurrentContext
-import com.example.nuru.view.activity.map.SearchAddressActivity2
-import com.example.nuru.viewmodel.community.CommunityViewModel
 import com.example.nuru.viewmodel.farm.MyFarmViewModel
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import kotlinx.android.synthetic.main.activity_add_farm.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 class AddFarmActivity : AppCompatActivity() {
     var latitude: Double = 0.0
@@ -53,19 +45,17 @@ class AddFarmActivity : AppCompatActivity() {
 
         binding.address = getString(R.string.press_address_find)
 
-//        viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
-//            .get(MyFarmViewModel::class.java)
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RETURN_FROM_SEARCH){
+        if(requestCode == RETURN_FROM_SEARCH) {
             val address = data?.getParcelableExtra<SearchResultEntity>("SEARCH_RESULT_EXTRA_KEY")
-            latitude = address?.locationLatLng!!.latitude.toDouble()
-            longtitude =address?.locationLatLng!!.longitude.toDouble()
-            binding.address = address?.fullAddress
+            if (address != null) {
+                latitude = address.locationLatLng.latitude.toDouble()
+                longtitude = address.locationLatLng.longitude.toDouble()
+                binding.address = address.fullAddress
+            }
         }
 
     }
@@ -91,7 +81,7 @@ class AddFarmActivity : AppCompatActivity() {
         var t = ArrayList<String>()
         t.add(UserId.toString())
 
-        val farmDao = FarmDAO(
+        val farmDao = FarmEntity(
             binding.address.toString(),
             "farmId",
             UserId.toString(),
