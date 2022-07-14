@@ -86,61 +86,7 @@ class CommunityRepository {
                 addTofirebase(communityEntity , ArrayList<String>())
 
             } else {
-
-                var i = 1
-                var images = ArrayList<String>()
-
-                for (it in communityEntity.image) {
-                    var fileName =
-                        "COMMUNITY_${SimpleDateFormat("yyyymmdd_HHmmss").format(Date())}" + i.toString() + "_.png"
-                    var imagesRef = firabaseStorage!!.reference.child("community/")
-                        .child(fileName)    //기본 참조 위치/images/${fileName}
-                    //이미지 파일 업로드
-                    var uploadTask = imagesRef.putFile(it)
-                    //uploadTaskList.add(uploadTask)
-
-                    if(images.size != i-1 ) {
-
-                        uploadTask.continueWithTask { task ->
-                            if (!task.isSuccessful) {
-                                task.exception?.let {
-                                    throw it
-                                }
-                            }
-                            imagesRef.downloadUrl
-                        }.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val downloadUri = task.result
-                                //downloadUri 가 firebase storage 참조 주소
-
-                                images.add(downloadUri.toString())
-
-                            }
-                        }
-                    }
-                    else{
-                        uploadTask.continueWithTask { task ->
-                            if (!task.isSuccessful) {
-                                task.exception?.let {
-                                    throw it
-                                }
-                            }
-                            imagesRef.downloadUrl
-                        }.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val downloadUri = task.result
-                                //downloadUri 가 firebase storage 참조 주소
-
-                                images.add(downloadUri.toString())
-
-                            }
-                        }.await()
-                    }
-                    i++
-                }
-
-                //while (images.size != i)
-                addTofirebase(communityEntity, images)
+                addTofirebase(communityEntity, addToStorage(communityEntity))
                 true
             }
             true
@@ -187,5 +133,95 @@ class CommunityRepository {
             }
         }
     }
+
+    suspend fun addToStorage(communityEntity: CommunityEntity) : ArrayList<String>{
+        var i = 1
+        var images = ArrayList<String>()
+
+        for (it in communityEntity.image) {
+            var fileName =
+                "COMMUNITY_${SimpleDateFormat("yyyymmdd_HHmmss").format(Date())}" + i.toString() + "_.png"
+            var imagesRef = firabaseStorage!!.reference.child("community/")
+                .child(fileName)    //기본 참조 위치/images/${fileName}
+            //이미지 파일 업로드
+            var uploadTask = imagesRef.putFile(Uri.parse(it))
+            //uploadTaskList.add(uploadTask)
+
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                imagesRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    //downloadUri 가 firebase storage 참조 주소
+
+                    images.add(downloadUri.toString())
+
+                }
+            }.await()
+
+            i++
+        }
+
+        return images
+    }
+/////////////////////Edit///////////////////////
+
+    suspend fun editCommunity(editCommunityDTO: CommunityDTO) : Boolean{
+
+        val docRef = db.collection("community").document(editCommunityDTO.id)
+
+        editContents(editCommunityDTO)
+
+        return try {
+
+            editContents(editCommunityDTO)
+            //_mutableData.value!!.contents = editCommunityDTO.contents
+            //_mutableData.value!!.title = editCommunityDTO.title
+
+
+            if (editCommunityDTO.image.isNotEmpty()){
+
+                val communityEntity = CommunityEntity(
+                    editCommunityDTO.image,
+                    editCommunityDTO.contents,
+                    editCommunityDTO.title,
+                    editCommunityDTO.writer,
+                    editCommunityDTO.like,
+                    editCommunityDTO.comments,
+                    FieldValue.serverTimestamp()
+                )
+
+                docRef.update("image", addToStorage(communityEntity))
+
+                true
+            }
+            true
+        } catch (e: Exception) {
+            when(e){
+                is FirebaseException ->{
+                    Log.d("FirebaseException" , e.toString())
+                }
+                else ->{
+                    Log.d("Exception", e.toString())
+                }
+            }
+            false
+        }
+    }
+
+    private suspend fun editContents(editCommunityDTO: CommunityDTO){
+
+        Log.d("0000000000" , editCommunityDTO.toString())
+        var ok = false
+        val docRef = db.collection("community").document(editCommunityDTO.id)
+        //여기서 왜 .add Listener 달면 null pointer exception이 뜨지???
+        docRef.update("contents", editCommunityDTO.contents, "title", editCommunityDTO.title).await()
+    }
+
 
 }

@@ -188,7 +188,7 @@ class SearchAddressActivity : AppCompatActivity(), CoroutineScope {
         searchWithPage(keywordString, 1)
     }
 
-    //TODO:: 여기도 Repository딴으로 빼야 함.
+
     private fun searchWithPage(keywordString: String, page: Int) {
         // 비동기 처리
         launch(coroutineContext) {
