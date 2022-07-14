@@ -49,13 +49,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
     var singletonC = GetCurrentContext.getInstance()
 
-    //database connection
-    private lateinit var database: DatabaseReference
-
-    lateinit var user_farm_info : ArrayList<Farm>
-
-    val db = FirebaseFirestore.getInstance()
-
     private lateinit var mMap: GoogleMap
     // 현재 위치를 검색하기 위함
     private lateinit var fusedLocationClient: FusedLocationProviderClient // 위칫값 사용
@@ -99,11 +92,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        database = Firebase.database.reference
-
         job = Job()
-
-        user_farm_info =ArrayList<Farm>()
 
     }
 

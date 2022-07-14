@@ -37,12 +37,6 @@ class MapsActivity2 : AppCompatActivity(), OnMapReadyCallback , CoroutineScope {
     lateinit var mapsActivity: MapsActivity2
     var singletonC = GetCurrentContext.getInstance()
 
-    //database connection
-    private lateinit var database: DatabaseReference
-
-
-    val db = FirebaseFirestore.getInstance()
-
     private lateinit var mMap: GoogleMap
 
     companion object {

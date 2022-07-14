@@ -46,7 +46,7 @@ class MyPageActivity : AppCompatActivity() {
             {
                 Log.d("INTERNET","INTERNET CONNECTION DISCONNECTED")
 
-                AlertDialog.Builder(singletonC.getcurrentContext()!!)
+                AlertDialog.Builder(applicationContext)
                     .setTitle(getString(R.string.check_internet_connection))
                     .setPositiveButton(getString(R.string.go_back)) {
                             dialogInterface: DialogInterface, i: Int ->

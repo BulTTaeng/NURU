@@ -6,7 +6,10 @@
     <data>
         <variable
             name="activity"
-            type="com.example.nuru.view.activity.community.AddCommunityActivity" />
+            type="com.example.nuru.view.activity.community.AddCommunityActivity"/>
+        <variable
+            name="communityDto"
+            type="com.example.nuru.model.data.community.CommunityDTO" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +32,7 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:hint="제목"
+                    android:text="@{communityDto.title}"
                     android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +57,7 @@
                     android:hint="내용"
                     android:inputType="text|textMultiLine"
                     android:lines="50"
+                    android:text="@{communityDto.contents}"
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +89,17 @@
                     android:layout_marginTop="50dp"
                     android:text="업로드"
                     android:onClick="@{activity::btnUpload}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_Contents" />
+
+                <Button
+                    android:id="@+id/btn_UploadEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="수정하기"
+                    android:onClick="@{activity::btnEdit}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/edt_Contents" />

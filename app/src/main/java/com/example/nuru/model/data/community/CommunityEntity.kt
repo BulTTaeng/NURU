@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FieldValue
 import kotlin.collections.ArrayList
 
 data class CommunityEntity(
-    val image: ArrayList<Uri>,
+    val image: ArrayList<String>,
     val contents: String,
     val title: String,
     val writer: String,
