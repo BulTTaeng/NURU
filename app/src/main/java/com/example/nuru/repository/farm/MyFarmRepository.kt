@@ -22,8 +22,19 @@ class MyFarmRepository(val farmRef : DocumentReference) {
     val Farm: LiveData<MutableList<Farm>>
         get() = _mutableData
 
+    var isInit : Boolean = false
+
     init {
         updateFarm()
+    }
+
+    suspend fun getUserNameAndEmail(userId : String) : String {
+        val docRef = db.collection("user").document(userId)
+        var resultString : String = ""
+        docRef.get().addOnSuccessListener {
+            resultString = it["name"].toString() + "\n" + it["email"].toString()
+        }.await()
+        return resultString
     }
 
     fun updateFarm(){

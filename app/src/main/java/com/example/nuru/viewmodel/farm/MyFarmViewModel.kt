@@ -33,4 +33,8 @@ class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
     suspend fun addAdmin(addId : String , farmId : String) : Boolean{
         return repo.addAdmin(addId, farmId)
     }
+
+    suspend fun getUserNameAndEmail(userId : String) : String {
+        return repo.getUserNameAndEmail(userId)
+    }
 }

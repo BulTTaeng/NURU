@@ -59,6 +59,7 @@
 
 `2022.07.14`  
 - SettingFragment Refactoring 완료  
+- MyPageFragment Refactoring 완료
 - Coroutine 적용
 - View, ViewModel, Repository 분리
 - EditCommunity activity 와 add community activity 병합
