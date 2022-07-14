@@ -41,18 +41,18 @@ import android.content.BroadcastReceiver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.content.IntentFilter
 import com.example.nuru.repository.service.WithdrawalService
+import com.example.nuru.viewmodel.login.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class SettingFragment : Fragment() {
-
-    private lateinit var firebaseAuth: FirebaseAuth
-    val db = FirebaseFirestore.getInstance()
     lateinit var mypageActivity: MyPageActivity
     private lateinit var googleSignInClient: GoogleSignInClient
-    var login_type : String = ""
-    lateinit var uid : String
     private lateinit var binding : FragmentSettingBinding
     lateinit var myPageActivity : MyPageActivity
+    var userViewModel: UserViewModel = UserViewModel()
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -84,18 +84,8 @@ class SettingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebaseAuth = FirebaseAuth.getInstance()
         mypageActivity = context as MyPageActivity
-        uid = firebaseAuth.currentUser!!.uid
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(mypageActivity, gso)
-        db.collection("user").document(firebaseAuth.currentUser!!.uid).get()
-
+        googleSignInClient = userViewModel.getGoogleSignInClient(mypageActivity)
     }
 
     override fun onCreateView(
@@ -175,39 +165,27 @@ class SettingFragment : Fragment() {
         findNavController().navigate(R.id.myPageFragment)
     }
 
-
-
     private fun signOut() { // 로그아웃
+        var signCompleteCheck : Boolean = false
         progressBar_setting.visibility = View.VISIBLE
-        db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
-            login_type = it["type"].toString()
-
-            if(login_type.equals("email_login")){
-                firebaseAuth.signOut()
-                progressBar_setting.visibility = View.GONE
-                val intent = Intent(getActivity(), LoginActivity::class.java)
-                startActivity(intent)
-                ActivityCompat.finishAffinity(mypageActivity)
-            }
-            else if(login_type.equals("google_login")){
-                // Firebase sign out
-                googleSignInClient.signOut().addOnCompleteListener{
-
-                    if(it.isSuccessful){
-                        Toast.makeText(mypageActivity, getString(R.string.do_logout), Toast.LENGTH_SHORT).show()
-                        firebaseAuth.signOut()
-                        progressBar_setting.visibility = View.GONE
-                        val intent = Intent(getActivity(), LoginActivity::class.java)
-                        startActivity(intent)
-                        ActivityCompat.finishAffinity(mypageActivity)
-                    }
-                    else{
-                        Toast.makeText(mypageActivity, getString(R.string.logout_exception), Toast.LENGTH_SHORT).show()
-                        progressBar_setting.visibility = View.GONE
-                    }
+        CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                signCompleteCheck = userViewModel.signOut(googleSignInClient)
+            }.join()
+            Log.d("[SettingFragment]", "로그아웃 joing 끝냄(signout끝냄)")
+            when (signCompleteCheck) {
+                true -> {
+                    Toast.makeText(mypageActivity, getString(R.string.do_logout), Toast.LENGTH_SHORT).show()
+                    progressBar_setting.visibility = View.GONE
+                    val intent = Intent(getActivity(), LoginActivity::class.java)
+                    startActivity(intent)
+                    ActivityCompat.finishAffinity(mypageActivity)
+                }
+                false -> {
+                    Toast.makeText(mypageActivity, getString(R.string.logout_exception), Toast.LENGTH_SHORT).show()
+                    progressBar_setting.visibility = View.GONE
                 }
             }
         }
     }
-
 }

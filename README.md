@@ -56,6 +56,10 @@
 - View, ViewModel, Repository 분리
 - Coroutine 적용
 
+`2022.07.14`  
+- SettingFragment Refactoring 완료  
+- Coroutine 적용
+- View, ViewModel, Repository 분리
 
 </details><br>  
 

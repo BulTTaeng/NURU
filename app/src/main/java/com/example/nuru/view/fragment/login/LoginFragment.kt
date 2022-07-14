@@ -90,6 +90,7 @@ class LoginFragment : Fragment() {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("[LoginActivity]", "Google sign in failed", e)
+                btn_googleSignIn.isEnabled=true
             }
         }
     } // onActivityResult End
@@ -97,15 +98,18 @@ class LoginFragment : Fragment() {
     // Email SignIn
     fun btnSignIn(view:View){
         progressBar_login.visibility = View.VISIBLE
+        btn_signIn.isEnabled=false
         var id :String = edt_email.text.toString()
         var pass : String = edt_password.text.toString()
 
         if(id == ""){
             Toast.makeText(loginActivity, getString(R.string.give_id), Toast.LENGTH_SHORT).show()
+            btn_signIn.isEnabled=true
             progressBar_login.visibility = View.GONE
         }
         else if(pass == ""){
             Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
+            btn_signIn.isEnabled=true
             progressBar_login.visibility = View.GONE
         }
         else {
@@ -124,8 +128,8 @@ class LoginFragment : Fragment() {
                     false -> {
                         progressBar_login.visibility = View.GONE
                         Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
+                        btn_signIn.isEnabled=true
                     }
-
                 }
             }
         }
@@ -136,6 +140,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun signIn() {
+        btn_googleSignIn.isEnabled=false
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
         //activity?.finish()

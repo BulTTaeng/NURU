@@ -1,31 +1,22 @@
 package com.example.nuru.repository.service
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.nuru.R
-import com.example.nuru.view.activity.login.LoginActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_setting.*
+import com.example.nuru.viewmodel.login.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class WithdrawalService() : Service() {
-
     private var startMode: Int = 0             // 서비스가 종료되면 어떻게 할지 명시
     private var binder: IBinder? = null        // bind한 클라이언트를 위한 인터페이스
     private var allowRebind: Boolean = false   // onRebind가 allow 되는지 명시
-    val db = FirebaseFirestore.getInstance()
-    val firebaseAuth = FirebaseAuth.getInstance()
     lateinit var broadcaster :  LocalBroadcastManager
+    private val userViewModel : UserViewModel = UserViewModel()
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -56,31 +47,15 @@ class WithdrawalService() : Service() {
     }
 
     fun revokeAccess() {
-        val fAuth: FirebaseUser = firebaseAuth.getCurrentUser()!!
-        val uuid = fAuth.uid
-
-        fAuth!!.delete().addOnCompleteListener{
-            if(it.isSuccessful){
-                Log.d("[revokeAccess]","firebaseAuth 회원정보 delete 성공")
-
-                FirebaseAuth.getInstance().signOut()
-                db.collection("user").document(uuid).delete().addOnCompleteListener{
-                    if(it.isSuccessful){
-                        Log.d("[revokeAccess]","firebaseAuth 회원정보 delete 성공")
-                        FirebaseAuth.getInstance().signOut()
-                        sendMessage("good")
-                    }
-                    else{
-                        sendMessage("error")
-                    }
-                }
-
-            }
-            else{
-                sendMessage("error")
+        var check : Boolean = false
+        CoroutineScope(Dispatchers.IO).launch {
+            async {
+                check = userViewModel.deleteAccount()
+            }.await()
+            when (check) {
+                true -> sendMessage("good")
+                false -> sendMessage("error")
             }
         }
     }
-
-
 }
