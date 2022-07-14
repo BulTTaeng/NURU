@@ -24,19 +24,16 @@ class WithdrawalService() : Service() {
 
     override fun onCreate() {
         // 이 서비스가 맨 처음으로 call 됐을 때만 수행
-        Log.d("ONCREATE" , "This Service is new one!!")
 
         broadcaster = LocalBroadcastManager.getInstance(this);
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("OnStartCommand" , "Ready to start")
         revokeAccess()
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
-        Log.d("onDestroy" , "End service")
         super.onDestroy()
     }
 

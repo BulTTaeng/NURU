@@ -1,5 +1,6 @@
 package com.example.nuru.viewmodel.login
 
+import android.app.Activity
 import com.example.nuru.repository.user.DeleteAccountRepository
 import com.example.nuru.repository.user.LoginRepository
 import com.example.nuru.repository.user.SignOutRepository
@@ -19,13 +20,8 @@ class UserViewModel {
         return signUpRepository.registerUser(email, pass, loginActivity, name, isAdmin, isFarmer)
     }
 
-    fun getGoogleSignInClient(loginActivity: LoginActivity) : GoogleSignInClient {
-        return loginRepository.getGoogleSignInClient(loginActivity)
-    }
-
-    // Overrode
-    fun getGoogleSignInClient(myPageActivity: MyPageActivity) : GoogleSignInClient {
-        return loginRepository.getGoogleSignInClient(myPageActivity)
+    fun getGoogleSignInClient(activity: Activity) : GoogleSignInClient {
+        return loginRepository.getGoogleSignInClient(activity)
     }
 
     suspend fun firebaseAuthWithGoogle(googleSignInAccount: GoogleSignInAccount, loginActivity: LoginActivity) : Boolean{
