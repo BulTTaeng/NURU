@@ -71,9 +71,6 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //binding = DataBindingUtil.setContentView(this ,R.layout.fragment_my_page)
-        //binding = FragmentMyPageBinding.inflate(layoutInflater)
-        //binding.fragment = this@MyPageFragment
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -96,29 +93,6 @@ class MyPageFragment : Fragment() , CoroutineScope {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
-        /*if (UserId != null) {
-
-            val docRef = db.collection("user").document(UserId)
-
-            docRef.addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.w("error", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-
-                    user_farm_info =ArrayList<Farm>()
-                    findFarmInfo(UserId)
-
-
-                } else {
-                    Log.d("current null", "Current data: null")
-                }
-            }
-
-        }*/
-
         val UserId = firebaseAuth.currentUser?.uid
         val docRef = db.collection("user").document(UserId.toString())
         viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))

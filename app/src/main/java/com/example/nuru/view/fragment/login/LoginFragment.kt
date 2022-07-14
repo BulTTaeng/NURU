@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -17,24 +16,17 @@ import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.R
 import com.example.nuru.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.nuru.view.activity.mypage.MyPageActivity
-import com.example.nuru.model.data.login.SignUpInfo
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.nuru.viewmodel.login.UserViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlin.collections.ArrayList
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
-    //firebase Auth
-    private lateinit var firebaseAuth: FirebaseAuth
-
     //google client
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -42,10 +34,8 @@ class LoginFragment : Fragment() {
 
     lateinit var loginActivity: LoginActivity
 
-    val db = FirebaseFirestore.getInstance()
+    var userViewModel : UserViewModel = UserViewModel()
 
-    lateinit var username : String
-    lateinit var email: String
     private lateinit var binding: FragmentLoginBinding
 
     override fun onAttach(context: Context) {
@@ -72,20 +62,10 @@ class LoginFragment : Fragment() {
         LoginController = login_navigation.findNavController()
         progressBar_login.visibility = View.GONE
 
-        //firebase auth 객체
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(loginActivity, gso)
-
+        googleSignInClient = userViewModel.getGoogleSignInClient(loginActivity)
         btn_googleSignIn.setOnClickListener{
             signIn()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -95,21 +75,27 @@ class LoginFragment : Fragment() {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
+                Log.d("[이거]", "여긴됨?")
                 // Google Sign In was successful, authenticate with Firebase
                 var account = task.getResult(ApiException::class.java)
-                username = account.displayName.toString()
-                email = account.email.toString()
-                firebaseAuthWithGoogle(account!!)
-                //activity?.finish()
-
+                Log.d("3233121222222[이거]", "여긴됨123213?")
+                var condition : Boolean
+                Log.d("[코루틴안]", "시작")
+                /*CoroutineScope(Dispatchers.IO).launch {
+                    async {
+                        condition = userViewModel.firebaseAuthWithGoogle(account!!, loginActivity)
+                    }.await()
+                    Log.d("[코루틴안]", "끝")
+                }*/
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Log.w("LoginActivity", "Google sign in failed", e)
+                Log.w("[LoginActivity]", "Google sign in failed", e)
             }
         }
     } // onActivityResult End
 
-    fun btnSignIn( view:View){
+    // Email SignIn
+    fun btnSignIn(view:View){
         progressBar_login.visibility = View.VISIBLE
         var id :String = edt_email.text.toString()
         var pass : String = edt_password.text.toString()
@@ -122,17 +108,24 @@ class LoginFragment : Fragment() {
             Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
             progressBar_login.visibility = View.GONE
         }
-        else{
-            firebaseAuth!!.signInWithEmailAndPassword(id , pass).addOnCompleteListener(loginActivity){
-                if(it.isSuccessful){
-                    val ass = Intent(context, MyPageActivity::class.java)
-                    startActivity(ass)
-                    //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
-                    activity?.finish()
-                }
-                else{
-                    Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
-                    progressBar_login.visibility = View.GONE
+        else {
+            var loginCheck : Boolean = false
+            CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.IO).launch {
+                    loginCheck = userViewModel.emailSignIn(id, pass, loginActivity)
+                }.join()
+                when (loginCheck) {
+                    true -> {
+                        progressBar_login.visibility = View.GONE
+                        val ass = Intent(context, MyPageActivity::class.java)
+                        startActivity(ass)
+                        activity?.finish()
+                    }
+                    false -> {
+                        progressBar_login.visibility = View.GONE
+                        Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }
@@ -142,56 +135,19 @@ class LoginFragment : Fragment() {
         LoginController.navigate(R.id.action_loginFragment2_to_signupFragment)
     }
 
-    // firebaseAuthWithGoogle
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-    //TODO:: 여기서 한번 firebase에 쓰고 갈까?
-        //Google SignInAccount 객체에서 ID 토큰을 가져와서 Firebase Auth로 교환하고 Firebase에 인증
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener(loginActivity) { task ->
-                if (task.isSuccessful) {
-                    Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
-
-                    db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
-                        val intent = Intent(loginActivity , MyPageActivity()::class.java)
-                        startActivity(intent)
-                    }.addOnFailureListener{
-                        LoginController.navigate(
-                            com.example.nuru.view.fragment.login.LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
-                                SignUpInfo(
-                                    firebaseAuth.currentUser?.uid.toString(), username,
-                                    email, "google_login"
-                                )
-                            )
-                        )
-                    }
-
-                    //LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
-                    //activity?.finish()
-                    //toMainActivity(firebaseAuth?.currentUser)
-                } else {
-                    Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
-                    //Snackbar.make(login_layout, "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-    }// firebaseAuthWithGoogle END
-
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
         //activity?.finish()
     }
 
-
-
     companion object {
         private const val TAG = "GoogleActivity"
         private const val RC_SIGN_IN = 9001
     }
 
+    /*
     fun writeNewUserWithTaskListeners(userId: String, name: String, email: String , type : String) {
-
         val Info_user = db.collection("user").document(userId)
 
             if(Info_user == null){
@@ -214,8 +170,6 @@ class LoginFragment : Fragment() {
             }
             //.addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             //.addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
     }
-
-
+    */
 }
