@@ -8,17 +8,23 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityAddCommunityBinding
+import com.example.nuru.model.data.community.CommunityEntity
 import com.example.nuru.view.adapter.AddCommunityAdapter
 import com.example.nuru.utility.GetCurrentContext
+import com.example.nuru.viewmodel.community.CommunityViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_community.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,13 +36,13 @@ class AddCommunityActivity : AppCompatActivity() {
 
     lateinit var UserId : String
 
-    var selectedImageUri : Uri? = null
-
     var singletonC = GetCurrentContext.getInstance()
 
-    var selectedImageUrilist = ArrayList<Uri>()
+    var selectedImageUriList = ArrayList<Uri>()
     lateinit var adapter : AddCommunityAdapter
     private lateinit var binding: ActivityAddCommunityBinding
+
+    private val viewModel :CommunityViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +51,7 @@ class AddCommunityActivity : AppCompatActivity() {
         binding.activity = this@AddCommunityActivity
         singletonC.setcurrentContext(this)
         firebaseAuth = FirebaseAuth.getInstance()
+        progressBar_addCommunity.visibility = View.GONE
 
         UserId = firebaseAuth.currentUser!!.uid
     }
@@ -52,7 +59,7 @@ class AddCommunityActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 9981 && resultCode == RESULT_OK && data != null && data.data != null) {
-            selectedImageUrilist.clear()
+            selectedImageUriList.clear()
             if (data?.clipData != null) { // 사진 여러개 선택한 경우
                 val count = data.clipData!!.itemCount
                 if (count > 9) {
@@ -61,7 +68,7 @@ class AddCommunityActivity : AppCompatActivity() {
                 }
                 for (i in 0 until count) {
                     val imageUri = data.clipData!!.getItemAt(i).uri
-                    selectedImageUrilist.add(imageUri)
+                    selectedImageUriList.add(imageUri)
                 }
 
             }
@@ -69,22 +76,48 @@ class AddCommunityActivity : AppCompatActivity() {
                 data?.data?.let { uri ->
                     val imageUri : Uri? = data?.data
                     if (imageUri != null) {
-                        selectedImageUrilist.add(imageUri)
+                        selectedImageUriList.add(imageUri)
                     }
                 }
             }
 
-            adapter = AddCommunityAdapter(selectedImageUrilist, this)
+            //TODO:: 여기도 listAdapter 필요?
+            adapter = AddCommunityAdapter(selectedImageUriList, this)
             addImage_recycleView.layoutManager = GridLayoutManager(this ,3)
             addImage_recycleView.adapter = adapter
-
-            //selectedImageUri = data.data
-            //img_ImageInCommunity.setImageURI(selectedImageUri)
         }
     }
 
     fun btnUpload(view : View){
-        uploadImageTOFirebase(selectedImageUrilist)
+        val temparr = ArrayList<String>()
+        val createdAt = FieldValue.serverTimestamp()
+
+        val communityEntity = CommunityEntity(
+            selectedImageUriList ,
+            edt_Contents.text.toString(),
+            edt_Title.text.toString(),
+            UserId.toString(),
+            temparr,
+            0,
+            createdAt
+        )
+
+        var success : Boolean = false
+        progressBar_addCommunity.visibility = View.VISIBLE
+
+        CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                success = viewModel.uploadCommunity(communityEntity)
+            }.join()
+
+            if(success){
+                finish()
+            }
+            else{
+                Toast.makeText(getContext() , getString(R.string.try_later) , Toast.LENGTH_LONG).show()
+                progressBar_addCommunity.visibility = View.GONE
+            }
+        }
     }
 
     fun btnAddImageInCommunity(view :View){
@@ -95,95 +128,10 @@ class AddCommunityActivity : AppCompatActivity() {
         startActivityForResult(intent, 9981)
     }
 
-    fun uploadImageTOFirebase(uriList: ArrayList<Uri>) {
-        if (uriList == null || uriList.isEmpty()) {
-            var temp = ArrayList<String>()
-            val docRef = db.collection("community")
-
-            val createdAt = FieldValue.serverTimestamp()
-            var temparr = ArrayList<String>()
-            val temp_int : Long = 0
-            val data = hashMapOf(
-                "contents" to edt_Contents.text.toString(),
-                "title" to edt_Title.text.toString(),
-                "writer" to UserId.toString(),
-                "image" to temp,
-                "time" to createdAt,
-                "likeId" to temparr,
-                "commentsNum" to temp_int,
-            )
-
-            docRef.add(data).addOnSuccessListener {
-                val tt =  ArrayList<String>()
-                val temp = hashMapOf(
-                    "list" to tt
-                )
-                db.collection("comments").document(it.id).set(temp).addOnCompleteListener {
-                    if(it.isSuccessful) {
-                        finish()
-                    }
-                    else{
-                        Log.d("문제 발생" , "aaaaaaaaaaaaaaaaaaa")
-                    }
-                }
-            }
-        } else {
-            var storage: FirebaseStorage? =
-                FirebaseStorage.getInstance()   //FirebaseStorage 인스턴스 생성
-            var i = 1
-            var temp = ArrayList<String>()
-
-            for(it in uriList){
-                var fileName = "COMMUNITY_${SimpleDateFormat("yyyymmdd_HHmmss").format(Date())}" + i.toString() + "_.png"
-                var imagesRef = storage!!.reference.child("community/")
-                    .child(fileName)    //기본 참조 위치/images/${fileName}
-                //이미지 파일 업로드
-                var uploadTask = imagesRef.putFile(it)
-                //uploadTaskList.add(uploadTask)
-
-                val urlTask = uploadTask.continueWithTask { task ->
-                    if (!task.isSuccessful) {
-                        task.exception?.let {
-                            throw it
-                        }
-                    }
-                    imagesRef.downloadUrl
-                }.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val downloadUri = task.result
-                        //downloadUri 가 firebase storage 참조 주소
-
-                        temp.add(downloadUri.toString())
-                        if(temp.size == uriList.size){
-                            addTofirebase(temp)
-                        }
-
-                    }
-                }
-                i++
-            }
-        }
+    fun getContext() : AddCommunityActivity{
+        return this
     }
 
-    fun addTofirebase(temp : ArrayList<String>){
-        val docRef = db.collection("community")
 
-        val createdAt = FieldValue.serverTimestamp()
-
-        val data = hashMapOf(
-            "contents" to edt_Contents.text.toString(),
-            "title" to edt_Title.text.toString(),
-            "writer" to UserId.toString(),
-            "image" to temp,
-            "time" to createdAt,
-            "commentsNum" to 0,
-            "likeId" to ArrayList<String>()
-        )
-
-        docRef.add(data).addOnSuccessListener {
-            finish()
-        }.addOnFailureListener{
-        }
-    }
 
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -17,20 +16,17 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.nuru.R
 import com.example.nuru.databinding.CommunityViewBinding
-import com.example.nuru.model.data.community.CommunityEntity
+import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.view.activity.community.CommunityContentsActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import java.lang.NullPointerException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CommunityAdapter(private val context: Context) :
-    ListAdapter<CommunityEntity, CommunityAdapter.CommunityViewHolder>(COMMUNITYENTITY_DIFF_CALLBACK)
+    ListAdapter<CommunityDTO, CommunityAdapter.CommunityViewHolder>(COMMUNITYENTITY_DIFF_CALLBACK)
 {
     //remember!
     //stroke in seperate_item_in_recycleview is for line's thickness and color
@@ -44,7 +40,7 @@ class CommunityAdapter(private val context: Context) :
     inner class CommunityViewHolder(
         private val binding: CommunityViewBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bindData(data: CommunityEntity) = with(binding) {
+        fun bindData(data: CommunityDTO) = with(binding) {
 
             //여기 if image empty로 나눠버리면 업데이트하는도중 잘못인식해서 이미지 사라짐...
             binding.community = data
@@ -132,11 +128,11 @@ class CommunityAdapter(private val context: Context) :
     }
 
     companion object {
-        val COMMUNITYENTITY_DIFF_CALLBACK = object : DiffUtil.ItemCallback<CommunityEntity>() {
-            override fun areItemsTheSame(oldItem: CommunityEntity, newItem: CommunityEntity): Boolean =
+        val COMMUNITYENTITY_DIFF_CALLBACK = object : DiffUtil.ItemCallback<CommunityDTO>() {
+            override fun areItemsTheSame(oldItem: CommunityDTO, newItem: CommunityDTO): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: CommunityEntity, newItem: CommunityEntity): Boolean =
+            override fun areContentsTheSame(oldItem: CommunityDTO, newItem: CommunityDTO): Boolean =
                 oldItem == newItem
         }
     }

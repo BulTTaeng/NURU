@@ -30,6 +30,8 @@ class AddImageActivity : AppCompatActivity() {
     var selectedImageUri : Uri? = null
     private lateinit var binding: ActivityAddImageBinding
 
+    //TODO:: update later
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_add_image)
