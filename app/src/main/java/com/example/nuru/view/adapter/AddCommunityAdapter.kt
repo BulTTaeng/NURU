@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.nuru.databinding.AddCommunityImageViewBinding
 
 
@@ -14,7 +15,8 @@ class AddCommunityAdapter(private var searchResultList : ArrayList<Uri> , privat
         private val binding: AddCommunityImageViewBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(data: Uri) = with(binding) {
-            imgImageInCommunity.setImageURI(data)
+            Glide.with(context).load(data).into(imgImageInCommunity)
+            //imgImageInCommunity.setImageURI(data)
         }
     }
 

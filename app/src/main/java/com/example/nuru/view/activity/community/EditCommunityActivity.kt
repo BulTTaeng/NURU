@@ -6,22 +6,28 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_edit_community.*
 import android.widget.EditText
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityEditCommunityBinding
-import com.example.nuru.model.data.community.CommunityEntity
-import com.example.nuru.model.data.farm.Farm
+import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.utility.GetCurrentContext
-import com.google.firebase.storage.FirebaseStorage
-import java.text.SimpleDateFormat
+import com.example.nuru.view.adapter.AddCommunityAdapter
+import com.example.nuru.viewmodel.community.EditCommunityViewModel
+import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForEditCommunityViewModel
+import kotlinx.android.synthetic.main.activity_add_community.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -33,14 +39,17 @@ class EditCommunityActivity : AppCompatActivity() {
 
     lateinit var imm : InputMethodManager
 
-    var selectedImageUri : Uri? = null
+    lateinit var editCommunityViewModel : EditCommunityViewModel
+    var selectedImageUriList = ArrayList<Uri>()
     private lateinit var binding: ActivityEditCommunityBinding
+    lateinit var info : CommunityDTO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_edit_community)
         binding.activity = this@EditCommunityActivity
         singletonC.setcurrentContext(this)
+        progressBar_editCommunity.visibility = View.GONE
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -48,39 +57,105 @@ class EditCommunityActivity : AppCompatActivity() {
 
         val intent: Intent = getIntent()
 
-        binding.communityContents = intent.getParcelableExtra<CommunityEntity>("COMMUNITYENTITY")
+        binding.communityContents = intent.getParcelableExtra<CommunityDTO>("COMMUNITYENTITY")
 
+        val uriList = ArrayList<Uri>()
 
+        for(it in binding.communityContents!!.image){
+            uriList.add(Uri.parse(it))
+        }
 
-        //edt_TitleInEdit.setText(title)
-        //edt_ContentsInEdit.setText(contents)
+        val re = binding.communityContents!!
 
-        //edt_TitleInEdit.text = Editable.Factory.getInstance().newEditable(title)
-        //edt_ContentsInEdit.text = Editable.Factory.getInstance().newEditable(contents)
+        val adapter = AddCommunityAdapter(uriList, this)
+        community_recycleViewInEditCommunityContents.layoutManager = GridLayoutManager(this ,3)
+        community_recycleViewInEditCommunityContents.adapter = adapter
 
-        val urt = Uri.parse(binding.communityContents!!.image.toString())
-        Glide.with(this).load(urt).into(img_EditImage)
+        val docRef = db.collection("community").document(binding.communityContents!!.id)
+
+        editCommunityViewModel = ViewModelProvider(this , ViewModelFactoryForEditCommunityViewModel(re))
+            .get(EditCommunityViewModel::class.java)
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 9981 && resultCode == RESULT_OK && data != null && data.data != null) {
-            selectedImageUri = data.data
-            img_EditImage.setImageURI(selectedImageUri)
+            selectedImageUriList.clear()
+            if (data?.clipData != null) { // 사진 여러개 선택한 경우
+                val count = data.clipData!!.itemCount
+                if (count > 9) {
+                    Toast.makeText(applicationContext, getString(R.string.image_limit_9), Toast.LENGTH_LONG)
+                    return
+                }
+                for (i in 0 until count) {
+                    val imageUri = data.clipData!!.getItemAt(i).uri
+                    selectedImageUriList.add(imageUri)
+                }
+
+            }
+            else { // 단일 선택
+                data?.data?.let { uri ->
+                    val imageUri : Uri? = data?.data
+                    if (imageUri != null) {
+                        selectedImageUriList.add(imageUri)
+                    }
+                }
+            }
+
+            //TODO:: 여기도 listAdapter 필요?
+            val adapter = AddCommunityAdapter(selectedImageUriList, this)
+            community_recycleViewInEditCommunityContents.layoutManager = GridLayoutManager(this ,3)
+            community_recycleViewInEditCommunityContents.adapter = adapter
         }
     }
 
-    fun btnEdit(view : View){
-        uploadImageTOFirebaseAndAdd(selectedImageUri , binding.communityContents!!.id,
-            edt_TitleInEdit.text.toString(), edt_ContentsInEdit.text.toString())
+    fun btnEdit(view : View?){
+        CoroutineScope(Dispatchers.Main).launch {
+            progressBar_editCommunity.visibility = View.VISIBLE
+
+            var success = false
+
+            var re = binding.communityContents!!
+            re.title = edt_TitleInEdit.text.toString()
+            re.contents = edt_ContentsInEdit.text.toString()
+
+            if(selectedImageUriList.isNotEmpty()){
+                Log.d("newoooooo" , selectedImageUriList.toString())
+                re.image.clear()
+                for(image in selectedImageUriList){
+                    re.image.add(image.toString())
+                }
+                Log.d("after " , re.image.toString())
+            }
+
+            Log.d("here!" , re.toString())
+
+            CoroutineScope(Dispatchers.IO).launch {
+                success = editCommunityViewModel.editContents(re)
+            }.join()
+            if(success){
+                finish()
+            }
+            else{
+                progressBar_editCommunity.visibility = View.GONE
+                Toast.makeText(getContext() , getContext().getString(R.string.try_later) , Toast.LENGTH_LONG).show()
+            }
+
+        }
+
     }
+
+    fun getContext() : EditCommunityActivity{
+        return this
+    }
+
     fun btnChangeImage(view : View){
-        val intent = Intent(android.content.Intent.ACTION_PICK)
-        intent.setDataAndType(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            "image/*"
-        )
+
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(intent, 9981)
     }
 
@@ -88,46 +163,6 @@ class EditCommunityActivity : AppCompatActivity() {
 
     private fun showKeyboard(editText: EditText) {
         imm.showSoftInput(editText, 0)
-    }
-
-    fun uploadImageTOFirebaseAndAdd(uri: Uri? , id : String , title : String , contents : String) {
-        val docRef = db.collection("community").document(id)
-
-        if (uri == null) {
-            docRef.update("contents" , contents , "title" , title)
-        } else {
-            var storage: FirebaseStorage? =
-                FirebaseStorage.getInstance()   //FirebaseStorage 인스턴스 생성
-            //파일 이름 생성.
-            var fileName = "COMMUNITY_${SimpleDateFormat("yyyymmdd_HHmmss").format(Date())}_.png"
-            //파일 업로드, 다운로드, 삭제, 메타데이터 가져오기 또는 업데이트를 하기 위해 참조를 생성.
-            //참조는 클라우드 파일을 가리키는 포인터라고 할 수 있음.
-            var imagesRef = storage!!.reference.child("community/")
-                .child(fileName)    //기본 참조 위치/images/${fileName}
-            //이미지 파일 업로드
-            var uploadTask = imagesRef.putFile(uri)
-
-            val urlTask = uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                imagesRef.downloadUrl
-            }.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val downloadUri = task.result
-                    //downloadUri 가 firebase storage 참조 주소
-                    var temp = ArrayList<String>()
-                    temp.add(downloadUri.toString())
-
-                    docRef.update("image", temp , "contents" , contents , "title" , title)
-                }
-            }
-
-        }
-
-        finish()
     }
 
 }

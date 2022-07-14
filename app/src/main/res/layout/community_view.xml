@@ -6,7 +6,7 @@
     <data>
         <variable
             name="community"
-            type="com.example.nuru.model.data.community.CommunityEntity" />
+            type="com.example.nuru.model.data.community.CommunityDTO" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
