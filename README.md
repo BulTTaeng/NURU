@@ -52,9 +52,10 @@
 
 `2022.07.13`  
 - Community 안에 있는 액티비티를 db접근 로직 분리
-
-
-
+- SignupFragment Refactoring 완료
+- LoginFragment Refactoring 완료(Google Login 부분 제외)
+- View, ViewModel, Repository 분리
+- Coroutine 적용
 
 
 </details><br>  
