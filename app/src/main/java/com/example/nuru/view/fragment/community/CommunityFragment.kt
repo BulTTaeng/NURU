@@ -15,6 +15,7 @@ import com.example.nuru.view.adapter.CommunityAdapter
 import com.example.nuru.view.activity.community.AddCommunityActivity
 import com.example.nuru.R
 import com.example.nuru.databinding.FragmentCommunityBinding
+import com.example.nuru.model.data.tmap.SearchResultEntity
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.viewmodel.community.CommunityViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -81,9 +82,13 @@ class CommunityFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("TTTTTTT",resultCode.toString())
         if(requestCode == RETURN_FROM_ADD_COMMUNITY){
-            CoroutineScope(Dispatchers.IO).launch {
-                val update = async {  viewModel.updateView() }
-                update.await()
+            val done = data?.getStringExtra("UPLOAD_DONE")
+
+            if(done == "OK") {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val update = async { viewModel.updateView() }
+                    update.await()
+                }
             }
         }
         else if(resultCode == DELETE_COMMUNITY){

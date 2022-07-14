@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.nuru.R
 import com.example.nuru.model.data.farm.Farm
-import com.example.nuru.model.data.farm.FarmDAO
+import com.example.nuru.model.data.farm.FarmEntity
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference
@@ -84,18 +84,18 @@ class MyFarmRepository(val farmRef : DocumentReference) {
         }
     }
 
-    suspend fun addFarm(farmDao : FarmDAO) : Boolean{
+    suspend fun addFarm(farmEntity : FarmEntity) : Boolean{
         Log.d("hhhhhhhhhhhhh", "hhhhhhhhhhh")
         val data = hashMapOf(
-            "farmAddress" to farmDao.farmAddress,
-            "farmId" to farmDao.farmId,
-            "farmOwner" to farmDao.farmOwner,
-            "farmName" to farmDao.farmName,
-            "latitude" to farmDao.latitude,
-            "longitude" to farmDao.longitude,
-            "products" to farmDao.products,
-            "farmPhoto" to farmDao.farmPhoto,
-            "farmAdmin" to farmDao.farmAdmin
+            "farmAddress" to farmEntity.farmAddress,
+            "farmId" to farmEntity.farmId,
+            "farmOwner" to farmEntity.farmOwner,
+            "farmName" to farmEntity.farmName,
+            "latitude" to farmEntity.latitude,
+            "longitude" to farmEntity.longitude,
+            "products" to farmEntity.products,
+            "farmPhoto" to farmEntity.farmPhoto,
+            "farmAdmin" to farmEntity.farmAdmin
         )
 
         val tempdata = hashMapOf(
@@ -118,7 +118,7 @@ class MyFarmRepository(val farmRef : DocumentReference) {
                 }.await()
 
             docRef.document(docId).update("farmId", docId).await()
-            db.collection("user").document(farmDao.farmOwner)
+            db.collection("user").document(farmEntity.farmOwner)
                 .update("farmList", FieldValue.arrayUnion(docId)).await()
             db.collection("farmInformation").document(docId).set(tempdata).await()
             true

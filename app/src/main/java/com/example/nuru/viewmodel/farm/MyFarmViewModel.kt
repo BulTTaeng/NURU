@@ -1,16 +1,11 @@
 package com.example.nuru.viewmodel.farm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.nuru.model.data.farm.Farm
-import com.example.nuru.model.data.farm.FarmDAO
+import com.example.nuru.model.data.farm.FarmEntity
 import com.example.nuru.repository.farm.MyFarmRepository
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
-import kotlinx.android.synthetic.main.activity_add_admin.*
-import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
     private val repo = MyFarmRepository(farmRef)
@@ -24,8 +19,8 @@ class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
         repo.updateFarm()
     }
 
-    suspend fun addFarm(farmDao : FarmDAO) : Boolean{
-        return repo.addFarm(farmDao)
+    suspend fun addFarm(farmEntity : FarmEntity) : Boolean{
+        return repo.addFarm(farmEntity)
     }
 
     //////////////////////AddAdmin//////////////////////

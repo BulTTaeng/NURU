@@ -1,5 +1,6 @@
 package com.example.nuru.view.activity.community
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.model.data.community.CommunityEntity
 import com.example.nuru.view.adapter.AddCommunityAdapter
 import com.example.nuru.utility.GetCurrentContext
+import com.example.nuru.view.activity.map.MapsActivity
 import com.example.nuru.viewmodel.community.CommunityViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -139,6 +141,11 @@ class AddCommunityActivity : AppCompatActivity() {
             }.join()
 
             if(success){
+                val Intent = Intent()
+
+                Intent.putExtra("UPLOAD_DONE", "OK")
+
+                setResult(Activity.RESULT_OK , Intent)
                 finish()
             }
             else{

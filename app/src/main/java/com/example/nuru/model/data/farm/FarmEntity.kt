@@ -2,7 +2,7 @@ package com.example.nuru.model.data.farm
 
 import com.google.protobuf.DoubleValue
 
-data class FarmDAO(
+data class FarmEntity(
     val farmAddress : String,
     val farmId : String,
     val farmOwner : String,

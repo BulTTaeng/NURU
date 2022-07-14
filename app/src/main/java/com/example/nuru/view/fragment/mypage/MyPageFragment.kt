@@ -142,6 +142,7 @@ class MyPageFragment : Fragment() , CoroutineScope {
         )
     }
 
+
     fun btnCalNum(view : View) {
         Log.d("[Tag] : btn_cal_num", "특화계수 버튼 클릭!")
     }

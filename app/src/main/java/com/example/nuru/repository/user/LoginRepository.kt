@@ -1,5 +1,6 @@
 package com.example.nuru.repository.user
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -25,23 +26,13 @@ class LoginRepository {
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
 
-    fun getGoogleSignInClient(loginActivity : LoginActivity) : GoogleSignInClient {
+    fun getGoogleSignInClient(activity : Activity) : GoogleSignInClient {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(loginActivity.getString(R.string.default_web_client_id))
+            .requestIdToken(activity.getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
-        return GoogleSignIn.getClient(loginActivity, gso)
-    }
-
-    // Overrode
-    fun getGoogleSignInClient(myPageActivity: MyPageActivity) : GoogleSignInClient {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(myPageActivity.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        return GoogleSignIn.getClient(myPageActivity, gso)
+        return GoogleSignIn.getClient(activity, gso)
     }
 
     // firebaseAuthWithGoogle
