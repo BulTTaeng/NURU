@@ -34,4 +34,9 @@ class CommunityViewModel : ViewModel() {
     suspend fun uploadCommunity(communityEntity: CommunityEntity) : Boolean{
         return repo.uploadCommunity(communityEntity)
     }
+
+    suspend fun editCommunity(communityDto : CommunityDTO) : Boolean{
+        return repo.editCommunity(communityDto)
+    }
+
 }
