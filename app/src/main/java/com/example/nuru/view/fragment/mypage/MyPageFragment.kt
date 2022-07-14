@@ -98,20 +98,17 @@ class MyPageFragment : Fragment() , CoroutineScope {
         viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
             .get(MyFarmViewModel::class.java)
 
-
-        docRef.get().addOnSuccessListener {
-            username = it["name"].toString() + "\n" + it["email"].toString()
-            txt_UserNameMyPage.text = username
+        var userText : String = ""
+        CoroutineScope(Dispatchers.IO).launch {
+            async {txt_UserNameMyPage.text = viewModel.getUserNameAndEmail(UserId.toString())}.await()
         }
 
         Glide.with(this).load(getString(R.string.basic_image))
             .transform(CenterCrop(), RoundedCorners(100)).into(img_MyPageImage)
 
-        // TODO : 이건 binding으로 해결 못함?
         swipe_in_mypage.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val update = async {  viewModel.updateFarm() }
-                update.await()
+                async {  viewModel.updateFarm() }.await()
             }
         }
         adapter = FarmAdapter(myPageActivity , viewModel)
@@ -124,8 +121,8 @@ class MyPageFragment : Fragment() , CoroutineScope {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == RETURN_FROM_ADD) {
-            viewModel.updateFarm()
-            Log.d("aaaaaaaa" , "Aaaaaaaaaaaaa")
+            val address = data?.getStringExtra("ADD_FARM_DONE")
+            if (address == "OK") viewModel.updateFarm()
         }
     }
 
@@ -164,85 +161,4 @@ class MyPageFragment : Fragment() , CoroutineScope {
     companion object {
         const val RETURN_FROM_ADD = 11
     }
-
-    /*private fun findFarmInfo(UserId : String){
-        launch(coroutineContext) {
-            try {
-                //binding.widgetProgressBarInMyPage.isVisible = true // 로딩 표시
-                widget_ProgressBarInMyPage.visibility = view.VISIBLE
-                var i = 1
-                // IO 스레드 사용
-                withContext(Dispatchers.IO) {
-                    Info_user = db.collection("user").document(UserId.toString())
-                    Info_user.get().addOnSuccessListener { document ->
-                        if (document != null) {
-
-                            username = document["name"] as String
-                            var userEmail = document["email"] as String
-                            user_farm_list = document["farmList"] as ArrayList<String>
-                            //Log.d("userName", "DocumentSnapshot data: ${username} ")
-                            txt_UserNameMyPage.text = username + "\n" +userEmail
-                            //Log.d("userName", "DocumentSnapshot data: ${document.data}")
-                            if(user_farm_list.isEmpty()){
-                                user_farm_list.add("zerozero")
-                            }
-                            val Farm_Info = db.collection("farmList")
-
-                            Farm_Info.whereIn("farmId", user_farm_list).get().addOnSuccessListener { documents ->
-                                for(document in documents){
-
-                                    val lati = document.data["latitude"] as Double
-                                    val longti = document.data["longitude"] as Double
-
-                                    val location = LatLng(lati, longti)
-
-                                    user_farm_info.add(
-                                        Farm(document.id, document.data["farmName"].toString() ,
-                                            document.data["farmPhoto"] as ArrayList<String>,
-                                            location, document.data["farmAddress"].toString() ,
-                                            document.data["farmOwner"].toString(), i  , document.data["products"].toString()) )
-                                    i += 1
-
-                                }
-                                val adapter = FarmAdapter(user_farm_info , mypageActivity)
-                                // Setting the Adapter with the recyclerview
-                                mypage_recycleView.layoutManager = LinearLayoutManager(mypageActivity)
-
-
-
-
-                                adapter.setSearchResultList(user_farm_info) {
-
-                                    val Intent = Intent(mypageActivity, MyFarmActivity::class.java)
-                                    Intent.putExtra("FARMID",it.farm_id)
-                                    startActivity(Intent)
-                                }
-                                adapter.currentPage = i
-                                // Setting the Adapter with the recyclerview
-
-                                mypage_recycleView.adapter = adapter
-                            }
-
-                        } else {
-                            Log.d("userName", "No such document")
-                        }
-                    }.addOnFailureListener { exception ->
-                        Log.d("UserName", "get failed with ", exception)
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // error 해결 방법
-                // Permission denied (missing INTERNET permission?) 인터넷 권한 필요
-                // 또는 앱 삭제 후 재설치
-            } finally {
-                //binding.widgetProgressBarInMyPage.isVisible = false // 로딩 표시 완료 그런데 안됨 그래서 그냥 visibility로 먹임
-                widget_ProgressBarInMyPage.visibility = view.GONE
-            }
-            //binding.widgetProgressBarInMyPage.isVisible = false
-        }
-    }*/
-
-
-
 }

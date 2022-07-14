@@ -1,5 +1,6 @@
 package com.example.nuru.view.activity.mypage
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -100,6 +101,9 @@ class AddFarmActivity : AppCompatActivity() {
 
             Log.d("okkkkkkkkkkk",ok.toString())
             if (ok) {
+                val Intent = Intent()
+                Intent.putExtra("ADD_FARM_DONE", "OK")
+                setResult(Activity.RESULT_OK , Intent)
                 finish()
             } else {
                 Log.d("error", "FirebaseWriting Failed")
