@@ -34,6 +34,16 @@ class LoginRepository {
         return GoogleSignIn.getClient(loginActivity, gso)
     }
 
+    // Overrode
+    fun getGoogleSignInClient(myPageActivity: MyPageActivity) : GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(myPageActivity.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(myPageActivity, gso)
+    }
+
     // firebaseAuthWithGoogle
     suspend fun firebaseAuthWithGoogle(acct: GoogleSignInAccount, loginActivity: LoginActivity) : Boolean {
         val username: String = acct.displayName.toString()
