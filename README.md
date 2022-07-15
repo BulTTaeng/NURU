@@ -65,6 +65,9 @@
 - EditCommunity activity 와 add community activity 병합
 - Activity db 접근 로직 viewMode ,repository로 이전
 
+`2022.07.15`  
+- CommunityFragment 부분 Paging3 적용
+
 </details><br>  
 
 --- 
