@@ -9,6 +9,7 @@ import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import kotlinx.android.synthetic.main.fragment_check_type_for_google.*
 
 class UserViewModel {
     var signUpRepository: SignUpRepository = SignUpRepository()
@@ -24,7 +25,7 @@ class UserViewModel {
         return loginRepository.getGoogleSignInClient(activity)
     }
 
-    suspend fun firebaseAuthWithGoogle(googleSignInAccount: GoogleSignInAccount, loginActivity: LoginActivity) : Boolean{
+    suspend fun firebaseAuthWithGoogle(googleSignInAccount: GoogleSignInAccount, loginActivity: LoginActivity) : Int {
         return loginRepository.firebaseAuthWithGoogle(googleSignInAccount, loginActivity)
     }
 
@@ -38,5 +39,9 @@ class UserViewModel {
 
     suspend fun deleteAccount() : Boolean {
         return deleteAccountRepository.deleteAccount()
+    }
+
+    suspend fun googleSignUp(userId: String, name: String, email: String, type : String, isFarmer : Boolean, isAdmin : Boolean) : Boolean {
+        return signUpRepository.googleSignUp(userId, name , email , type , isFarmer, isAdmin)
     }
 }
