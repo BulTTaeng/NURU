@@ -16,18 +16,19 @@ import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.R
 import com.example.nuru.databinding.FragmentCheckTypeForGoogleBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.nuru.viewmodel.login.UserViewModel
 import kotlinx.android.synthetic.main.fragment_check_type_for_google.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CheckTypeForGoogleFragment : Fragment() {
 
     lateinit var loginActivity: LoginActivity
-    val firebaseAuth = FirebaseAuth.getInstance()
-    val db = FirebaseFirestore.getInstance()
-    lateinit var args: com.example.nuru.view.fragment.login.CheckTypeForGoogleFragmentArgs
+    lateinit var args: CheckTypeForGoogleFragmentArgs
     private lateinit var callback: OnBackPressedCallback
     private lateinit var binding: FragmentCheckTypeForGoogleBinding
+    var userViewModel : UserViewModel = UserViewModel()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,9 +60,8 @@ class CheckTypeForGoogleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         progressBar_googleSignUp.visibility = View.GONE
 
-        val arg by navArgs<com.example.nuru.view.fragment.login.CheckTypeForGoogleFragmentArgs>()
+        val arg by navArgs<CheckTypeForGoogleFragmentArgs>()
         args = arg
-
     }
 
     //만약 이 페이지에서 프래그먼트 중단 상황이 발생하면
@@ -69,10 +69,7 @@ class CheckTypeForGoogleFragment : Fragment() {
     //따라서 onPause에서 임시적으로 firebase에 값을 넣어준다
     override fun onPause() {
         super.onPause()
-        writeNewUserWithTaskListeners(args.signUpInfo!!.userId ,
-            args.signUpInfo!!.name , args.signUpInfo!!.email ,
-            args.signUpInfo!!.type , toggle_farmer.isChecked ,
-            toggle_admin.isChecked)
+        uploadUserInfoToServer()
     }
 
     override fun onDetach() {
@@ -95,46 +92,29 @@ class CheckTypeForGoogleFragment : Fragment() {
             progressBar_googleSignUp.visibility = View.GONE
         }
         else{
-            writeNewUserWithTaskListeners(args.signUpInfo!!.userId ,
-                args.signUpInfo!!.name , args.signUpInfo!!.email ,
-                args.signUpInfo!!.type , toggle_farmer.isChecked ,
-                toggle_admin.isChecked)
-            Log.d("aaaaaaaaaaaaa" , args.signUpInfo!!.userId)
+            uploadUserInfoToServer()
         }
     }
 
-    private fun writeNewUserWithTaskListeners(userId: String, name: String, email: String, type : String, isFarmer : Boolean, isAdmin : Boolean) {
-
-            val str = ArrayList<String>()
-            str.add("zerozero")
-
-            val data = hashMapOf(
-                "name" to name,
-                "userId" to userId,
-                "email" to email,
-                "type" to type,
-                "farmList" to str,
-                "isAdmin" to isAdmin,
-                "isFarmer" to isFarmer
-            )
-
-            db.collection("user").document(userId)
-                .set(data).addOnCompleteListener{
-                    if(it.isSuccessful){
-                        Log.d("success" , "ssssssssssss")
-                        val ass = Intent(context, MyPageActivity::class.java)
-                        startActivity(ass)
-                        //LoginController.navigate(R.id.action_loginFragment2_to_myPageActivity)
-                        activity?.finish()
-                    }
-                    else{
-                        Log.d("ffffffffff" , "fffffffffffffffffffff")
-                        progressBar_googleSignUp.visibility = View.GONE
-
-                    }
+    fun uploadUserInfoToServer() {
+        var check : Boolean = false
+        CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                check = userViewModel.googleSignUp(args.signUpInfo!!.userId ,
+                    args.signUpInfo!!.name , args.signUpInfo!!.email ,
+                    args.signUpInfo!!.type , toggle_farmer.isChecked ,
+                    toggle_admin.isChecked)
+            }.join()
+            when(check) {
+                true -> {
+                    val ass = Intent(context, MyPageActivity::class.java)
+                    startActivity(ass)
+                    activity?.finish()
                 }
-        //.addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-        //.addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
+                false -> {
+                    progressBar_googleSignUp.visibility = View.GONE
+                }
+            }
+        }
     }
 }

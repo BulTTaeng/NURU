@@ -65,6 +65,13 @@
 - EditCommunity activity 와 add community activity 병합
 - Activity db 접근 로직 viewMode ,repository로 이전
 
+`2022.07.15`  
+- LoginFragment, SettingFragment, CheckTypeGoogleFragment Refactoring 완료
+- Coroutine 적용
+- View, ViewModel, Repository 분리
+- MVVM 패턴 적용
+- Issue #10, #14 해결 -> 인증서 문제 (SHA-1)
+
 </details><br>  
 
 --- 
