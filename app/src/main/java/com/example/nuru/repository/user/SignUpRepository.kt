@@ -1,12 +1,17 @@
 package com.example.nuru.repository.user
 
+import android.content.Intent
+import android.util.Log
+import android.view.View
 import com.example.nuru.R
 import com.example.nuru.view.activity.login.LoginActivity
+import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.fragment_check_type_for_google.*
 import kotlinx.coroutines.tasks.await
 
 class SignUpRepository {
@@ -64,5 +69,27 @@ class SignUpRepository {
                 db.collection("pushtokens").document(uid!!).set(data)
             }
         }
+    }
+
+    suspend fun googleSignUp(userId: String, name: String, email: String, type : String, isFarmer : Boolean, isAdmin : Boolean) : Boolean {
+        val str = ArrayList<String>()
+        var check : Boolean = false
+        str.add("zerozero")
+
+        val data = hashMapOf(
+            "name" to name,
+            "userId" to userId,
+            "email" to email,
+            "type" to type,
+            "farmList" to str,
+            "isAdmin" to isAdmin,
+            "isFarmer" to isFarmer
+        )
+
+        db.collection("user").document(userId)
+            .set(data).addOnCompleteListener{
+                check = it.isSuccessful
+            }.await()
+        return check
     }
 }

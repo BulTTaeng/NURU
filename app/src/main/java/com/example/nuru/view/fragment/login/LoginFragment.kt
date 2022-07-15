@@ -15,12 +15,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.R
 import com.example.nuru.databinding.FragmentLoginBinding
+import com.example.nuru.model.data.login.SignUpInfo
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.viewmodel.login.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,27 +73,44 @@ class LoginFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        progressBar_login.visibility = View.VISIBLE
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                Log.d("[이거]", "여긴됨?")
                 // Google Sign In was successful, authenticate with Firebase
                 var account = task.getResult(ApiException::class.java)
-                Log.d("3233121222222[이거]", "여긴됨123213?")
-                var condition : Boolean
-                Log.d("[코루틴안]", "시작")
-                CoroutineScope(Dispatchers.IO).launch {
-                    async {
+                var condition : Int = -1
+                CoroutineScope(Dispatchers.Main).launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         condition = userViewModel.firebaseAuthWithGoogle(account!!, loginActivity)
-                    }.await()
-                    Log.d("[코루틴안]", "끝")
+                    }.join()
+                    when (condition) {
+                        0 -> {
+                            progressBar_login.visibility = View.GONE
+                            val intent = Intent(loginActivity , MyPageActivity()::class.java)
+                            startActivity(intent)
+                            activity?.finish()
+                        }
+                        1 -> {
+                            progressBar_login.visibility = View.GONE
+                            LoginController.navigate(
+                                LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
+                                    SignUpInfo(FirebaseAuth.getInstance().currentUser?.uid.toString(), account.displayName as String, account.email as String, "google_login")
+                                )
+                            )
+                        }
+                        2 -> {
+                            Toast.makeText(loginActivity , "로그인에 실패하였습니다." , Toast.LENGTH_SHORT).show()
+                            progressBar_login.visibility = View.GONE
+                        }
+                    }
                 }
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("[LoginActivity]", "Google sign in failed", e)
                 btn_googleSignIn.isEnabled=true
+                progressBar_login.visibility = View.GONE
             }
         }
     } // onActivityResult End
@@ -151,31 +170,4 @@ class LoginFragment : Fragment() {
         private const val TAG = "GoogleActivity"
         private const val RC_SIGN_IN = 9001
     }
-
-    /*
-    fun writeNewUserWithTaskListeners(userId: String, name: String, email: String , type : String) {
-        val Info_user = db.collection("user").document(userId)
-
-            if(Info_user == null){
-                val str = ArrayList<String>()
-                str.add("zerozero")
-
-                val data = hashMapOf(
-                    "name" to name,
-                    "userId" to userId,
-                    "email" to email,
-                    "type" to type,
-                    "farmList" to str
-                )
-
-                db.collection("user").document(userId)
-                    .set(data)
-            }
-            else{
-                return
-            }
-            //.addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            //.addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-    }
-    */
 }

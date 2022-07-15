@@ -36,46 +36,38 @@ class LoginRepository {
     }
 
     // firebaseAuthWithGoogle
-    suspend fun firebaseAuthWithGoogle(acct: GoogleSignInAccount, loginActivity: LoginActivity) : Boolean {
+    // 0 : 원래 로그인 된 계정, 1 : 처음 구글 로그인 시도, 2 : 구글 로그인 실패
+    suspend fun firebaseAuthWithGoogle(acct: GoogleSignInAccount, loginActivity: LoginActivity) : Int {
         val username: String = acct.displayName.toString()
         val email: String = acct.email.toString()
-        var case : Boolean = false
+        var isSuccess : Boolean = false
+        var result : Int = -1
         //TODO:: 여기서 한번 firebase에 쓰고 갈까?
         //Google SignInAccount 객체에서 ID 토큰을 가져와서 Firebase Auth로 교환하고 Firebase에 인증
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
 
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(loginActivity) { task ->
-                if (task.isSuccessful) {
-                    Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
-
-                    db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnSuccessListener {
-                        case=true
-                        //val intent = Intent(loginActivity , MyPageActivity()::class.java)
-                        //startActivity(intent)
-                    }.addOnFailureListener{
-                        case=false
-                        /*LoginController.navigate(
-                            com.example.nuru.view.fragment.login.LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
-                                SignUpInfo(
-                                    firebaseAuth.currentUser?.uid.toString(), username,
-                                    email, "google_login"
-                                )
-                            )
-                        )*/
-
+            if (task.isSuccessful) {
+                Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
+                isSuccess = true
+            } else {
+                Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
+                result=2
+            }
+        }.await()
+        when (isSuccess) {
+            true -> {
+                db.collection("user").document(firebaseAuth.currentUser!!.uid).get().addOnCompleteListener { task->
+                    if (task.result["name"] as String? == null) {
+                        result = 1
+                    } else {
+                        result = 0
                     }
-
-                    //LoginController.navigate(R.id.action_loginFragment2_to_mapsActivity)
-                    //activity?.finish()
-                    //toMainActivity(firebaseAuth?.currentUser)
-                } else {
-                    Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
-                    case = false
-                    //Snackbar.make(login_layout, "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
-                }
-            }.await()
-        return case
+                }.await()
+            }
+        }
+        return result
     }
 
     // Sign In With Email and Password
