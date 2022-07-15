@@ -37,17 +37,19 @@ class CommunityContentsRepository(val communityContentsRef : DocumentReference) 
         CoroutineScope(Dispatchers.IO).async {
             //widget_progressbarInCommunityImage.visibility = View.VISIBLE
             communityContentsRef.get().addOnSuccessListener {
-                newContents = CommunityDTO(
-                    it["image"] as ArrayList<String> ,
-                    it["contents"].toString() ,
-                    it["title"].toString() ,
-                    it["writer"].toString(),
-                    it.id.toString(),
-                    it["likeId"] as ArrayList<String>,
-                    it["commentsNum"] as Long,
-                    Date()
-                )
-                _mutableData.value = newContents
+                if (it["title"] != null) {
+                    newContents = CommunityDTO(
+                        it["image"] as ArrayList<String>,
+                        it["contents"].toString(),
+                        it["title"].toString(),
+                        it["writer"].toString(),
+                        it.id.toString(),
+                        it["likeId"] as ArrayList<String>,
+                        it["commentsNum"] as Long,
+                        Date()
+                    )
+                    _mutableData.value = newContents
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.model.data.community.CommunityEntity
+import com.example.nuru.utility.paging3.community.CommunityPagingSource
 import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -42,6 +43,8 @@ class CommunityRepository {
             updateCommunity()
         }
     }
+
+    fun getCommunity() = CommunityPagingSource()
 
     suspend fun updateCommunity(){
         db.collection("community")

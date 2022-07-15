@@ -1,5 +1,6 @@
 package com.example.nuru.view.activity.community
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ import com.example.nuru.R
 import com.example.nuru.databinding.ActivityCommunityContentsBinding
 import com.example.nuru.repository.FcmPush
 import com.example.nuru.utility.GetCurrentContext
+import com.example.nuru.view.activity.map.MapsActivity
 import com.example.nuru.viewmodel.community.CommentsViewModel
 import com.example.nuru.viewmodel.community.CommunityContentsViewModel
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForComments
@@ -146,6 +148,9 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
                     done = communityContentsViewModel.deleteCommunityAndComments()
                 }.join()
                 if(done) {
+                    val Intent = Intent()
+                    Intent.putExtra("DELETE_COMMUNITY_KEY", "DELETION")
+                    setResult(Activity.RESULT_OK , Intent)
                     finish()
                 }
                 else{
