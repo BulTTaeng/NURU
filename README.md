@@ -66,6 +66,7 @@
 - Activity db 접근 로직 viewMode ,repository로 이전
 
 `2022.07.15`  
+- CommunityFragment 부분 Paging3 적용
 - LoginFragment, SettingFragment, CheckTypeGoogleFragment Refactoring 완료
 - Coroutine 적용
 - View, ViewModel, Repository 분리
