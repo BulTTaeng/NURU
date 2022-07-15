@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -18,15 +20,20 @@ import com.example.nuru.R
 import com.example.nuru.databinding.CommunityViewBinding
 import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.view.activity.community.CommunityContentsActivity
+import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.Activity
+import androidx.fragment.app.Fragment
+import com.example.nuru.view.fragment.community.CommunityFragment
 
-class CommunityAdapter(private val context: Context) :
-    ListAdapter<CommunityDTO, CommunityAdapter.CommunityViewHolder>(COMMUNITYENTITY_DIFF_CALLBACK)
+
+class CommunityAdapter(private val context: Context , private val communityFragment: CommunityFragment) :
+    PagingDataAdapter<CommunityDTO, CommunityAdapter.CommunityViewHolder>(COMMUNITYENTITY_DIFF_CALLBACK)
 {
     //remember!
     //stroke in seperate_item_in_recycleview is for line's thickness and color
@@ -86,7 +93,9 @@ class CommunityAdapter(private val context: Context) :
                             else{
                                 val intent_to_CommunityCotents = Intent(context, CommunityContentsActivity::class.java)
                                 intent_to_CommunityCotents.putExtra("COMMUNITY",data)
-                                context.startActivity(intent_to_CommunityCotents)
+                                //context.startActivity(intent_to_CommunityCotents)
+
+                                communityFragment.startActivityForResult(intent_to_CommunityCotents, CommunityFragment.DELETE_COMMUNITY)
                             }
                         }
                         else{
@@ -118,13 +127,12 @@ class CommunityAdapter(private val context: Context) :
     }
 
     // return the number of the items in the list
-    override fun getItemCount(): Int {
-        return currentList.size
-    }
+
 
 
     override fun onBindViewHolder(holder: CommunityViewHolder, position: Int) {
-        holder.bindData(currentList[position])
+        val community = getItem(position) ?: return
+        holder.bindData(community)
     }
 
     companion object {
@@ -207,3 +215,4 @@ class CommunityAdapter(private val context: Context) :
 
 
 }
+
