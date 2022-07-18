@@ -75,10 +75,14 @@
     <string name="delete_comments">정말 댓글을 삭제 할까요?</string>
     <string name="select_job">직업군 고르기</string>
     <string name="signup">가입하기</string>
-    <string name="farmer">농장주</string>
+    <string name="farmer">임업인</string>
     <string name="admin">관리자</string>
     <string name="back_impossible">회원가입중에는 이동할 수 없습니다.</string>
     <string name="success_withdrawal">회원 탈퇴에 성공했습니다</string>
     <string name="fail_withdrawal">회원 탈퇴에 실패했습니다</string>
+    <string name="hard_login1">가입이 어렵다면 </string>
+    <string name="hard_login2"> 하세요</string>
+    <string name="already_signup">이미 가입 하셨나요? </string>
+    <string name="not_signup">아직 가입하지 않으셨나요? </string>
 
 </resources>

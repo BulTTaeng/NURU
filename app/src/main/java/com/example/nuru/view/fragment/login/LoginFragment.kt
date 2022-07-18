@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.nuru.view.activity.login.LoginActivity
 import com.example.nuru.R
@@ -21,13 +23,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
 import com.example.nuru.view.activity.mypage.MyPageActivity
+import com.example.nuru.viewmodel.community.CommunityViewModel
+import com.example.nuru.viewmodel.farm.MyFarmViewModel
 import com.example.nuru.viewmodel.login.UserViewModel
+import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import androidx.activity.OnBackPressedCallback
+
+
+
 
 class LoginFragment : Fragment() {
     //google client
@@ -37,9 +46,10 @@ class LoginFragment : Fragment() {
 
     lateinit var loginActivity: LoginActivity
 
-    var userViewModel : UserViewModel = UserViewModel()
+    private val userViewModel by lazy { ViewModelProvider(this).get(UserViewModel::class.java) }
 
     private lateinit var binding: FragmentLoginBinding
+    private var backPressedTime : Long = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,6 +58,16 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LoginController = login_navigation.findNavController()
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    backPressedTwice()
+                }
+            }
+        loginActivity.onBackPressedDispatcher.addCallback(this, callback)
+
     }
 
     override fun onCreateView(
@@ -62,11 +82,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        LoginController = login_navigation.findNavController()
         progressBar_login.visibility = View.GONE
 
         googleSignInClient = userViewModel.getGoogleSignInClient(loginActivity)
-        btn_googleSignIn.setOnClickListener{
+
+        btn_googleSignIn.setOnClickListener {
             signIn()
         }
     }
@@ -95,7 +115,7 @@ class LoginFragment : Fragment() {
                         1 -> {
                             progressBar_login.visibility = View.GONE
                             LoginController.navigate(
-                                LoginFragmentDirections.actionLoginFragment2ToCheckTypeForGoogleFragment(
+                                LoginFragmentDirections.actionLoginFragmentToCheckTypeForGoogleFragment(
                                     SignUpInfo(FirebaseAuth.getInstance().currentUser?.uid.toString(), account.displayName as String, account.email as String, "google_login")
                                 )
                             )
@@ -115,48 +135,8 @@ class LoginFragment : Fragment() {
         }
     } // onActivityResult End
 
-    // Email SignIn
-    fun btnSignIn(view:View){
-        progressBar_login.visibility = View.VISIBLE
-        btn_signIn.isEnabled=false
-        var id :String = edt_email.text.toString()
-        var pass : String = edt_password.text.toString()
-
-        if(id == ""){
-            Toast.makeText(loginActivity, getString(R.string.give_id), Toast.LENGTH_SHORT).show()
-            btn_signIn.isEnabled=true
-            progressBar_login.visibility = View.GONE
-        }
-        else if(pass == ""){
-            Toast.makeText(loginActivity, getString(R.string.give_password), Toast.LENGTH_SHORT).show()
-            btn_signIn.isEnabled=true
-            progressBar_login.visibility = View.GONE
-        }
-        else {
-            var loginCheck : Boolean = false
-            CoroutineScope(Dispatchers.Main).launch {
-                CoroutineScope(Dispatchers.IO).launch {
-                    loginCheck = userViewModel.emailSignIn(id, pass, loginActivity)
-                }.join()
-                when (loginCheck) {
-                    true -> {
-                        progressBar_login.visibility = View.GONE
-                        val ass = Intent(context, MyPageActivity::class.java)
-                        startActivity(ass)
-                        activity?.finish()
-                    }
-                    false -> {
-                        progressBar_login.visibility = View.GONE
-                        Toast.makeText(loginActivity, getString(R.string.id_password_wrong), Toast.LENGTH_SHORT).show()
-                        btn_signIn.isEnabled=true
-                    }
-                }
-            }
-        }
-    }
-
-    fun btnCreateAccount(view: View){
-        LoginController.navigate(R.id.action_loginFragment2_to_signupFragment)
+    fun btnToLoginEmail(view : View){
+        LoginController.navigate(R.id.action_loginFragment_to_loginEmailFragment)
     }
 
     private fun signIn() {
@@ -164,6 +144,20 @@ class LoginFragment : Fragment() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
         //activity?.finish()
+    }
+
+    fun backPressedTwice() {
+        Log.d("TAG", "뒤로가기")
+
+        // 2초내 다시 클릭하면 앱 종료
+        if (System.currentTimeMillis() - backPressedTime < 2000) {
+            activity?.finish()
+            return
+        }
+
+        // 처음 클릭 메시지
+        Toast.makeText(loginActivity, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+        backPressedTime = System.currentTimeMillis()
     }
 
     companion object {

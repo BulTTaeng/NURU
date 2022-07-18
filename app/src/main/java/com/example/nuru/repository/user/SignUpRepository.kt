@@ -19,15 +19,16 @@ class SignUpRepository {
     var auth = Firebase.auth
 
     // 회원가입
-    suspend fun registerUser(email : String, pass: String, loginActivity: LoginActivity, name : String, isAdmin: Boolean, isFarmer: Boolean) : Boolean {
+    suspend fun registerUser(email : String, pass: String, loginActivity: LoginActivity, name : String, isAdmin: Boolean, isFarmer: Boolean , isMember : Boolean) : Boolean {
         return try {
                 auth!!.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(loginActivity){
                     if(it.isSuccessful){
                         registerPushToken()
                         val user = auth?.currentUser?.uid
-                        writeNewUserWithTaskListeners(user.toString(), name, email , loginActivity.getString(R.string.email_login) , isAdmin , isFarmer)
+                        writeNewUserWithTaskListeners(user.toString(), name, email , loginActivity.getString(R.string.email_login) , isAdmin , isFarmer , isMember)
                     }
                     else{
+                        false
                     }
                 }.await()
             true
@@ -36,7 +37,7 @@ class SignUpRepository {
         }
     }
 
-    fun writeNewUserWithTaskListeners(userId: String, name: String, email: String , type : String , isAdmin : Boolean , isFarmer : Boolean) {
+    fun writeNewUserWithTaskListeners(userId: String, name: String, email: String , type : String , isAdmin : Boolean , isFarmer : Boolean , isMember : Boolean) {
         var temp : ArrayList<String>
         temp = ArrayList<String>()
         val data = hashMapOf(
@@ -46,7 +47,8 @@ class SignUpRepository {
             "type" to type,
             "farmList" to temp,
             "isAdmin" to isAdmin,
-            "isFarmer" to isFarmer
+            "isFarmer" to isFarmer,
+            "isMember" to isMember
         )
 
         db.collection("user").document(userId).set(data)

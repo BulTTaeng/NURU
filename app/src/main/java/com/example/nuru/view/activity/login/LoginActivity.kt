@@ -1,7 +1,9 @@
 package com.example.nuru.view.activity.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -29,24 +31,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     } //onStart End
 
     override fun onClick(p0: View?) {
-    }
-
-    /*private var backPressedTime : Long = 0
-    override fun onBackPressed() {
-        Log.d("TAG", "뒤로가기")
-
-        // 2초내 다시 클릭하면 앱 종료
-        if (System.currentTimeMillis() - backPressedTime < 2000) {
-            finish()
-            return
-        }
-
-        // 처음 클릭 메시지
-        Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
-        backPressedTime = System.currentTimeMillis()
-    }*/
-
-    override fun onBackPressed() {
     }
 
 }

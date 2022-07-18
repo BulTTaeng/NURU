@@ -73,6 +73,10 @@
 - MVVM 패턴 적용
 - Issue #10, #14 해결 -> 인증서 문제 (SHA-1)
 
+`2022.07.18`  
+- Community 메인 UI Design 변경
+- Login Activity쪽 UI 변경 및 로직 변경
+
 </details><br>  
 
 --- 

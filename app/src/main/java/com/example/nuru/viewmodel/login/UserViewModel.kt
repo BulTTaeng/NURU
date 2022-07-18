@@ -1,6 +1,7 @@
 package com.example.nuru.viewmodel.login
 
 import android.app.Activity
+import androidx.lifecycle.ViewModel
 import com.example.nuru.repository.user.DeleteAccountRepository
 import com.example.nuru.repository.user.LoginRepository
 import com.example.nuru.repository.user.SignOutRepository
@@ -11,14 +12,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.fragment_check_type_for_google.*
 
-class UserViewModel {
+class UserViewModel : ViewModel(){
     var signUpRepository: SignUpRepository = SignUpRepository()
     var loginRepository: LoginRepository = LoginRepository()
     var signOutRepository: SignOutRepository = SignOutRepository()
     var deleteAccountRepository: DeleteAccountRepository = DeleteAccountRepository()
 
-    suspend fun registerUser(email : String, pass: String, loginActivity: LoginActivity, name : String, isAdmin: Boolean, isFarmer: Boolean) : Boolean {
-        return signUpRepository.registerUser(email, pass, loginActivity, name, isAdmin, isFarmer)
+    suspend fun registerUser(email : String, pass: String, loginActivity: LoginActivity, name : String, isAdmin: Boolean, isFarmer: Boolean , isMember : Boolean) : Boolean {
+        return signUpRepository.registerUser(email, pass, loginActivity, name, isAdmin, isFarmer,isMember)
     }
 
     fun getGoogleSignInClient(activity: Activity) : GoogleSignInClient {
