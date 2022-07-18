@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.activity_community_contents.*
+import kotlinx.android.synthetic.main.community_view.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -76,7 +77,6 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         communityContentsViewModel = ViewModelProvider(this , ViewModelFactoryForCommunityContents(docRef))
             .get(CommunityContentsViewModel::class.java)
         binding.communityContentsViewModel = communityContentsViewModel
-
         singletonC.setcurrentContext(this)
 
         firebaseAuth = FirebaseAuth.getInstance()
