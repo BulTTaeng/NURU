@@ -46,6 +46,7 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(data: Comments) = with(binding) {
             binding.comments= data
+            Log.d("aaaa",data.commentsContents)
 
             txtCommentsContents.isEnabled = false
             btnEditCommentsDone.visibility = View.GONE
@@ -67,7 +68,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
                 btnDeleteComments.visibility = View.GONE
                 btnEditComments.isClickable = false
                 btnEditComments.visibility = View.GONE
-
             }
 
             btnEditComments.setOnClickListener {

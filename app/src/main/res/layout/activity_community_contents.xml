@@ -41,11 +41,10 @@
                     android:id="@+id/image_frame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     app:layout_constrainedHeight="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent">
+                    app:layout_constraintTop_toBottomOf="@+id/txt_ContentInContent">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/community_recycleViewInCommunityContents"
@@ -53,10 +52,9 @@
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         app:layout_constrainedHeight="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/txt_ContentInContent" />
 
                     <ProgressBar
                         android:id="@+id/widget_progressbarInCommunityImage"
@@ -66,35 +64,42 @@
                         android:scaleX="0.4"
                         android:scaleY="0.4"
                         android:visibility="visible" />
-
-
                 </FrameLayout>
 
                 <TextView
                     android:id="@+id/txt_TitleInContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@{communityContentsViewModel.fetchData().title}"
-                    android:textSize="35dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    android:text="커뮤니티"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/view_inCommunity"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#D1D3D9"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent" />
+
+
                 <TextView
                     android:id="@+id/txt_ContentInContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="10dp"
                     android:maxLines="50"
                     android:text="@{communityContentsViewModel.fetchData().contents}"
-                    android:textSize="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/image_frame" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_inCommunity" />
 
                 <ImageButton
                     android:id="@+id/btn_EditContents"
@@ -117,7 +122,7 @@
                     android:background="@null"
                     android:onClick="@{activity::btnLikeInContents}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txt_ContentInContent"
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
                     app:srcCompat="@drawable/ic_baseline_thumb_up_gray_24" />
 
                 <ImageButton
@@ -128,7 +133,7 @@
                     android:background="@null"
                     android:scaleType="fitCenter"
                     app:layout_constraintStart_toEndOf="@+id/txt_LikeNumberInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_ContentInContent"
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
                     app:srcCompat="@drawable/comment" />
 
                 <TextView
@@ -139,7 +144,7 @@
                     android:layout_marginTop="13dp"
                     android:text="@{Integer.toString(communityContentsViewModel.fetchData().like.size)}"
                     app:layout_constraintStart_toEndOf="@+id/btn_LikeInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_ContentInContent" />
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"/>
 
                 <TextView
                     android:id="@+id/txt_CommentsNumberInContents"
@@ -149,7 +154,7 @@
                     android:layout_marginTop="13dp"
                     android:text="@{Long.toString(communityContentsViewModel.fetchData().comments)}"
                     app:layout_constraintStart_toEndOf="@+id/btn_CommentsInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_ContentInContent" />
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
