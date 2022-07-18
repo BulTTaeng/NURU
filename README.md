@@ -75,10 +75,7 @@
 
 `2022.07.18`  
 - Community 메인 UI Design 변경
-<<<<<<< HEAD
 - Login Activity쪽 UI 변경 및 로직 변경
-=======
->>>>>>> e14a1383b7decaeea190d65f187def9ed9430953
 
 </details><br>  
 
