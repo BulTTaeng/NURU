@@ -28,6 +28,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import android.app.Activity
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.nuru.view.fragment.community.CommunityFragment
 
@@ -51,6 +52,7 @@ class CommunityAdapter(private val context: Context , private val communityFragm
 
             //여기 if image empty로 나눠버리면 업데이트하는도중 잘못인식해서 이미지 사라짐...
             binding.community = data
+            txtEachCommunityContents.text = data.contents
 
             adapter = ImgInCommunityAdapter(context)
             communityRecycleViewForImage.adapter = adapter
