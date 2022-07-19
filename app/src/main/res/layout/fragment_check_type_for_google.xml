@@ -42,12 +42,13 @@
             android:layout_marginTop="44dp"
             android:layout_marginEnd="45dp"
             android:background="@drawable/radius_gray"
+            android:onClick="@{fragment::toggleFarmer}"
             android:text="ToggleButton"
             android:textColor="@color/black"
             android:textOff="@string/farmer"
-            android:textOn="농장주 선택됨"
-            android:onClick="@{fragment::toggleFarmer}"
+            android:textOn="임업인 선택됨"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_selectJob" />
 
@@ -66,6 +67,23 @@
             android:onClick="@{fragment:: toggleAdmin}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toggle_member" />
+
+        <ToggleButton
+            android:id="@+id/toggle_member"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="45dp"
+            android:background="@drawable/radius_gray"
+            android:onClick="@{fragment:: toggleMember}"
+            android:text="ToggleButton"
+            android:textColor="@color/black"
+            android:textOff="조합원"
+            android:textOn="조합원 선택됨"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toggle_farmer" />
 
         <Button
@@ -78,6 +96,20 @@
             android:background="@drawable/radius_green"
             android:text="@string/signup"
             android:onClick="@{fragment::btnSignUpGoogle}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_signUp"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/radius_green"
+            android:onClick="@{fragment::btnSignup}"
+            android:text="가입하기 1111"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

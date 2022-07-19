@@ -73,9 +73,13 @@ class AddCommunityActivity : AppCompatActivity() {
             addImage_recycleView.adapter = adapter
 
             btn_Upload.visibility = View.GONE
+            btn_Upload.isEnabled = false
+            btn_Upload.isClickable = false
         }
         else{
             btn_UploadEdit.visibility = View.GONE
+            btn_UploadEdit.isEnabled = false
+            btn_Upload.isClickable = false
         }
     }
 

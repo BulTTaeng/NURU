@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_nav_graph"
-    app:startDestination="@id/loginFragment2">
+    app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/loginFragment2"
+        android:id="@+id/loginFragment"
         android:name="com.example.nuru.view.fragment.login.LoginFragment"
-        android:label="fragment_login2"
+        android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment2_to_signupFragment"
+            android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
         <action
-            android:id="@+id/action_loginFragment2_to_mapsActivity"
-            app:destination="@id/mapsActivity" />
-        <action
-            android:id="@+id/action_loginFragment2_to_myPageActivity"
+            android:id="@+id/action_loginFragment_to_myPageActivity"
             app:destination="@id/myPageActivity" />
         <action
-            android:id="@+id/action_loginFragment2_to_checkTypeForGoogleFragment"
+            android:id="@+id/action_loginFragment_to_checkTypeForGoogleFragment"
             app:destination="@id/checkTypeForGoogleFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_loginEmailFragment"
+            app:destination="@id/loginEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -29,14 +29,12 @@
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
-            android:id="@+id/action_signupFragment_to_loginFragment2"
-            app:destination="@id/loginFragment2" />
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_checkTypeForGoogleFragment"
+            app:destination="@id/checkTypeForGoogleFragment" />
     </fragment>
-    <activity
-        android:id="@+id/mapsActivity"
-        android:name="com.example.nuru.view.activity.map.MapsActivity"
-        android:label="activity_maps"
-        tools:layout="@layout/activity_maps" />
     <activity
         android:id="@+id/myPageActivity"
         android:name="com.example.nuru.view.activity.mypage.MyPageActivity"
@@ -52,5 +50,16 @@
             app:argType="com.example.nuru.model.data.login.SignUpInfo"
             app:nullable="true" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/loginEmailFragment"
+        android:name="com.example.nuru.view.fragment.login.LoginEmailFragment"
+        android:label="LoginEmailFragment" >
+        <action
+            android:id="@+id/action_loginEmailFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_loginEmailFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
     </fragment>
 </navigation>
