@@ -84,5 +84,5 @@
     <string name="hard_login2"> 하세요</string>
     <string name="already_signup">이미 가입 하셨나요? </string>
     <string name="not_signup">아직 가입하지 않으셨나요? </string>
-
+    <string name="counsel_title">전문가 상담</string>
 </resources>
