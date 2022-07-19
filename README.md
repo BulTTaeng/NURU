@@ -77,7 +77,7 @@
 - Community 메인 UI Design 변경
 - Login Activity쪽 UI 변경 및 로직 변경
 
-`2022.07.19`
+`2022.07.19`  
 
 </details><br>  
 
