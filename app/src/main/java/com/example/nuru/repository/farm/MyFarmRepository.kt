@@ -12,15 +12,19 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
+import kotlin.Exception
 import kotlin.collections.ArrayList
 
 class MyFarmRepository(val farmRef : DocumentReference) {
     val db = FirebaseFirestore.getInstance()
 
     val _mutableData = MutableLiveData<MutableList<Farm>>()
+    val _mutableImages = MutableLiveData<MutableList<String>>()
     val Farm: LiveData<MutableList<Farm>>
         get() = _mutableData
+
+    val images : LiveData<MutableList<String>>
+        get() = _mutableImages
 
     var isInit : Boolean = false
 
@@ -28,11 +32,12 @@ class MyFarmRepository(val farmRef : DocumentReference) {
         updateFarm()
     }
 
-    suspend fun getUserNameAndEmail(userId : String) : String {
+    suspend fun getUserNameAndEmail(userId : String) : ArrayList<String> {
         val docRef = db.collection("user").document(userId)
-        var resultString : String = ""
+        var resultString = ArrayList<String>()
         docRef.get().addOnSuccessListener {
-            resultString = it["name"].toString() + "\n" + it["email"].toString()
+            resultString.add(it["name"].toString())
+            resultString.add(it["email"].toString())
         }.await()
         return resultString
     }
@@ -134,6 +139,21 @@ class MyFarmRepository(val farmRef : DocumentReference) {
             db.collection("farmList").document(farmId).update("farmAdmin" , FieldValue.arrayUnion(addId)).addOnSuccessListener {
                 true
             }.addOnFailureListener{
+                false
+            }.await()
+            true
+        }catch (e : Exception){
+            Log.d("Error" , e.toString())
+            false
+        }
+    }
+
+    suspend fun updateImage(id : String) : Boolean{
+        return try {
+            db.collection("farmList").document(id).get().addOnSuccessListener {
+                _mutableImages.value = it["farmPhoto"] as ArrayList<String>
+                true
+            }.addOnFailureListener {
                 false
             }.await()
             true

@@ -11,8 +11,14 @@ class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
     private val repo = MyFarmRepository(farmRef)
     private val farmData = repo.Farm
 
+    private val farmImages  = repo.images
+
     fun fetchData(): LiveData<MutableList<Farm>> {
         return farmData
+    }
+
+    fun fetchImages() : LiveData<MutableList<String>>{
+        return farmImages
     }
 
     fun updateFarm(){
@@ -29,7 +35,12 @@ class MyFarmViewModel(val farmRef : DocumentReference) : ViewModel() {
         return repo.addAdmin(addId, farmId)
     }
 
-    suspend fun getUserNameAndEmail(userId : String) : String {
+    suspend fun getUserNameAndEmail(userId : String) : ArrayList<String> {
         return repo.getUserNameAndEmail(userId)
     }
+
+    suspend fun updateImage(id : String) : Boolean{
+        return repo.updateImage(id)
+    }
+
 }

@@ -21,6 +21,7 @@ import com.example.nuru.*
 import com.example.nuru.view.adapter.FarmAdapter
 import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.model.data.farm.Farm
+import com.example.nuru.view.activity.adminfarm.AdminFarmActivity
 import com.example.nuru.view.activity.mypage.AddFarmActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
@@ -29,7 +30,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_my_page.*
-import kotlinx.android.synthetic.main.fragment_my_page.mypage_recycleView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -39,13 +39,8 @@ class MyPageFragment : Fragment() , CoroutineScope {
     //firebase Auth
     private lateinit var firebaseAuth: FirebaseAuth
     //google client
-    private lateinit var googleSignInClient: GoogleSignInClient
-
-    lateinit var mypageActivity: MyPageActivity
 
     val db = FirebaseFirestore.getInstance()
-
-    lateinit var username : String
 
     lateinit var user_farm_info : ArrayList<Farm>
 
@@ -100,51 +95,15 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
         var userText : String = ""
         CoroutineScope(Dispatchers.IO).launch {
-            async {txt_UserNameMyPage.text = viewModel.getUserNameAndEmail(UserId.toString())}.await()
+            async {
+                val nameEmail = viewModel.getUserNameAndEmail(UserId.toString())
+                txt_UserNameMyPage.text = nameEmail[0]
+                txt_UserEmailMyPage.text = nameEmail[1]
+            }.await()
         }
 
         Glide.with(this).load(getString(R.string.basic_image))
             .transform(CenterCrop(), RoundedCorners(100)).into(img_MyPageImage)
-
-        swipe_in_mypage.setOnRefreshListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                async {  viewModel.updateFarm() }.await()
-            }
-        }
-        adapter = FarmAdapter(myPageActivity , viewModel)
-        // Setting the Adapter with the recyclerview
-        mypage_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
-        mypage_recycleView.adapter = adapter
-        observeData()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RETURN_FROM_ADD) {
-            val address = data?.getStringExtra("ADD_FARM_DONE")
-            if (address == "OK") viewModel.updateFarm()
-        }
-    }
-
-    fun observeData(){
-        viewModel.fetchData().observe(
-            viewLifecycleOwner, Observer {
-                widget_ProgressBarInMyPage.visibility = View.VISIBLE
-
-                adapter.submitList(it.map{
-                    it.copy()
-                }
-                ).let {
-                    swipe_in_mypage.isRefreshing = false
-                    widget_ProgressBarInMyPage.visibility = View.GONE
-                }
-            }
-        )
-    }
-
-
-    fun btnCalNum(view : View) {
-        Log.d("[Tag] : btn_cal_num", "특화계수 버튼 클릭!")
     }
 
     fun btnSetting(view : View) {
@@ -152,13 +111,8 @@ class MyPageFragment : Fragment() , CoroutineScope {
         findNavController().navigate(R.id.action_myPageFragment_to_settingFragment)
     }
 
-    fun btnAddFarm(view : View) {
-        Log.d("[Tag] : btn_add_farm", "농장 추가 버튼 클릭")
-        val intent = Intent(activity , AddFarmActivity::class.java)
-        startActivityForResult(intent , RETURN_FROM_ADD)
+    fun btnCareMyFarm(view: View){
+        startActivity(Intent(myPageActivity , AdminFarmActivity::class.java))
     }
 
-    companion object {
-        const val RETURN_FROM_ADD = 11
-    }
 }

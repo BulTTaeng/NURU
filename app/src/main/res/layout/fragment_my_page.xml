@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="com.example.nuru.view.fragment.mypage.MyPageFragment" />
@@ -12,6 +13,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".view.fragment.mypage.MyPageFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,117 +22,275 @@
 
             <TextView
                 android:id="@+id/txt_UserNameMyPage"
-                android:layout_width="133dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="5dp"
-                android:maxLines="2"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_MyPageImage" />
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="40dp"
+                android:maxLines="1"
+                android:paddingStart="20dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/txt_UserEmailMyPage"
+                app:layout_constraintStart_toEndOf="@+id/img_MyPageImage"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/view_RoundEdge"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/background_roundedge_round"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
+            <TextView
+                android:id="@+id/txt_UserEmailMyPage"
+                android:layout_width="200dp"
+                android:layout_height="20dp"
+                android:maxLines="2"
+                android:paddingStart="20dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/light_gray"
+                app:layout_constraintStart_toEndOf="@+id/img_MyPageImage"
+                app:layout_constraintTop_toBottomOf="@+id/txt_UserNameMyPage" />
 
             <ImageView
                 android:id="@+id/img_MyPageImage"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
                 android:scaleType="fitCenter"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/profile_lightgray" />
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_in_mypage"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_marginTop="50dp"
-                app:layout_constrainedHeight="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_UserNameMyPage">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mypage_recycleView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-            <ProgressBar
-                android:id="@+id/widget_ProgressBarInMyPage"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/swipe_in_mypage"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/swipe_in_mypage" />
-
-            <ImageButton
-                android:id="@+id/btn_add_farm"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/background_roundedge"
-                android:scaleType="fitCenter"
-                android:onClick="@{fragment::btnAddFarm}"
-                app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle"
-                app:srcCompat="@drawable/plusbtn" />
-
-            <TextView
-                android:id="@+id/txt_MyFarmTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="내 농장"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/btn_setting"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/background_roundedge"
+                android:background="@null"
+                android:onClick="@{fragment::btnSetting}"
                 android:scaleType="fitCenter"
                 android:src="@drawable/settings"
-                android:onClick="@{fragment::btnSetting}"
-                app:layout_constraintBottom_toTopOf="@+id/txt_UserNameMyPage"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_MyFarmTitle" />
+                app:layout_constraintBottom_toTopOf="@+id/card_adver"/>
 
-            <Button
-                android:id="@+id/btn_cal_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/cal_num"
-                android:onClick="@{fragment::btnCalNum}"
-                app:layout_constraintEnd_toEndOf="parent"
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_adver"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/swipe_in_mypage" />
+                app:layout_constraintTop_toBottomOf="@+id/img_MyPageImage">
+
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/lin_firstLine"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginTop="70dp"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_adver">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/btn_careMyFarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        android:onClick="@{fragment::btnCareMyFarm}"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/txt_carMyFarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="내 농장관리"
+                        android:textAlignment="center"
+                        app:layout_constraintTop_toBottomOf="@id/btn_careMyFarm" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+
+                    <ImageButton
+                        android:id="@+id/btn_community"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        app:layout_constraintStart_toEndOf="@id/btn_careMyFarm"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="커뮤니티"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_community"
+                        app:layout_constraintStart_toStartOf="@+id/btn_community"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_community" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/btn_governmentBusiness"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="정부사업"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_governmentBusiness"
+                        app:layout_constraintStart_toStartOf="@+id/btn_governmentBusiness"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_governmentBusiness" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginTop="70dp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lin_firstLine">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/btn_checkStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="상태검사"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_checkStatus"
+                        app:layout_constraintStart_toStartOf="@+id/btn_checkStatus"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_checkStatus" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/btn_checkFit"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="적합도검사"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_checkFit"
+                        app:layout_constraintStart_toStartOf="@+id/btn_checkFit"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_checkFit" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/btn_callExpert"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9.5"
+                        android:scaleType="fitCenter"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="전문가상담"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_callExpert"
+                        app:layout_constraintStart_toStartOf="@+id/btn_callExpert"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_callExpert" />
+                </LinearLayout>
+
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

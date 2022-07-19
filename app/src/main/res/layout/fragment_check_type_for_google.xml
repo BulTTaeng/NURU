@@ -109,7 +109,7 @@
             android:layout_marginBottom="80dp"
             android:background="@drawable/radius_green"
             android:onClick="@{fragment::btnSignup}"
-            android:text="가입하기 1111"
+            android:text="@string/signup"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
