@@ -23,11 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nuru"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".repository.service.WithdrawalService"
             android:enabled="true"
             android:exported="false"
             tools:ignore="Instantiatable" />
+
+        <activity
+            android:name=".view.activity.adminfarm.AdminFarmActivity"
+            android:exported="false" />
 
         <activity
             android:name=".view.activity.mypage.NewMyFarmActivity"

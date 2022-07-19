@@ -8,13 +8,16 @@ import android.view.ViewGroup
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nuru.R
 import com.example.nuru.databinding.CardviewFarmBinding
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.mypage.NewMyFarmActivity
+import com.example.nuru.view.fragment.adminfarm.AdminFarmPageFragmentDirections
 import com.example.nuru.viewmodel.farm.MyFarmViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -40,10 +43,12 @@ class FarmAdapter(private val context: Context , private val myFarMViewModel : M
             }
 
             itemView.setOnClickListener {
+                val navController = Navigation.findNavController(itemView)
+                navController.navigate(AdminFarmPageFragmentDirections.actionAdminFarmPageFragmentToAdminFarm2Fragment(absoluteAdapterPosition))
                 //TODO : 여기서 임시로 만들 농장이면 그냥 터치 이벤트 없애야함.
-                val Intent = Intent(context, NewMyFarmActivity::class.java)
-                Intent.putExtra("FARM",data)
-                context.startActivity(Intent)
+//                val Intent = Intent(context, NewMyFarmActivity::class.java)
+//                Intent.putExtra("FARM",data)
+//                context.startActivity(Intent)
             }
         }
 

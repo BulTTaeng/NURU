@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_farm_nav_graph"
+    app:startDestination="@+id/adminFarmPageFragment">
+
+    <fragment
+        android:id="@+id/adminFarmPageFragment"
+        android:name="com.example.nuru.view.fragment.adminfarm.AdminFarmPageFragment"
+        android:label="AdminFarmPageFragment"
+        tools:layout="@layout/fragment_admin_farm_page">
+        <action
+            android:id="@+id/action_adminFarmPageFragment_to_adminFarm2Fragment"
+            app:destination="@id/adminFarm2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminFarm2Fragment"
+        android:name="com.example.nuru.view.fragment.adminfarm.AdminFarm2Fragment"
+        android:label="AdminFarm2Fragment">
+        <argument
+            android:name="loc"
+            app:argType="integer">
+
+        </argument>
+        <action
+            android:id="@+id/action_adminFarm2Fragment_to_adminFarmSensorFragment"
+            app:destination="@id/adminFarmSensorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminFarmSensorFragment"
+        android:name="com.example.nuru.view.fragment.adminfarm.AdminFarmSensorFragment"
+        android:label="fragment_admin_farm_sensor"
+        tools:layout="@layout/fragment_admin_farm_sensor">
+        <argument
+            android:name="loc"
+            app:argType="integer">
+
+        </argument>
+
+    </fragment>
+
+
+</navigation>
