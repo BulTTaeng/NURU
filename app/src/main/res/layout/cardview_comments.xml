@@ -20,21 +20,21 @@
             android:id="@+id/txt_writer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:lines="1"
             android:maxLines="1"
             android:text="@{comments.name}"
             android:textSize="15sp"
-            android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/img_profileInComments"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <ImageView
             android:id="@+id/img_profileInComments"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/background_roundedge_round"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,11 +47,9 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="14dp"
             android:background="@null"
-            android:maxLines="5"
             android:ellipsize="end"
             android:text="@{comments.commentsContents}"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_editCommentsDone"
             app:layout_constraintHorizontal_bias="0.01"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,9 +57,11 @@
 
         <View
             android:id="@+id/divider_view_Setting"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#D1D3D9"
+            app:layout_constraintTop_toBottomOf="@+id/txt_commentsContents"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -70,32 +70,23 @@
             android:id="@+id/txt_timeDiffInComments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/txt_writer"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="12dp"
+            android:textColor="@color/light_gray"
+            app:layout_constraintStart_toEndOf="@+id/img_profileInComments"
+            app:layout_constraintTop_toBottomOf="@+id/txt_writer" />
 
-        <ImageButton
-            android:id="@+id/btn_editComments"
+        <TextView
+            android:id="@+id/txt_viewOptions"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="8dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            app:layout_constraintStart_toEndOf="@+id/txt_timeDiffInComments"
+            android:gravity="center"
+            android:layout_height="30dp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/pencil" />
-
-        <ImageButton
-            android:id="@+id/btn_deleteComments"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            app:layout_constraintStart_toEndOf="@+id/btn_editComments"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/cancelbtn" />
+            android:text="⋮"
+            android:textAppearance="?android:textAppearanceLarge" />
 
         <Button
             android:id="@+id/btn_editCommentsDone"
@@ -104,7 +95,7 @@
             android:text="수정하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/img_profileInComments" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
