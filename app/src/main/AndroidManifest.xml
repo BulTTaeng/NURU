@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.nuru">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -24,6 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nuru"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".repository.service.WithdrawalService"
             android:enabled="true"
@@ -31,13 +31,14 @@
             tools:ignore="Instantiatable" />
 
         <activity
+            android:name=".view.activity.adminfarm.AdminFarmActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.activity.mypage.NewMyFarmActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.community.ShowImageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.community.EditCommunityActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.community.CommunityContentsActivity"
