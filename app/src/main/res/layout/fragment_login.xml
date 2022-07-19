@@ -61,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
-                    android:background="@drawable/radius_white"
+                    android:background="@android:color/transparent"
                     android:text="Google로 로그인하기"
                     app:buttonSize="wide" />
             </androidx.cardview.widget.CardView>

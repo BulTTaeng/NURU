@@ -25,17 +25,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".view.activity.community.CommunityContentsActivity">
-                <!--
-                                <ImageView
-                                    android:id="@+id/img_ContentImage"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent"
-                                    app:srcCompat="@drawable/empty_im,ag" />
-                                    -->
+
+                <TextView
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/txt_statusText"
+                    android:layout_width="30dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="10dp"
+                    android:text="고민"
+                    android:textStyle="bold"
+                    android:background="@drawable/background_community_status"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="11dp"
+                    android:textAlignment="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_TitleInContent" />
+
+                <ImageView
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/img_ownerProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_statusText"
+                    app:srcCompat="@drawable/profile_lightgray" />
+
+                <TextView
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/txt_ownerWriter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@{communityContentsViewModel.fetchData().title}"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintStart_toEndOf="@+id/img_ownerProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_statusText" />
+
+                <TextView
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/txt_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text=""
+                    android:textSize="12dp"
+                    android:textColor="@color/light_gray"
+                    app:layout_constraintStart_toEndOf="@+id/img_ownerProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_ownerWriter" />
 
                 <FrameLayout
                     android:id="@+id/image_frame"
@@ -90,16 +132,28 @@
 
                 <TextView
                     android:id="@+id/txt_ContentInContent"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
                     android:maxLines="50"
                     android:text="@{communityContentsViewModel.fetchData().contents}"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_inCommunity" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_ownerProfile" />
+
+                <View
+                    android:id="@+id/view_ownerContentDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:layout_marginTop="10dp"
+                    android:background="#D1D3D9"
+                    app:layout_constraintTop_toBottomOf="@+id/image_frame" />
+
 
                 <ImageButton
                     android:id="@+id/btn_EditContents"
@@ -122,39 +176,48 @@
                     android:background="@null"
                     android:onClick="@{activity::btnLikeInContents}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
+                    app:layout_constraintTop_toBottomOf="@+id/view_ownerContentDivider"
                     app:srcCompat="@drawable/ic_baseline_thumb_up_gray_24" />
 
                 <ImageButton
                     android:id="@+id/btn_CommentsInContents"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
                     android:background="@null"
                     android:scaleType="fitCenter"
                     app:layout_constraintStart_toEndOf="@+id/txt_LikeNumberInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/image_frame"
+                    app:layout_constraintTop_toBottomOf="@+id/view_ownerContentDivider"
                     app:srcCompat="@drawable/comment" />
+
+                <View
+                    android:id="@+id/view_ownerContentDivider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#D1D3D9"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_LikeInContents" />
+
 
                 <TextView
                     android:id="@+id/txt_LikeNumberInContents"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="0dp"
                     android:layout_marginTop="13dp"
                     android:text="@{Integer.toString(communityContentsViewModel.fetchData().like.size)}"
                     app:layout_constraintStart_toEndOf="@+id/btn_LikeInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/image_frame"/>
+                    app:layout_constraintTop_toBottomOf="@+id/view_ownerContentDivider"/>
 
                 <TextView
                     android:id="@+id/txt_CommentsNumberInContents"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="13dp"
                     android:text="@{Long.toString(communityContentsViewModel.fetchData().comments)}"
                     app:layout_constraintStart_toEndOf="@+id/btn_CommentsInContents"
-                    app:layout_constraintTop_toBottomOf="@+id/image_frame"/>
+                    app:layout_constraintTop_toBottomOf="@+id/view_ownerContentDivider"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
