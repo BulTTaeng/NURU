@@ -6,7 +6,10 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
+import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -18,6 +21,7 @@ import com.example.nuru.model.data.community.CommunityDTO
 import com.example.nuru.R
 import com.example.nuru.databinding.ActivityCommunityContentsBinding
 import com.example.nuru.repository.FcmPush
+import com.example.nuru.utility.FindDifference
 import com.example.nuru.utility.GetCurrentContext
 import com.example.nuru.view.activity.map.MapsActivity
 import com.example.nuru.viewmodel.community.CommentsViewModel
@@ -31,6 +35,8 @@ import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.activity_community_contents.*
 import kotlinx.android.synthetic.main.community_view.*
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
@@ -68,6 +74,12 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         var like = CommunityInfo.like
         var image = CommunityInfo.image
 
+        val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+        val currentDate : String = sdf.format(Date())
+        val writetime : String = sdf.format(CommunityInfo.time)
+
+        binding.txtDate.text = FindDifference.findDifference(writetime , currentDate)
+
 
         val commentsRef = db.collection("comments").document(id!!).collection(id)
         docRef = db.collection("community").document(id!!)
@@ -88,6 +100,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
         btn_EditContents.isVisible = writer.equals(firebaseAuth.currentUser?.uid)
         btn_DeleteCommunity.isVisible = writer.equals(firebaseAuth.currentUser?.uid)
 
+        // optionClickListener 추가
         adapter = CommentsAdapter(getCommunityContentsActivity() , commentsViewModel)
         // Setting the Adapter with the recyclerview
         comments_recycleView.layoutManager = LinearLayoutManager(getCommunityContentsActivity())

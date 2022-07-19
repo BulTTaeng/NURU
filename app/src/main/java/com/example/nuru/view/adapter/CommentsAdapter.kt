@@ -5,8 +5,11 @@ import android.content.DialogInterface
 import android.graphics.Paint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nuru.databinding.CardviewCommentsBinding
@@ -24,6 +27,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.nuru.R
+import com.example.nuru.utility.FindDifference
 import com.example.nuru.viewmodel.community.CommentsViewModel
 
 //Your Fragment's views should have a shorter lifecycle than your associated ViewModel,
@@ -32,14 +36,12 @@ import com.example.nuru.viewmodel.community.CommentsViewModel
 class CommentsAdapter( private val context: Context , private val viewModel : CommentsViewModel) :
     ListAdapter<Comments, CommentsAdapter.CommentsViewHolder>(COMMENTS_DIFF_CALLBACK)
 {
-
     val auth = Firebase.auth
     val db = FirebaseFirestore.getInstance()
 
     val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
     val currentDate : String = sdf.format(Date())
     private lateinit var binding: CardviewCommentsBinding
-
 
     inner class CommentsViewHolder(
         private val binding: CardviewCommentsBinding
@@ -52,34 +54,44 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
             btnEditCommentsDone.visibility = View.GONE
             btnEditCommentsDone.isEnabled = false
             val writetime : String = sdf.format(data.time)
-            txtTimeDiffInComments.text = findDifference(writetime , currentDate)
+            txtTimeDiffInComments.text = FindDifference.findDifference(writetime , currentDate)
 
             Glide.with(context)
                 .load("https://firebasestorage.googleapis.com/v0/b/nuru-a3203.appspot.com/o/profile_lightGray.png?alt=media&token=fbd9ab57-dbde-45e2-900d-b7ce20534888")
                 .transform(CenterCrop(), RoundedCorners(100)).into(imgProfileInComments)
             if(data.writer.equals(auth.currentUser?.uid)){
-                btnDeleteComments.visibility = View.VISIBLE
-                btnDeleteComments.isClickable = true
-                btnEditComments.visibility = View.VISIBLE
-                btnEditComments.isClickable = true
+                txtViewOptions.visibility = View.VISIBLE
             }
             else{
-                btnDeleteComments.isClickable = false
-                btnDeleteComments.visibility = View.GONE
-                btnEditComments.isClickable = false
-                btnEditComments.visibility = View.GONE
+                txtViewOptions.visibility = View.GONE
             }
 
-            btnEditComments.setOnClickListener {
-                txtCommentsContents.isEnabled = true
-                txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            // 댓글 옵션 메뉴
+            txtViewOptions.setOnClickListener{
+                val popupMenu = PopupMenu(context, txtViewOptions)
+                popupMenu.inflate(R.menu.comments_menu)
+                popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
+                    override fun onMenuItemClick(item: MenuItem?): Boolean {
+                        when(item?.itemId){
+                            R.id.option_edit -> {
+                                Log.d("수정 버튼!", "수정 버튼을 눌르셨습니다. $data")
+                                txtCommentsContents.isEnabled = true
+                                txtCommentsContents.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-                btnEditCommentsDone.visibility = View.VISIBLE
-                btnEditCommentsDone.isEnabled = true
-            }
-
-            btnDeleteComments.setOnClickListener {
-                showAlert(data.id , data.communityId)
+                                btnEditCommentsDone.visibility = View.VISIBLE
+                                btnEditCommentsDone.isEnabled = true
+                                return true
+                            }
+                            R.id.option_delete -> {
+                                Log.d("삭제 버튼!", "삭제 버튼을 눌르셨습니다. $data")
+                                showAlert(data.id , data.communityId)
+                                return true
+                            }
+                        }
+                        return false
+                    }
+                })
+                popupMenu.show()
             }
 
             btnEditCommentsDone.setOnClickListener {
@@ -137,7 +149,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
         }
     }
 
-
     fun showAlert(commentsId : String , communityId : String) {
         AlertDialog.Builder(context)
             .setTitle(R.string.delete_comments)
@@ -149,9 +160,6 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
     }
 
     fun deleteComments(commentsId: String , communityId: String){
-
-
-
         db.collection("comments").document(communityId).collection(communityId).document(commentsId).delete()
         var size : Long =0
         db.collection("community").document(communityId).get().addOnCompleteListener {
@@ -167,72 +175,4 @@ class CommentsAdapter( private val context: Context , private val viewModel : Co
         }
 
     }
-
-    fun findDifference(start_date: String?, end_date: String?): String {
-
-        // SimpleDateFormat converts the
-        // string format to date object
-        val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
-
-        // Try Block
-        try {
-
-            // parse method is used to parse
-            // the text from a string to
-            // produce the date
-            val d1 = sdf.parse(start_date)
-            val d2 = sdf.parse(end_date)
-
-            // Calucalte time difference
-            // in milliseconds
-            val difference_In_Time = d2.time - d1.time
-            // Calucalte time difference in
-            // seconds, minutes, hours, years,
-            // and days
-            val difference_In_Seconds = ((difference_In_Time
-                    / 1000)
-                    % 60)
-            val difference_In_Minutes = ((difference_In_Time
-                    / (1000 * 60))
-                    % 60)
-            val difference_In_Hours = ((difference_In_Time
-                    / (1000 * 60 * 60))
-                    % 24)
-            val difference_In_Years = (difference_In_Time
-                    / (1000L * 60 * 60 * 24 * 365))
-            val difference_In_Days = ((difference_In_Time
-                    / (1000 * 60 * 60 * 24))
-                    % 365)
-
-            // Print the date difference in
-            // years, in days, in hours, in
-            // minutes, and in seconds
-
-            if(difference_In_Years.toInt() != 0){
-                return difference_In_Years.toString() + "년 전"
-            }
-            else if(difference_In_Days.toInt() > 30){
-                return (difference_In_Days.toInt()/30).toString() + "개월 전"
-            }
-            else if(difference_In_Days.toInt() in 1..30){
-                return difference_In_Days.toInt().toString() + "일 전"
-            }
-            else if(difference_In_Hours.toInt() != 0){
-                return difference_In_Hours.toInt().toString() + "시간 전"
-            }
-            else if(difference_In_Minutes.toInt() != 0){
-                return difference_In_Minutes.toString() + "분 전"
-            }
-            else{
-                return "방금 전"
-            }
-
-        } // Catch the Exception
-        catch (e: ParseException) {
-            e.printStackTrace()
-            return " "
-        }
-    }
-
-
 }
