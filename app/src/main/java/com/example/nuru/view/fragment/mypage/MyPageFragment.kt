@@ -24,6 +24,7 @@ import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.adminfarm.AdminFarmActivity
 import com.example.nuru.view.activity.fitcheck.FitCheckActivity
 import com.example.nuru.view.activity.mainbusiness.MainBusinessActivity
+import com.example.nuru.view.activity.counsel.CounselActivity
 import com.example.nuru.view.activity.mypage.AddFarmActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.view.activity.statuscheck.StatusCheckActivity
@@ -119,6 +120,7 @@ class MyPageFragment : Fragment() , CoroutineScope {
         startActivity(Intent(myPageActivity , AdminFarmActivity::class.java))
     }
 
+
     fun btnGovernmentBusiness(view : View){
         startActivity(Intent(myPageActivity , MainBusinessActivity::class.java))
     }
@@ -129,6 +131,10 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
     fun btnCheckFit(view : View){
         startActivity(Intent(myPageActivity , FitCheckActivity::class.java))
+        
+    fun btnCounseling(view: View) {
+        Log.d("전문가상담", "클릭")
+        startActivity(Intent(myPageActivity , CounselActivity::class.java))
     }
 
 }
