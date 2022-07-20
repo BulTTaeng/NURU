@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fit_check_nav_graph"
+    app:startDestination="@id/fitCheckSelectFragment">
+
+    <fragment
+        android:id="@+id/fitCheckSelectFragment"
+        android:name="com.example.nuru.view.fragment.fitcheck.FitCheckSelectFragment"
+        android:label="fragment_fit_check_select"
+        tools:layout="@layout/fragment_fit_check_select" >
+        <action
+            android:id="@+id/action_fitCheckSelectFragment_to_fitCheckAddressCityFragment"
+            app:destination="@id/fitCheckAddressProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fitCheckAddressProductFragment"
+        android:name="com.example.nuru.view.fragment.fitcheck.FitCheckAddressProductFragment"
+        android:label="fragment_fit_check_address_city"
+        tools:layout="@layout/fragment_fit_check_address_city" >
+        <action
+            android:id="@+id/action_fitCheckAddressCityFragment_to_fitCheckSelectFragment"
+            app:destination="@id/fitCheckSelectFragment" />
+        <argument
+            android:name="check"
+            app:argType="integer">
+        </argument>
+    </fragment>
+</navigation>

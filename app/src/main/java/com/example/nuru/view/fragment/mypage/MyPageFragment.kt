@@ -22,8 +22,12 @@ import com.example.nuru.view.adapter.FarmAdapter
 import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.adminfarm.AdminFarmActivity
+import com.example.nuru.view.activity.fitcheck.FitCheckActivity
+import com.example.nuru.view.activity.mainbusiness.MainBusinessActivity
 import com.example.nuru.view.activity.mypage.AddFarmActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
+import com.example.nuru.view.activity.statuscheck.StatusCheckActivity
+import com.example.nuru.view.fragment.fitcheck.FitCheckSelectFragment
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
 import com.example.nuru.viewmodel.farm.MyFarmViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -113,6 +117,18 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
     fun btnCareMyFarm(view: View){
         startActivity(Intent(myPageActivity , AdminFarmActivity::class.java))
+    }
+
+    fun btnGovernmentBusiness(view : View){
+        startActivity(Intent(myPageActivity , MainBusinessActivity::class.java))
+    }
+
+    fun btnCheckStatus(view : View){
+        startActivity(Intent(myPageActivity , StatusCheckActivity::class.java))
+    }
+
+    fun btnCheckFit(view : View){
+        startActivity(Intent(myPageActivity , FitCheckActivity::class.java))
     }
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_business_nav_graph"
+    app:startDestination="@id/mainBusiness1Fragment">
+
+    <fragment
+        android:id="@+id/mainBusiness1Fragment"
+        android:name="com.example.nuru.view.fragment.mainBusiness.MainBusiness1Fragment"
+        android:label="fragment_main_business1"
+        tools:layout="@layout/fragment_main_business1" />
+</navigation>
