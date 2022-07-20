@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/status_check_nav_graph"
+    app:startDestination="@id/statusCheckReadyFragment">
+
+    <fragment
+        android:id="@+id/statusCheckReadyFragment"
+        android:name="com.example.nuru.view.fragment.statuscheck.StatusCheckReadyFragment"
+        android:label="fragment_status_check_ready"
+        tools:layout="@layout/fragment_status_check_ready" >
+        <action
+            android:id="@+id/action_statusCheckReadyFragment_to_statusCheckResultFragment"
+            app:destination="@id/statusCheckResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statusCheckResultFragment"
+        android:name="com.example.nuru.view.fragment.statuscheck.StatusCheckResultFragment"
+        android:label="fragment_status_check_result"
+        tools:layout="@layout/fragment_status_check_result" >
+
+        <argument
+            android:name="image"
+            app:argType="com.example.nuru.model.data.statuscheck.ImageBitmap"/>
+
+    </fragment>
+</navigation>

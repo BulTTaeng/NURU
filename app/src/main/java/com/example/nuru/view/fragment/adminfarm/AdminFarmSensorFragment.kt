@@ -58,8 +58,21 @@ class AdminFarmSensorFragment : Fragment() {
 
         val farmId = viewModel.fetchData().value!!.get(args.loc).farm_id
 
-        CoroutineScope(Dispatchers.IO).launch {
-            launch { viewModel.updateImage(farmId) }.join()
+        CoroutineScope(Dispatchers.Main).launch {
+            var success = false
+            swipe_in_adminSensorImage.isRefreshing = true
+            CoroutineScope(Dispatchers.IO).launch {
+                success = viewModel.updateImage(farmId)
+            }.join()
+
+            if(success){
+                Toast.makeText(requireContext() , getText(R.string.get_image_ok) , Toast.LENGTH_LONG).show()
+            }
+            else{
+                Toast.makeText(requireContext() , getText(R.string.try_later) , Toast.LENGTH_LONG).show()
+            }
+
+            swipe_in_adminSensorImage.isRefreshing = false
         }
 
         adapter = SensorImageAdapter(adminFarmActivity)

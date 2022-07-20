@@ -16,7 +16,6 @@ import com.example.nuru.model.data.counsel.NameCard
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.viewmodel.counsel.CounselViewModel
 
-// RecyclerView adapater를 사용해도 되지만, 연습을 위해 ListAdapter를 사용함
 class CounselAdapter (private val context: Context, private val viewModel : CounselViewModel) :
     ListAdapter<NameCard, CounselAdapter.CounselViewHolder>(CounselAdapter.DIFF_CALLBACK) {
 

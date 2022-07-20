@@ -85,4 +85,13 @@
     <string name="already_signup">이미 가입 하셨나요? </string>
     <string name="not_signup">아직 가입하지 않으셨나요? </string>
     <string name="counsel_title">전문가 상담</string>
+    <string name="get_image_ok">농장 사진을 잘 불러왔어요!</string>
+    <string name="main_business">주요 사업</string>
+    <string name="get_my_location_alarm">내 지역 사업알림 받기</string>
+    <string name="status_check">상태검사</string>
+    <string name="camera_ok_try">카메라 권한 설정이 완료되었습니다! 다시 버튼을 눌러주세요!</string>
+    <string name="counsel_expert">전문가 상담</string>
+    <string name="fit_check">적합도 검사</string>
+    <string name="get_address">주소 입력하기</string>
+    <string name="get_product">임산물 입력하기</string>
 </resources>
