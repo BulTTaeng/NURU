@@ -22,6 +22,7 @@ import com.example.nuru.view.adapter.FarmAdapter
 import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.adminfarm.AdminFarmActivity
+import com.example.nuru.view.activity.counsel.CounselActivity
 import com.example.nuru.view.activity.mypage.AddFarmActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
@@ -113,6 +114,11 @@ class MyPageFragment : Fragment() , CoroutineScope {
 
     fun btnCareMyFarm(view: View){
         startActivity(Intent(myPageActivity , AdminFarmActivity::class.java))
+    }
+
+    fun btnCounseling(view: View) {
+        Log.d("전문가상담", "클릭")
+        startActivity(Intent(myPageActivity , CounselActivity::class.java))
     }
 
 }

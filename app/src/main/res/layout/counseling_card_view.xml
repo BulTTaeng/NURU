@@ -10,8 +10,9 @@
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginBottom="30dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="130dp">
 
 
         <androidx.cardview.widget.CardView
@@ -20,9 +21,10 @@
             android:layout_height="120dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:layout_paddingRight="30dp"
             android:shadowColor="@color/gray"
             app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            android:outlineSpotShadowColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -36,9 +38,28 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="8"
+                    android:layout_weight="7.5"
                     android:weightSum="10"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="6"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="10dp"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:text="@{data.company}">
+                        </TextView>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -47,36 +68,43 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="20dp"
-                            android:text="Tasdfasffs">
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="10dp"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/light_green"
+                            android:text="@{data.address}">
                         </TextView>
 
                     </LinearLayout>
 
-
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
-                        android:text="Tasdfasffs">
-                    </TextView>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="2.5"
                     android:orientation="vertical">
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
-                        android:text="11111111111111111111111111">
-                    </TextView>
 
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/btn_tell"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_centerInParent="true"
+                        android:backgroundTint="@color/brown"
+                        android:layout_marginRight="10dp"
+                        android:text="통화\n버튼"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
