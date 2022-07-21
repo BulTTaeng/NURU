@@ -138,7 +138,7 @@ class CheckTypeForGoogleFragment : Fragment() {
     fun btnSignup(view:View){
 
         progressBar_googleSignUp.visibility = View.VISIBLE
-        if(!toggle_admin.isChecked && !toggle_farmer.isChecked || !toggle_member.isChecked){
+        if(!toggle_admin.isChecked && !toggle_farmer.isChecked && !toggle_member.isChecked){
             Toast.makeText(loginActivity , R.string.select_admin_farm , Toast.LENGTH_LONG).show()
             progressBar_googleSignUp.visibility = View.GONE
         }
