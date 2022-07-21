@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_fitCheckSelectFragment_to_fitCheckAddressCityFragment"
             app:destination="@id/fitCheckAddressProductFragment" />
+        <action
+            android:id="@+id/action_fitCheckSelectFragment_to_fitCheckResultFragment"
+            app:destination="@id/fitCheckResultFragment" />
     </fragment>
     <fragment
         android:id="@+id/fitCheckAddressProductFragment"
@@ -27,4 +30,9 @@
             app:argType="integer">
         </argument>
     </fragment>
+    <fragment
+        android:id="@+id/fitCheckResultFragment"
+        android:name="com.example.nuru.view.fragment.fitcheck.FitCheckResultFragment"
+        android:label="fragment_fit_check_result"
+        tools:layout="@layout/fragment_fit_check_result" />
 </navigation>

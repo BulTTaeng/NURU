@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.nuru.view.fragment.fitcheck.FitCheckResultFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.nuru.viewmodel.fitcheck.FitCheckViewModel" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/scrollview_InMyFarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_inMyPage"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/background_roundedge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/txt_FarmProductsInMyPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:autoSizeTextType="uniform"
+                    android:lines="1"
+                    android:maxLines="4"
+                    android:text="@{viewModel.selectedProduct}"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="30dp"
+                    app:autoSizeMinTextSize="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_FarmLocationInMyPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:lines="1"
+                    android:maxLines="4"
+                    android:text="@{viewModel.selectedCity + viewModel.selectedCountry}"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/txt_FarmProductsInMyPage"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+            <FrameLayout
+                android:id="@+id/map_inMyPage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout_inMyPage">>
+
+                <fragment
+                    android:id="@+id/map_inFrame"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout_inMyPage"
+                    tools:context=".view.activity.mypage.NewMyFarmActivity"></fragment>
+
+            </FrameLayout>
+            -->
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/background_roundedge_filledlightgreen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout_inMyPage">
+
+                <ImageView
+                    android:id="@+id/img_goodOrBad"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/background_roundedge_filledlightgreen"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/face_very_satisfied" />
+
+                <TextView
+                    android:id="@+id/txt_condition"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:text="최고"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_goodOrBad" />
+
+                <TextView
+                    android:id="@+id/txt_conditionExplain"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:text="키우기 좋은 장소에요!"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_condition" />
+
+                <View
+                    android:id="@+id/divider_view_MyFarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_conditionExplain" />
+
+                <ImageView
+                    android:id="@+id/img_veryNotSatisfied"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@id/img_notSatisfied"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_view_MyFarm"
+                    app:srcCompat="@drawable/face_very_not_satisfied" />
+
+                <TextView
+                    android:id="@+id/txt_veryNotSatisfied"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="최악"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_veryNotSatisfied"
+                    app:layout_constraintStart_toStartOf="@id/img_veryNotSatisfied"
+                    app:layout_constraintTop_toBottomOf="@id/img_veryNotSatisfied" />
+
+                <ImageView
+                    android:id="@+id/img_notSatisfied"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@id/img_soso"
+                    app:layout_constraintStart_toEndOf="@id/img_veryNotSatisfied"
+                    app:layout_constraintTop_toBottomOf="@id/divider_view_MyFarm"
+                    app:srcCompat="@drawable/face_not_satisfied" />
+
+                <TextView
+                    android:id="@+id/txt_notSatisfied"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="나쁨"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_notSatisfied"
+                    app:layout_constraintStart_toStartOf="@id/img_notSatisfied"
+                    app:layout_constraintTop_toBottomOf="@id/img_notSatisfied" />
+
+                <ImageView
+                    android:id="@+id/img_soso"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@id/img_satisfied"
+                    app:layout_constraintStart_toEndOf="@id/img_notSatisfied"
+                    app:layout_constraintTop_toBottomOf="@id/divider_view_MyFarm"
+                    app:srcCompat="@drawable/face_soso" />
+
+                <TextView
+                    android:id="@+id/txt_soso"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="보통"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_soso"
+                    app:layout_constraintStart_toStartOf="@id/img_soso"
+                    app:layout_constraintTop_toBottomOf="@id/img_soso" />
+
+                <ImageView
+                    android:id="@+id/img_satisfied"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@id/img_verySatisfied"
+                    app:layout_constraintStart_toEndOf="@id/img_soso"
+                    app:layout_constraintTop_toBottomOf="@id/divider_view_MyFarm"
+                    app:srcCompat="@drawable/face_satisfied" />
+
+                <TextView
+                    android:id="@+id/txt_satisfied"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="양호"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_satisfied"
+                    app:layout_constraintStart_toStartOf="@id/img_satisfied"
+                    app:layout_constraintTop_toBottomOf="@id/img_satisfied" />
+
+                <ImageView
+                    android:id="@+id/img_verySatisfied"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/img_satisfied"
+                    app:layout_constraintTop_toBottomOf="@id/divider_view_MyFarm"
+                    app:srcCompat="@drawable/face_very_satisfied" />
+
+                <TextView
+                    android:id="@+id/txt_verySatisfied"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="최고"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_verySatisfied"
+                    app:layout_constraintStart_toStartOf="@id/img_verySatisfied"
+                    app:layout_constraintTop_toBottomOf="@id/img_verySatisfied" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

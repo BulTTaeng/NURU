@@ -129,8 +129,9 @@ class MyPageFragment : Fragment() , CoroutineScope {
         startActivity(Intent(myPageActivity , StatusCheckActivity::class.java))
     }
 
-    fun btnCheckFit(view : View){
-        startActivity(Intent(myPageActivity , FitCheckActivity::class.java))
+    fun btnCheckFit(view : View) {
+        startActivity(Intent(myPageActivity, FitCheckActivity::class.java))
+    }
         
     fun btnCounseling(view: View) {
         Log.d("전문가상담", "클릭")

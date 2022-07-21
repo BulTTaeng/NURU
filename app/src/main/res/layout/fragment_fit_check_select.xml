@@ -101,6 +101,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/background_roundedge"
                 android:text="분석"
+                android:onClick="@{fragment::btnAnalysis}"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
