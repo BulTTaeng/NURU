@@ -1,5 +1,8 @@
 # NURU
 
+**Description :** 스마트 임산물 관리  
+**Contributor :** `BulTTaeng(BulTTaeng)`, `Dongjun(kdjun97)`   
+
 ### History
 
 <details>
@@ -8,19 +11,16 @@
 `2022.07.04`  
 - Init Project
 
-
 `2022.07.05`  
 - ListAdapter 적용 
 - 리스너 제거
 - #4 이슈 발생
-
 
 `2022.07.06`  
 - 사용자 토큰 register 위치 변경(회원가입)
 - 코루틴 적용
 - CommunityContents 수정
 - Viewpager ListAdapter 적용
-
 
 `2022.07.07`  
 - 구글 로그인 문제(admin , farmer) 해결
@@ -89,12 +89,17 @@
 `2022.07.21`  
 - 8. 적합도 검사2 페이지 구현
 - 적합도 검사 onBackPress 버그 수정
-
+- 전체적인 앱 기능 테스팅 완료.
+- signUp Button 수정(checkType)
+- 커뮤니티 페이지 rollback
 
 </details><br>  
 
 --- 
 
-### Description
+### TODO
 
-스마트 임산물 관리  
+* 알림 페이지 구현
+* 실시간 그래프 구현(내 농장 관리)
+* 지도 marker 달기
+* 카카오톡 로그인
