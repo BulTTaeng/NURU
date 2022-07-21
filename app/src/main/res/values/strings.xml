@@ -94,4 +94,5 @@
     <string name="fit_check">적합도 검사</string>
     <string name="get_address">주소 입력하기</string>
     <string name="get_product">임산물 입력하기</string>
+    <string name="select_product_address">주소 및 임산물을 선택해 주세요</string>
 </resources>

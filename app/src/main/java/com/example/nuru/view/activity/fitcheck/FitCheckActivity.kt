@@ -17,7 +17,7 @@ class FitCheckActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_firt_check)
+        setContentView(R.layout.activity_fit_check)
 
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fit_check_container) as NavHostFragment

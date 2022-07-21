@@ -31,6 +31,8 @@ class AdminFarmActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ViewModelFactoryForMyFarm(docRef))
             .get(MyFarmViewModel::class.java)
 
+        viewModel.updateFarm()
+
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_admin_farm_container) as NavHostFragment
         adminFarmController = navHostFragment.navController

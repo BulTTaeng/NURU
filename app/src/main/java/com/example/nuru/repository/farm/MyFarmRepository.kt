@@ -29,7 +29,7 @@ class MyFarmRepository(val farmRef : DocumentReference) {
     var isInit : Boolean = false
 
     init {
-        updateFarm()
+        //updateFarm()
     }
 
     suspend fun getUserNameAndEmail(userId : String) : ArrayList<String> {
