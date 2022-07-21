@@ -140,6 +140,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="9.5"
                         android:scaleType="fitCenter"
+                        android:onClick="@{fragment::btnCommunity}"
                         app:layout_constraintStart_toEndOf="@id/btn_careMyFarm"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:srcCompat="@tools:sample/avatars" />

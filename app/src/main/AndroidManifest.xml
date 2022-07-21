@@ -11,8 +11,7 @@
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!--전화 permission-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 전화 permission -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -31,6 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nuru"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.activity.community.CommunityActivity"
+            android:exported="false" />
         <activity
             android:name=".view.activity.fitcheck.FitCheckActivity"
             android:exported="false" />

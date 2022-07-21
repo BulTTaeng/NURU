@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/community_nav_graph"
+    app:startDestination="@id/communityFragment2">
+
+    <fragment
+        android:id="@+id/communityFragment2"
+        android:name="com.example.nuru.view.fragment.community.CommunityFragment"
+        android:label="CommunityFragment" />
+</navigation>

@@ -6,8 +6,8 @@
         android:enabled="true"
         android:icon="@drawable/myfarm_lightgray"
         android:title="내 농장" />
-
-    <item android:id="@+id/communityFragment"
+    <!--TODO:: 조합 소식 추가해야 함-->
+    <item android:id="@+id/myPageFragment"
         android:enabled="true"
         android:icon="@drawable/community_lightgray_edited"
         android:title="커뮤니티" />

@@ -22,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_inCommunity">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/community_recycleView"
@@ -71,27 +71,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pencil" />-->
-
-        <TextView
-            android:id="@+id/txt_CommunityTitle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="커뮤니티"
-            android:background="@color/white"
-            android:textAlignment="center"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view_inCommunity"
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="#D1D3D9"
-            app:layout_constraintTop_toBottomOf="@+id/txt_CommunityTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

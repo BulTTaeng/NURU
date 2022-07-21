@@ -22,6 +22,7 @@ import com.example.nuru.view.adapter.FarmAdapter
 import com.example.nuru.databinding.FragmentMyPageBinding
 import com.example.nuru.model.data.farm.Farm
 import com.example.nuru.view.activity.adminfarm.AdminFarmActivity
+import com.example.nuru.view.activity.community.CommunityActivity
 import com.example.nuru.view.activity.fitcheck.FitCheckActivity
 import com.example.nuru.view.activity.mainbusiness.MainBusinessActivity
 import com.example.nuru.view.activity.counsel.CounselActivity
@@ -136,6 +137,10 @@ class MyPageFragment : Fragment() , CoroutineScope {
     fun btnCounseling(view: View) {
         Log.d("전문가상담", "클릭")
         startActivity(Intent(myPageActivity , CounselActivity::class.java))
+    }
+
+    fun btnCommunity(view : View){
+        startActivity(Intent(myPageActivity , CommunityActivity::class.java))
     }
 
 }

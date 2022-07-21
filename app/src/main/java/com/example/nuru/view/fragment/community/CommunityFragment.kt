@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,8 +23,10 @@ import com.example.nuru.R
 import com.example.nuru.databinding.FragmentCommunityBinding
 import com.example.nuru.model.data.tmap.SearchResultEntity
 import com.example.nuru.utility.GetCurrentContext
+import com.example.nuru.view.activity.community.CommunityActivity
 import com.example.nuru.view.activity.mypage.MyPageActivity
 import com.example.nuru.viewmodel.community.CommunityViewModel
+import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_community.*
@@ -31,7 +34,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 
 class CommunityFragment : Fragment() {
-
     private lateinit var adapter: CommunityAdapter
     private lateinit var firebaseAuth: FirebaseAuth
     val db = FirebaseFirestore.getInstance()
@@ -42,13 +44,13 @@ class CommunityFragment : Fragment() {
     private lateinit var job: Job
     private lateinit var binding: FragmentCommunityBinding
 
-    lateinit var myPageActivity : MyPageActivity
+    lateinit var communityActivity : CommunityActivity
 
-    private val viewModel by lazy { ViewModelProvider(this).get(CommunityViewModel::class.java) }
+    private val viewModel : CommunityViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myPageActivity = context as MyPageActivity
+        communityActivity = context as CommunityActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,9 +78,9 @@ class CommunityFragment : Fragment() {
         widget_ProgressBarInCommunity.visibility = View.GONE
 
 
-        adapter = CommunityAdapter(myPageActivity, this)
+        adapter = CommunityAdapter(communityActivity, this)
         // Setting the Adapter with the recyclerview
-        community_recycleView.layoutManager = LinearLayoutManager(myPageActivity)
+        community_recycleView.layoutManager = LinearLayoutManager(communityActivity)
         community_recycleView.adapter = adapter
         //observeData()
         getProducts()
