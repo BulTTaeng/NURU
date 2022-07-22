@@ -94,4 +94,13 @@ class SignUpRepository {
             }.await()
         return check
     }
+
+    suspend fun alarmSet(){
+        val data = hashMapOf(
+            "community" to ArrayList<String>(),
+            "farm" to ArrayList<String>()
+        )
+
+        db.collection("alarm").document(FirebaseAuth.getInstance().currentUser!!.uid).set(data).await()
+    }
 }

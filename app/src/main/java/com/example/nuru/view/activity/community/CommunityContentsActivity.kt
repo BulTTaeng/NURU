@@ -51,6 +51,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
     private lateinit var adapterForImage: ImgInCommunityAdapter
     var block = false
     private lateinit var binding: ActivityCommunityContentsBinding
+    lateinit var communityInfo : CommunityDTO
 
     private lateinit var job: Job
 
@@ -67,16 +68,16 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
 
         val Intent: Intent = getIntent()
 
-        val CommunityInfo = Intent.getParcelableExtra<CommunityDTO>("COMMUNITY")!!
+        communityInfo = Intent.getParcelableExtra<CommunityDTO>("COMMUNITY")!!
 
-        var id = CommunityInfo.id
-        var writer = CommunityInfo.writer
-        var like = CommunityInfo.like
-        var image = CommunityInfo.image
+        var id = communityInfo.id
+        var writer = communityInfo.writer
+        var like = communityInfo.like
+        var image = communityInfo.image
 
         val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
         val currentDate : String = sdf.format(Date())
-        val writetime : String = sdf.format(CommunityInfo.time)
+        val writetime : String = sdf.format(communityInfo.time)
 
         binding.txtDate.text = FindDifference.findDifference(writetime , currentDate)
 
@@ -176,13 +177,14 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
     }
 
     fun btnLikeInContents(view : View){
+
         val info = communityContentsViewModel.fetchData().value
 
         if (info!!.like.contains(firebaseAuth.currentUser?.uid)) {
             communityContentsViewModel.deleteLike()
             btn_LikeInContents.setColorFilter(Color.GRAY)
         } else {
-            communityContentsViewModel.addLike()
+            communityContentsViewModel.addLike(communityInfo.writer)
             btn_LikeInContents.setColorFilter(Color.BLUE)
         }
     }
@@ -197,7 +199,7 @@ class CommunityContentsActivity : AppCompatActivity() , CoroutineScope {
                 block = true
                 var success = false;
                 CoroutineScope(Dispatchers.IO).async {
-                    success = communityContentsViewModel.addComments(edt_AddComments.text.toString())
+                    success = communityContentsViewModel.addComments(edt_AddComments.text.toString() , communityInfo.writer)
                 }.await()
 
                 if(success) {

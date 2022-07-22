@@ -45,4 +45,8 @@ class UserViewModel : ViewModel(){
     suspend fun googleSignUp(userId: String, name: String, email: String, type : String, isFarmer : Boolean, isAdmin : Boolean) : Boolean {
         return signUpRepository.googleSignUp(userId, name , email , type , isFarmer, isAdmin)
     }
+
+    suspend fun alarmSet(){
+        signUpRepository.alarmSet()
+    }
 }

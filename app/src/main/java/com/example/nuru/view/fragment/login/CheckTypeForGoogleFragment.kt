@@ -112,6 +112,10 @@ class CheckTypeForGoogleFragment : Fragment() {
         }
     }
 
+    suspend fun alarmSet(){
+        userViewModel.alarmSet()
+    }
+
     fun uploadUserInfoToServer() {
         var check : Boolean = false
 
@@ -124,6 +128,11 @@ class CheckTypeForGoogleFragment : Fragment() {
             }.join()
             when(check) {
                 true -> {
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        alarmSet()
+                    }.join()
+
                     val ass = Intent(loginActivity, MyPageActivity::class.java)
                     startActivity(ass)
                     activity?.finish()
@@ -154,7 +163,13 @@ class CheckTypeForGoogleFragment : Fragment() {
                 CoroutineScope(Dispatchers.IO).launch {
                     loginResult = userViewModel.registerUser(email, pass, loginActivity, name, toggle_admin.isChecked, toggle_farmer.isChecked, toggle_member.isChecked)
                 }.join()
+
+
                 if (loginResult) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        alarmSet()
+                    }.join()
+
                     Toast.makeText(loginActivity, getString(R.string.singup_success), Toast.LENGTH_SHORT).show()
                     val ass = Intent(loginActivity, MyPageActivity::class.java)
                     startActivity(ass)
