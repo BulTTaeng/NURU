@@ -23,41 +23,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoSizeTextType="uniform"
-            android:lines="1"
-            android:maxLines="4"
+            android:layout_marginStart="50dp"
+            android:singleLine="true"
+            android:maxEms="4"
+            android:ellipsize="end"
             android:text="@{farm.products}"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/txt_FarmLocation"
-            app:layout_constraintEnd_toStartOf="@+id/btn_DeleteFarmm"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txt_FarmLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:lines="1"
-            android:maxLines="4"
-            android:text="@{farm.farm_address}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_FarmLocation"/>
+
+        <TextView
+            android:id="@+id/txt_FarmLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="50dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@{farm.farm_address}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txt_FarmProducts"
             app:layout_constraintEnd_toStartOf="@+id/btn_DeleteFarmm"
-            app:layout_constraintTop_toBottomOf="@id/txt_FarmProducts" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageButton
             android:id="@+id/btn_DeleteFarmm"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:background="@android:color/transparent"
             android:maxWidth="10dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/cancelbtn" />
+            app:srcCompat="@drawable/cancelbtn"
+            app:tint="@color/white"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

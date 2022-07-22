@@ -5,33 +5,43 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.example.nuru.view.activity.map.MapsActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.nuru.R
 import com.example.nuru.databinding.FragmentMapBinding
+import com.example.nuru.view.activity.map.MapsActivity
 import com.example.nuru.view.activity.map.SearchAddressActivity
+import com.example.nuru.viewmodel.farm.MyFarmViewModel
+import com.example.nuru.viewmodel.viewmodelfactory.ViewModelFactoryForMyFarm
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_map.*
 
+
 class MapFragment : Fragment() , OnMapReadyCallback {
+
+    val db = FirebaseFirestore.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
+
     private var mapFragment: SupportMapFragment? = null
     lateinit var gso : GoogleSignInOptions
     private lateinit var mMap: GoogleMap
     private lateinit var locationCallback: LocationCallback // 위칫값 요청에 대한 갱신 정보를 받아옴
     private lateinit var fusedLocationClient: FusedLocationProviderClient // 위칫값 사용
     private lateinit var binding: FragmentMapBinding
+
+
+
+    val docRef = db.collection("user").document(firebaseAuth.currentUser?.uid.toString())
+    val viewModel : MyFarmViewModel by viewModels{ ViewModelFactoryForMyFarm(docRef) }
 
     companion object {
         const val SEARCH_RESULT_EXTRA_KEY: String = "SEARCH_RESULT_EXTRA_KEY"
@@ -65,6 +75,9 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.updateFarm()
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -78,6 +91,24 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posLatLng ,
             MapsActivity.CAMERA_ZOOM_LEVEL
         ))
+
+        val xx = viewModel.fetchData().value
+
+
+        xx!!.forEach {
+            val farmMarker = mMap.addMarker(MarkerOptions().position(it.farm_latLng))
+            farmMarker!!.tag = it.products
+            farmMarker.title = it.farm_name
+            val circleMaker = CircleOptions()
+            circleMaker.center(it.farm_latLng)
+            circleMaker.fillColor(R.color.light_green)
+            circleMaker.radius(1000.0)
+            //TODO:: stroke 색 뭘로하지?
+            circleMaker.strokeColor(R.color.white)
+            circleMaker.strokeWidth(4.0f)
+            mMap.addCircle(circleMaker)
+        }
+
         widget_ProgressBar1.visibility = View.GONE
 
     }
@@ -141,5 +172,18 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         widget_ProgressBar1.visibility = View.GONE
     }
+
+    /*fun DrawCircle(gMap: GoogleMap?) {
+        val circle: Circle
+        val CircleMaker = CircleOptions()
+        val latlong = LatLng(13.0291, 80.2083) //Location
+        CircleMaker.InvokeCenter(latlong) //
+        CircleMaker.InvokeRadius(1000) //Radius in Circle
+        CircleMaker.InvokeStrokeWidth(4)
+        CircleMaker.InvokeStrokeColor(Android.Graphics.Color.ParseColor("#e6d9534f")) //Circle Color
+        CircleMaker.InvokeFillColor(Color.Argb(28, 209, 72, 54))
+        val camera: CameraUpdate = CameraUpdateFactory.NewLatLngZoom(latlong, 15) //Map Zoom Level
+        circle = GMap.AddCircle(CircleMaker) //Gmap Add Circle
+    }*/
 
 }
