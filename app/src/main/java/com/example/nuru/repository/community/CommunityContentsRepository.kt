@@ -86,10 +86,12 @@ class CommunityContentsRepository(val communityContentsRef : DocumentReference) 
         updateLike()
     }
 
-    fun addLike(){
+    fun addLike(writer : String){
         db.collection("community").document(_mutableData.value!!.id)
             .update("likeId", FieldValue.arrayUnion(firebaseAuth.currentUser?.uid))
         updateLike()
+
+        db.collection("alarm").document(writer).update("communtiy", FieldValue.arrayUnion(firebaseAuth.currentUser!!.uid + "님이 좋아요를 눌렀습니다"))
     }
 
     fun updateLike(){
@@ -99,7 +101,7 @@ class CommunityContentsRepository(val communityContentsRef : DocumentReference) 
         }
     }
 
-    suspend fun addComments(commentstxt : String) : Boolean{
+    suspend fun addComments(commentstxt : String , contestWriter : String) : Boolean{
         val createTime = FieldValue.serverTimestamp()
         var nameofwriter =""
         val commentsRef = db.collection("comments").document(_mutableData.value!!.id).collection(_mutableData.value!!.id)
@@ -148,9 +150,10 @@ class CommunityContentsRepository(val communityContentsRef : DocumentReference) 
                 }.addOnFailureListener{
                     false
                 }
-
-
             }
+
+            db.collection("alarm").document(contestWriter).update("communtiy", FieldValue.arrayUnion(firebaseAuth.currentUser!!.uid + "님이 댓글을 작성했습니다"))
+
             true
         }catch (e:Exception){
             Log.d("Error" , e.toString())

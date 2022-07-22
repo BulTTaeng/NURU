@@ -31,6 +31,9 @@
         android:theme="@style/Theme.Nuru"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.alarm.AlarmActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.community.CommunityActivity"
             android:exported="false" />
         <activity

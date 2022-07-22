@@ -26,11 +26,11 @@ class CommunityContentsViewModel(val communityContentsRef : DocumentReference) :
         repo.deleteLike()
     }
 
-    fun addLike(){
-        repo.addLike()
+    fun addLike(writer : String){
+        repo.addLike(writer)
     }
 
-    suspend fun addComments(commentstxt : String):Boolean{
-        return repo.addComments(commentstxt);
+    suspend fun addComments(commentstxt : String , contentsWriter : String):Boolean{
+        return repo.addComments(commentstxt , contentsWriter)
     }
 }

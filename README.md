@@ -93,6 +93,11 @@
 - signUp Button 수정(checkType)
 - 커뮤니티 페이지 rollback
 
+`2022.07.22`  
+- alarm page 추가
+- signup 할때, 알람 db에 community , farm 기록
+- 구글 마커 , circle 추가 (API 키가 없어서 테스팅은 못해봄)
+
 </details><br>  
 
 --- 
